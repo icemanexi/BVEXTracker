@@ -8,8 +8,9 @@ ubxt.io_handle = gpsio
 def read_ser():
     out = None
     while out == None:
-        out = gpsio.read(decode_func=ubxt.decode_msg)
-        #print(out, '\n')
+        out = gpsio.ser.sock.recv(8192)
+        #out = gpsio.read(decode_func=ubxt.decode_msg)
+        print(out, '\n')
     return out
 
 #CFG_VALSET = {"class" : 0x06, "id" : 0x8a}
@@ -26,7 +27,8 @@ def read_ser():
 #print(ubxt.gps_send(0x27, 0x03, []))
 #input()
 while True:
-    ubxt.decode_msg(read_ser())
+    read_ser()
+    #ubxt.decode_msg(read_ser())
     #print(ubxt.decode_msg(read_ser()))
 
 
