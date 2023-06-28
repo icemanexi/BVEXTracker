@@ -1,10 +1,8 @@
 import spidev
-from numpy import save
-from datetime import datetime
-import csv
 from time import time, sleep
 import threading
 from math import floor
+import struct
 
 try:
 	from adxl355 import ADXL355, SET_RANGE_2G, ODR_TO_BIT
@@ -12,25 +10,13 @@ except:
 	from Sensors.adxl355 import ADXL355, SET_RANGE_2G, ODR_TO_BIT
 
 
-# function to get rid of nested lists        
-def flatten_list(_list):
-	flat_list = []
-	for element in _list:
-		if hasattr(element, '__iter__'): # if the item is iterable
-			for item in element:
-				flat_list.append(item)
-		else:
-			flat_list.append(element)
-	return flat_list
-
 class Accelerometer:
 	def __init__(self, Write_Directory, rate=1000):
 		self.wd = Write_Directory
-		self.thread = None
-		self.alive = True
-		self.data= []
-		self.t0 = -1
+		self.threads = []
 		self.rate = rate # valid: 4000, 2000, 1000, 500, 250, 125
+		self.key = "<dfff"
+		self.header = ["time", "accel x", "accel y", "accel z"]
 
 		# SETUP SPI AND ACCELEROMTERE
 		spi = spidev.SpiDev()
@@ -44,33 +30,54 @@ class Accelerometer:
 		#self.interface_handler.dumpinfo()
 		print("acc initialized")
 
-	def kill(self):
-		self.alive=False
-		self.thread.join()
-		print("acc ended")
+	def new_thread(self):
+		stop_flag = threading.Event()
+		thread = threading.Thread(target=self.run, args=(stop_flag,))
+		self.threads.append((thread, stop_flag))
+		thread.start()
+		sleep(0.001)
+		if len(self.threads) == 2:
+			prevThread, prevFlag = self.threads.pop(0)
+			prevFlag.set()
+		if len(self.threads) > 2:
+			print("Something went wrong with the threading in accelerometer!")
 
-	def begin(self):
-		self.thread  = threading.Thread(target=self.run, args=())
-		self.thread.start()
-		self.alive = True
-		print("acc started")
+	def kill_all_threads(self):
+		for _, flag in self.threads:
+			flag.set()
 
-	def save_data(self):
-		self.kill()
-		self.thread.join()
-		assert self.t0 > 0 # make sure data has been collected
-		save(self.wd + str(floor(self.t0)), self.data)
-		print("acc data saved, data started at t=", self.t0)
+	def run(self, flag):
+		file = open(self.wd + str(floor(time())), "wb+")
+		#t0 = time()
 
-	def run(self):
-		self.data = ["time", "ax", "ay", "az"]
-		self.t0 = time()
 		try:
-			while self.alive:
-				self.data += self.ih.get3Vfifo()
-		except (OverflowError):
-			print("too much data, overflow error")
-			self.kill()
+			while not flag.is_set():
+				data = self.ih.get3Vfifo()
+				if data: #make sure data is not empty
+					print(data)
+					bin_data = struct.pack("<dfff", data[0], data[1], data[2], data[3])
+					file.write(bin_data)
+		except Exception as e:
+			print("error wrile running accel: ", e)
+			file.close()
+
+		file.close()
+		print("finished running accel thread")
+
+	def read_file(self, file):
+		data = [self.header]
+		while True:
+			try:
+				bin_dat = file.read(20)
+				if not bin_dat:
+					break
+				data += [struct.unpack("<dfff", bin_dat)]
+			except Exception as e:
+				print(e)
+				print("got error reading data, returned processed data")
+				return data
+		return data
+
 
 	def test(self):
 		while True:
@@ -78,9 +85,6 @@ class Accelerometer:
 
 if __name__ == "__main__":
 	test = Accelerometer("/home/fissellab/BVEXTracker-main/output/Accelerometer/")
-	test.test()
-	sleep(60)
-	test.save()
-	test.kill()
-	
 
+	with open("/home/fissellab/BVEXTracker-main/output/Accelerometer/1687966070", "rb") as file:
+		print(test.read_file(file))

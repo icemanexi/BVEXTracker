@@ -68,18 +68,18 @@ class L3GD20H:
         gz = self.readRegister(OUT_Z_H) << 8 | self.readRegister(OUT_Z_L)
 
         # make sure axes read out 16 bits
-        #gx = np.int16(gx) * 0.00875     # multiply by conversion factor pg 10
-        #gy = np.int16(gy) * 0.00875
-        #gz = np.int16(gz) * 0.00875
+        gx = np.int16(gx) * 0.00875     # multiply by conversion factor pg 10
+        gy = np.int16(gy) * 0.00875
+        gz = np.int16(gz) * 0.00875
         
         # subtract bias mean to calibrate gyroscope
-        #gx = gx + 1.256171414184
-        #gy = gy - 1.654750684812
-        #gz = gz - 0.489359026685
+        gx = gx + 1.256171414184
+        gy = gy - 1.654750684812
+        gz = gz - 0.489359026685
         
         timestamp = time.time()
         
-        gyrodata = list([timestamp, gx, gy, gz])
+        gyrodata = [timestamp, gx, gy, gz]
 
         return gyrodata
 

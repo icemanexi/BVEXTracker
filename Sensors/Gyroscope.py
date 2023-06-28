@@ -16,7 +16,7 @@ class Gyro:
 		self.wd = Write_Directory
 		self.ih = L3GD20H()
 		self.header = ("time", "gyro x", "gyro y", "gyro z")
-		self.key = "<dIII" # this is used for the struct methods
+		self.key = "<dfff" # this is used for the struct methods
 		self.threads = [] 
 		self.num_threads = 0
 
@@ -27,10 +27,13 @@ class Gyro:
 		thread = threading.Thread(target=self.run, args=(stop_flag,))
 		self.threads.append((thread, stop_flag))
 		thread.start()
-		sleep(0.0005)
-		if self.num_threads != 0:
-			self.threads[self.num_threads - 1][1].set()
-		self.num_threads += 1
+		sleep(0.003)
+		if len(self.threads) == 2:
+			prevThread, prevFlag = self.threads.pop(0)
+			prevFlag.set()
+		if len(self.threads) > 2:
+			print("Something went wrong with the threading in gyro!")
+
 
 	def kill_all_threads(self):
 		for _, flag in self.threads:
@@ -43,7 +46,7 @@ class Gyro:
 			while not flag.is_set():
 				axes = self.ih.read_axes()
 				print(t0, axes)
-				bin_data = struct.pack("<dIII",  axes[0], axes[1], axes[2], axes[3])
+				bin_data = struct.pack("<dfff",  axes[0], axes[1], axes[2], axes[3])
 				file.write(bin_data)
 				sleep(0.001)
 		except Exception as e:
@@ -60,15 +63,16 @@ class Gyro:
 
 	def read_file(self, file):
 		data = [self.header]
-
 		while True:
 			try:
 				bin_dat = file.read(20)
+				print(bin_dat)
 				if not bin_dat:
 					break
-				data += [struct.unpack("<dIII", bin_dat)]
-			except:
-				print("got error reading data, printing result:\n")
+				data += [struct.unpack("<dfff", bin_dat)]
+			except Exception as e:
+				print(e)
+				print("got error reading data, returned processed data")
 				return data
 		return data
 
@@ -81,12 +85,10 @@ class Gyro:
 
 if __name__ == "__main__":
 	test = Gyro("/home/fissellab/BVEXTracker-main/output/Gyroscope/")
-
-	test.new_thread()
-	sleep(1.5)
-	test.new_thread()
-	sleep(0.2)
-	test.kill_all_threads()
-
+	#test.new_thread()
+	#sleep(2)
+	#test.kill_all_threads()
+	with open("/home/fissellab/BVEXTracker-main/output/Gyroscope/1687964823", "rb") as file:
+		print(test.read_file(file))
 
 
