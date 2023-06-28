@@ -144,6 +144,16 @@ AXIS_REMAP_Z = const(0x02)
 AXIS_REMAP_POSITIVE = const(0x00)
 AXIS_REMAP_NEGATIVE = const(0x01)
 
+class _ReadOnlyStruct(Struct):
+    def __init__(self, register_address: int, struct_format: str) -> None:
+        super().__init__(register_address, struct_format)
+
+    def __get__(self, obj: Optional["BNO055_I2C"], objtype: Optional[Type["BNO055_I2C"]] = None):
+        result = super().__get__(obj, objtype)
+        return super().__get__(obj, objtype) 
+
+    def __set__(self, obj: Optional["BNO055_I2C"], value: Any) -> None:
+        raise NotImplementedError()
 
 class _ScaledReadOnlyStruct(Struct):  # pylint: disable=too-few-public-methods
     def __init__(self, register_address: int, struct_format: str, scale: float) -> None:

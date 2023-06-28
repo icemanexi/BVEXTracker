@@ -40,7 +40,7 @@ class Accelerometer:
 			prevThread, prevFlag = self.threads.pop(0)
 			prevFlag.set()
 		if len(self.threads) > 2:
-			print("Something went wrong with the threading in accelerometer!")
+			print("too many accelerometer threads!")
 
 	def kill_all_threads(self):
 		for _, flag in self.threads:

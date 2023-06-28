@@ -48,7 +48,7 @@ class Gyro:
 				print(t0, axes)
 				bin_data = struct.pack("<dfff",  axes[0], axes[1], axes[2], axes[3])
 				file.write(bin_data)
-				sleep(0.001)
+				sleep(0.0005)
 		except Exception as e:
 			print("error while running gyro: ", e)
 			file.close()
@@ -56,9 +56,6 @@ class Gyro:
 		file.close()
 
 		print("finished running gyro thread")
-
-
-
 
 
 	def read_file(self, file):
@@ -85,10 +82,8 @@ class Gyro:
 
 if __name__ == "__main__":
 	test = Gyro("/home/fissellab/BVEXTracker-main/output/Gyroscope/")
-	#test.new_thread()
-	#sleep(2)
-	#test.kill_all_threads()
-	with open("/home/fissellab/BVEXTracker-main/output/Gyroscope/1687964823", "rb") as file:
-		print(test.read_file(file))
+	test.new_thread()
+	sleep(2)
+	test.kill_all_threads()
 
 
