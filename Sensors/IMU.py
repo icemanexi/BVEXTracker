@@ -15,7 +15,6 @@ class IMU:
 		self.wd = Write_Directory # write directory
 		self.threads = []
 		self.ih = bno055.BNO055_I2C(I2C(1)) # ih = interface handler
-		self.data=[]
 		self.header = ("time", "accel x", "accel y", "accel z", "mag x", "mag y", "mag z", "gyro x", "gyro y", "gyro z", "euler 1", "euler 2", "euler 3")
 
 		print("IMU initialized")
@@ -37,7 +36,7 @@ class IMU:
 			flag.set()
 
 
-	def run(self, flag):
+    def run(self, flag):
 		t0 = time()
 		t= time()
 		file = open(self.wd + str(floor(time())), "wb+")
