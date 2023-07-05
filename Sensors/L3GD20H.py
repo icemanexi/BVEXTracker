@@ -26,7 +26,7 @@ DUMMY_BYTE = 0xAA
 
 #SPI settings
 SPI_MAX_CLOCK_HZ = 10000000  # Hz
-SPI_MODE = 0b01
+SPI_MODE = 0b00
 SPI_BUS = 0
 SPI_DEVICE = 1  # change for different chip select
 
@@ -37,7 +37,6 @@ class L3GD20H:
         self.spi.open(SPI_BUS, SPI_DEVICE)
         self.spi.max_speed_hz = SPI_MAX_CLOCK_HZ
         self.spi.mode = SPI_MODE
-        odr = self.power()
 
     # read and write register functions using SPI
     def writeRegister(self, address, value): # writes to the gyroscope's addresses
@@ -68,14 +67,14 @@ class L3GD20H:
         gz = self.readRegister(OUT_Z_H) << 8 | self.readRegister(OUT_Z_L)
 
         # make sure axes read out 16 bits
-        gx = np.int16(gx) * 0.00875     # multiply by conversion factor pg 10
-        gy = np.int16(gy) * 0.00875
-        gz = np.int16(gz) * 0.00875
-        
-        # subtract bias mean to calibrate gyroscope
-        gx = gx + 1.256171414184
-        gy = gy - 1.654750684812
-        gz = gz - 0.489359026685
+        #gx = np.int16(gx) * 0.00875     # multiply by conversion factor pg 10
+        #gy = np.int16(gy) * 0.00875
+        #gz = np.int16(gz) * 0.00875
+        #
+        ## subtract bias mean to calibrate gyroscope
+        #gx = gx + 1.256171414184
+        #gy = gy - 1.654750684812
+        #gz = gz - 0.489359026685
         
         timestamp = time.time()
         

@@ -17,8 +17,9 @@ class Gyro:
 		self.ih = L3GD20H()
 		self.header = ("time", "gyro x", "gyro y", "gyro z")
 		self.key = "<dfff" # this is used for the struct methods
-		self.threads = [] 
+		self.threads = []
 		self.num_threads = 0
+		self.name = "Gyroscope"
 
 		print("gyro initialized")
 
@@ -75,15 +76,14 @@ class Gyro:
 
 	def test(self):
 		while True:
-			t, x, y ,z = self.ih.read_axes()
+			t, x, y ,z = self.ih.read_axes() 
 			print("%8.2f, %8.2f, %8.2f" %(x, y, z))
+			print(hex(x), hex(y), hex(z))
 			sleep(0.001)
 
 
 if __name__ == "__main__":
 	test = Gyro("/home/fissellab/BVEXTracker-main/output/Gyroscope/")
-	test.new_thread()
-	sleep(2)
-	test.kill_all_threads()
 
+	test.test()
 

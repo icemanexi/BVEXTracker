@@ -13,11 +13,18 @@ except:
 class IMU:
 	def __init__(self, Write_Directory):
 		self.wd = Write_Directory # write directory
+		self.name = "IMU"
 		self.threads = []
 		self.ih = bno055.BNO055_I2C(I2C(1)) # ih = interface handler
 		self.header = ("time", "accel x", "accel y", "accel z", "mag x", "mag y", "mag z", "gyro x", "gyro y", "gyro z", "euler 1", "euler 2", "euler 3")
 
 		print("IMU initialized")
+
+	@property
+	def is_calibrated(self):
+		status_reg =  self.ih._read_register(0x35)
+		return (status_reg & 0b00111111) == 0b00111111
+
 
 	def new_thread(self):
 		stop_flag = threading.Event()
@@ -36,7 +43,7 @@ class IMU:
 			flag.set()
 
 
-    def run(self, flag):
+	def run(self, flag):
 		t0 = time()
 		t= time()
 		file = open(self.wd + str(floor(time())), "wb+")
@@ -88,6 +95,8 @@ class IMU:
 
 if __name__ == "__main__":
 	test = IMU("/home/fissellab/BVEXTracker-main/output/IMU/")
-	with open("/home/fissellab/BVEXTracker-main/output/IMU/1687986790", "rb") as file:
-		print(test.read_file(file))
-
+	while not test.is_calibrated:
+		sleep(1)
+	test.test()
+	sleep(2)
+	test.kill_all_threads()

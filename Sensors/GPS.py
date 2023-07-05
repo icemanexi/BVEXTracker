@@ -16,6 +16,7 @@ class Gps:
 		self.gpsio = gps_io(input_speed=38400)
 		self.ih = ubx.ubx()
 		self.data = []
+		self.name = "GPS"
 
 		print("gps initialized")
 
@@ -41,10 +42,10 @@ class Gps:
 		return out
 
 	def test(self):
-
+		pass
 
 if __name__ == "__main__":
 	test = Gps("asd")
 	test.begin()
 
-	
+

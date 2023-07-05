@@ -14,8 +14,69 @@ class Magnetometer:
 		self.wd =Write_Directory
 		self.threads = []
 		self.ih = LIS3MDL(I2C(1))
-        self.header = ("time", "mag x", "mag y", "mag z")
+		self.header = ("time", "mag x", "mag y", "mag z")
+		self.name = "Magnetometer"
+		self.is_calibrated = False
 		print("Magnetometer initialized")
+
+	def calibrate(self):
+		cal_thread = threading.Thread(target = self.run_calibrate, args=())
+		cal_thread.start()
+
+	def run_calibrate(self):
+		# 10 second timer, every time max/min changes reset the timer
+		end_time = time() + 10
+
+		mag_x, mag_y, mag_z = self.ih.magnetic
+		min_x = max_x = mag_x
+		min_y = max_y = mag_y
+		min_z = max_z = mag_z
+
+		while time() < end_time:
+			flag = False
+			mag_x, mag_y, mag_z = self.ih.magnetic
+
+			if mag_x < min_x:
+				flag = True
+				min_x = mag_x
+			if mag_y < min_y:
+				flag = True
+				min_y = mag_y
+			if mag_z < min_z:
+				flag = True
+				min_z = mag_z
+
+			if mag_x > max_x:
+				flag = True
+				max_x = mag_x
+			if mag_y > max_y:
+				flag = True
+				max_y = mag_y
+			if mag_z > max_z:
+				flag = True
+				max_z = mag_z
+
+			# Hard Iron Correction
+			offset_x = (max_x + min_x)/2.0
+			offset_y = (max_y + min_y)/2.0
+			offset_z = (max_z + min_z)/2.0
+
+			# Soft Iron Correction
+			field_x = (max_x - min_x)/2.0
+			field_y = (max_y - min_y)/2.0
+			field_z = (max_z - min_z)/2.0
+			
+			if flag: # if any of the max/min values changed wait another 10s
+				end_time = time() + 10
+			#print("Hard Offset:  X: {0:8.2f}, Y:{1:8.2f}, Z:{2:8.2f} uT".format(offset_x, offset_y, offset_z))
+			#print("Field:    X: {0:8.2f}, Y:{1:8.2f}, Z:{2:8.2f} uT".format(field_x, field_y, field_z))
+			#print("")
+
+			sleep(0.01)
+
+
+		self.is_calibrated = True
+		return 0
 
 
 	def new_thread(self):
@@ -36,11 +97,11 @@ class Magnetometer:
 
 	def run(self, flag):
 		file = open(self.wd + str(floor(time())), "wb+")
-        while flag.is_set():
-            bin_data = struct.pack("<d", time())
+		while flag.is_set():
+			bin_data = struct.pack("<d", time())
 			mx, my, mz = self.ih.magnetic
-            bin_data += struct.pack("<fff", mx, my, mz)
-            file.write(bin_data)
+			bin_data += struct.pack("<fff", mx, my, mz)
+			file.write(bin_data)
 
 	def read_file(self, file):
 		data = [self.header]
@@ -57,13 +118,15 @@ class Magnetometer:
 				return data
 		return data
 	
-    def test(self):
+	def test(self):
 		while True:
-			print([time(), self.ih.magnetic])
+			ax = self.ih.magnetic
+			print("%8.5f, %8.5f, %8.5f" %(ax[0], ax[1], ax[2]))
 
 if __name__ == '__main__':
 	sens = Magnetometer("~/BVEXTracker/output/Magnetometer")
-	sens.test()
+	sens.calibrate()
+
 
 
 

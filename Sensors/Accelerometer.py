@@ -17,8 +17,9 @@ class Accelerometer:
 		self.rate = rate # valid: 4000, 2000, 1000, 500, 250, 125
 		self.key = "<dfff"
 		self.header = ["time", "accel x", "accel y", "accel z"]
+		self.name = "Acceleromter"
 
-		# SETUP SPI AND ACCELEROMTERE
+		# SETUP SPI AND ACCELEROMTER
 		spi = spidev.SpiDev()
 		spi.open(0, 0) # bus=0, cs=0
 		spi.max_speed_hz = 10000000
@@ -81,10 +82,12 @@ class Accelerometer:
 
 	def test(self):
 		while True:
-			print(self.ih.get3Vfifo())
+			ax = self.ih.get3Vfifo()
+
+			if ax:
+				print("%8.5f, %8.5f, %8.5f" %(ax[1], ax[2], ax[3]))
 
 if __name__ == "__main__":
 	test = Accelerometer("/home/fissellab/BVEXTracker-main/output/Accelerometer/")
 
-	with open("/home/fissellab/BVEXTracker-main/output/Accelerometer/1687966070", "rb") as file:
-		print(test.read_file(file))
+	test.test()
