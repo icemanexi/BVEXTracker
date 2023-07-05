@@ -3,4 +3,5 @@ old/
 gitSSH
 gitSSH.pub
 output/
+Sensors/__pycache__
 
