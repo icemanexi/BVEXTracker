@@ -4702,8 +4702,6 @@ Oddly this is the poll for UBX-LOG-BATCH
     def nav_pvt(self, buf):
         """UBX-NAV-PVT decode, Navigation Position Velocity Time Solution"""
         m_len = len(buf)
-        print("ubx decode: \n")
-        print(buf)
 
         # 84 bytes long in protver 14.
         # 92 bytes long in protver 15.
@@ -6494,7 +6492,7 @@ High Precision GNSS products only."""
                     print("chksum: %02x,%02x" % (m_ck_a, m_ck_b))
                 print("%s\n" % s_payload)
                 #print(m_class)
-                print(m_payload)
+                #print(m_payload)
                 
                 return consumed
 

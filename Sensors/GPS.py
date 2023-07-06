@@ -4,6 +4,8 @@ from numpy import save
 from math import floor
 import threading
 from struct import unpack_from
+import subprocess
+
 try:
 	from Sensors.gpsModule import ubx, gps_io
 except:
@@ -45,9 +47,48 @@ class Gps:
 		# 3 steps:
 		# 0. ensure binary protocol
 
+		print("Checking GPS protocol")
+		while True:
+			out = []
+
+			# hopefully 30 messages is enough to capture both NMEA 
+			# and ubx messages if they are being outputted
+			for i in range(30):
+				#print(self.read())
+				out += [self.read()]
+			
+			binary_prot = False
+			NMEA_prot = False
+			for line in out:
+				strout= str(line[:1])
+				
+				if "$" in strout:
+					NMEA_prot = True
+				if "\\x" in strout:
+					binary_prot = True
+			if binary_prot and not NMEA_prot:
+				break
+
+			# debug..
+			if binary_prot:
+				print("GPS outputting ubx protocol")
+			else: #if not enabled, enable it
+				print("Enabling GPS binary protocol")
+				subprocess.run(['ubxtool', '-e', 'BINARY', '-w', '0'])
+
+			if NMEA_prot:
+				print("GPS outputting NMEA protocol, disabling")
+				subprocess.run(['ubxtool', '-d', 'NMEA', '-w', '0'])
+			sleep(5)
+		print("GPS outputting proper protocol")
+
+		# TODO: ensure 20hz sample rate
+
+
 		# 1. Wait for fix
 		no_fix = True
 		fix_type = None
+		print("Checking fix")
 		while no_fix:
 			out = self.read()
 
@@ -78,9 +119,16 @@ class Gps:
 		print("GPS has", fix_type)
 
 		
-		# 2. ensure pps signal
+		# 2. ensure pps signal (OPTIONAL???)
+		print("Checking pps time signal")
+		pps_status = None
+		while str(pps_status) != "b\'#*\'":
+			pps_status = subprocess.check_output(['chronyc', 'sources', '|', 'grep', 'PPS0']).split()[10]
+			print("\rinvalid pps signal, waiting for validation", end="")
+		print("\rvalid pps signal")
 
-
+		print("GPS has been calibrated")
+		self.is_calibrated = True
 
 	def new_thread(self):
 		stop_flag = threading.Event()
@@ -136,13 +184,15 @@ class Gps:
 
 	def test(self):
 		while True:
-			print(self.ih.decode_msg(self.read()))
+			print(self.read())
+			#self.ih.decode_msg(self.read())
 
 if __name__ == "__main__":
 	test = Gps("/home/fissellab/BVEXTracker-main/output/GPS/")
 
 	test.calibrate()
 	
+	#test.test()
 
 
 
