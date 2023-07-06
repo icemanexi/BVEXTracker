@@ -20,6 +20,11 @@ sensor_list.append(imu)
 #sensor_list.append(acc)
 sensor_list.append(mag)
 
+try:
+    log = open("/home/fissellab/BVEXTracker-main/Logs" + str(floor(time())), "w+")
+except Exception as e:
+    print("Error opening log file: ", e)
+    log = None
 
 # Calibration
 def calibrate(arr):
@@ -28,11 +33,11 @@ def calibrate(arr):
         return False
 
     fully_calibrated = False
-    for sens in arr:
+    for sens in arr: # run calibrate script if it exists
         if hasattr(sens, "calibrate"):
             sens.calibrate()
 
-    while not fully_calibrated:
+    while not fully_calibrated: # standby mode until sensors are calibrated
         temp = []
         print("| ", end="")
         for sens in arr:
@@ -46,7 +51,8 @@ def calibrate(arr):
     print([a.name for a in arr], " calibrated")
     return True
 
-calibrate(sensor_list)
 
+calibrate(sensor_list)
+# can now collect data
 
 print("\nfinished")
