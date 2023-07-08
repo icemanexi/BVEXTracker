@@ -18,12 +18,15 @@ class Magnetometer:
         self.header = ("time", "mag x", "mag y", "mag z")
         self.name = "Magnetometer"
         self.is_calibrated = False
+        self.is_calibrating = False
 
         self.log.write("\nMAG: initialized")
 
     def calibrate(self):
+        self.is_calibrating = True
         cal_thread = threading.Thread(target = self.run_calibrate, args=())
         cal_thread.start()
+        
 
     def run_calibrate(self):
         # 10 second timer, every time max/min changes reset the timer
@@ -78,25 +81,26 @@ class Magnetometer:
 
 
         self.is_calibrated = True
+        self.is_calibrating = False
         return 0
 
 
     def new_thread(self):
         stop_flag = threading.Event()
         thread = threading.Thread(target=self.run, args=(stop_flag,))
-        self.threads.append((thread, stop_flag))
+        self.threads.append({"thread" : thread, "stop flag" : stop_flag, "start time" : time()})
         thread.start()
         sleep(0.003)
         if len(self.threads) == 2:
-            prevThread, prevFlag = self.threads.pop(0)
-            prevFlag.set()
+            prevThreadDict = self.threads.pop(0)
+            prevThreadDict["stop flag"].set()
         if len(self.threads) > 2:
             self.log.write("MAG: too many threads!!")
 
 
     def kill_all_threads(self):
-        for _, flag in self.threads:
-            flag.set()
+        for diction in self.threads:
+            diction["stop flag"].set()
 
     def run(self, flag):
         file = open(self.wd + str(floor(time())), "wb+")

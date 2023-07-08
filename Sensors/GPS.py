@@ -25,6 +25,7 @@ class Gps:
         self.ih.io_handle = self.gpsio
         self.name = "GPS"
         self.is_calibrated = False
+        self.is_calibrating = False
 
         # ensure connection to gps
         #t0 = time()
@@ -38,6 +39,7 @@ class Gps:
         #    self.log.write("\nGPS: initialized")
 
     def calibrate(self):
+        self.is_calibrating = True
         cal_thread = threading.Thread(target=self.run_calibrate, args=())
         cal_thread.start()
 
@@ -147,22 +149,23 @@ class Gps:
 
         self.log.write("\nGPS: has been calibrated")
         self.is_calibrated = True
+        self.is_calibrating = False
 
     def new_thread(self):
         stop_flag = threading.Event()
         thread = threading.Thread(target=self.run, args=(stop_flag,))
-        self.threads.append((thread, stop_flag))
+        self.threads.append({"thread" : thread, "stop flag" : stop_flag, "start time" : time()})
         thread.start()
         sleep(0.003)
         if len(self.threads) == 2:
-            prevThread, prevFlag = self.threads.pop(0)
-            prevFlag.set()
+            prevThreadDict = self.threads.pop(0)
+            prevThreadDict["start time"].set()
         if len(self.threads) > 2:
             self.log.write("\nGPS: Something went wrong with the threading in gps!")
 
     def kill_all_threads(self):
-        for _, flag in self.threads:
-            flag.set()
+        for diction in self.threads:
+            diction["stop flag"].set()
 
         self.log.write("GPS: all threads killed")
 

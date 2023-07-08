@@ -777,9 +777,9 @@ class BNO055_I2C(BNO055):
     """
 
     _temperature = _ReadOnlyUnaryStruct(0x34, "b")
-    _acceleration = _ScaledReadOnlyStruct(0x08, "<hhh", np.float16(1)) # 0.01
+    _acceleration = _ScaledReadOnlyStruct(0x08, "<hhh", np.float16(0.01)) # 0.01
     _magnetic = _ScaledReadOnlyStruct(0x0E, "<hhh", np.float16(0.0625))
-    _gyro = _ScaledReadOnlyStruct(0x14, "<hhh", np.float16(1))#0.001090830782496456)
+    _gyro = _ScaledReadOnlyStruct(0x14, "<hhh", np.float16(0.001090830782496456))
     _euler = _ScaledReadOnlyStruct(0x1A, "<hhh", np.float16(0.0625))
     _quaternion = _ScaledReadOnlyStruct(0x20, "<hhhh", 1 / (1 << 14))
     _linear_acceleration = _ScaledReadOnlyStruct(0x28, "<hhh", np.float16(0.01))

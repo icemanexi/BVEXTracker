@@ -20,36 +20,35 @@ class Gyro:
         self.threads = []
         self.num_threads = 0
         self.name = "Gyroscope"
+        self.is_calibrating = False
+        self.is_calibrated = True # gyro does not need to be calibrated
         
         try:
             # TODO write script to ensure connection 
             # eg read whoami reg
             self.ih = L3GD20H()
+            self.log.write("\nGYRO: initialized")
         except Exception as e:
             self.ih = None
             self.log.write("\nGYRO: CRITICAL ERROR!! could not initialize interface handler:" + str(e))
             raise e
-        else:
-            self.log.write("\nGYRO: initialized")
-
-
 
     def new_thread(self):
         stop_flag = threading.Event()
         thread = threading.Thread(target=self.run, args=(stop_flag,))
-        self.threads.append((thread, stop_flag))
+        self.threads.append({"thread" : thread, "stop flag" : stop_flag, "start time" : time()})
         thread.start()
         sleep(0.003)
         if len(self.threads) == 2:
-            prevThread, prevFlag = self.threads.pop(0)
-            prevFlag.set()
+            prevThreadDict = self.threads.pop(0)
+            prevThreadDict["stop flag"].set()
         if len(self.threads) > 2:
             self.log.write("\nGYRO: too many gyro threads, did not start a new one")
 
 
     def kill_all_threads(self):
-        for _, flag in self.threads:
-            flag.set()
+        for diction in self.threads:
+            diction["stop flag"].set()
 
     def run(self, flag):
         if not self.ih:

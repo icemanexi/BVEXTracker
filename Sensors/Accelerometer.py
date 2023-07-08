@@ -20,6 +20,7 @@ class Accelerometer:
         self.header = ["time", "accel x", "accel y", "accel z"]
         self.name = "Acceleromter"
         self.is_calibrated = True # does not require calibration
+        self.is_calibrating = False
 
         # SETUP SPI AND ACCELEROMTER
         try:

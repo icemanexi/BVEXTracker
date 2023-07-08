@@ -17,7 +17,6 @@ class IMU:
         self.threads = []
         self.log = log
         self.header = ("time", "accel x", "accel y", "accel z", "mag x", "mag y", "mag z", "gyro x", "gyro y", "gyro z", "euler 1", "euler 2", "euler 3")
-        self.is_calibrating = False
         
         try:
             # will throw error if not connected
@@ -34,37 +33,31 @@ class IMU:
     def is_calibrated(self):
         if not self.ih:
             self.log.write("\nIMU: CRITICAL ERROR!! interface handler not defined, cant calibrate")
-            return
-        self.is_calibrating = True
+            return False
         status_reg =  self.ih._read_register(0x35)
         sys_stat = (status_reg & 0b11000000) >>6
         gyr_stat = (status_reg & 0b00110000) >> 4
         acc_stat = (status_reg & 0b00001100) >> 2
         mag_stat = (status_reg & 0b00000011)
         print("\n IMU cali status: sys: ", sys_stat, "gy", gyr_stat, "ac", acc_stat, "ma", mag_stat)
-        
-
-        if (status_reg & 0b00110011) == 0b00110011:
-            self.is_calibrating = False
-            return True
-        return False
+        return (status_reg & 0b00110011) == 0b00110011
 
 
     def new_thread(self):
         stop_flag = threading.Event()
         thread = threading.Thread(target=self.run, args=(stop_flag,))
-        self.threads.append({"thread" : thread, "stop flag" : stop_flag, "start time" : time()})
+        self.threads.append((thread, stop_flag))
         thread.start()
         sleep(0.003)
         if len(self.threads) == 2:
-            prevThreadDict = self.threads.pop(0)
-            prevThreadDict["stop flag"].set()
+            prevThread, prevFlag = self.threads.pop(0)
+            prevFlag.set()
         if len(self.threads) > 2:
             self.log.write("\nIMU: too many IMU threads, did not start a new one")
 
     def kill_all_threads(self):
-        for diction in self.threads:
-            diction["stop flag"].set()
+        for _, flag in self.threads:
+            flag.set()
 
 
     def run(self, flag):
@@ -121,7 +114,7 @@ class IMU:
         if not self.ih:
             print("IMU: ih not defined, exiting")
             return
-        from math import sqrt
+        
         while True:
             #print(self.ih.calibration_status)
             ax = self.ih.gyro
@@ -130,8 +123,8 @@ class IMU:
             #print("-"*30)
             #print("\r\rGyro: %8.5f, %8.5f, %8.5f" %(ax[0], ax[1], ax[2]))
 
-            ax = self.ih.acceleration
-            print("\r\rAcc:  %8.5f, %8.5f, %8.5f | %8.5f" %(ax[0], ax[1], ax[2], sqrt(ax[0]*ax[0]+ax[1]*ax[1]+ax[2]*ax[2])))
+            ax = self.ih.gyro
+            print("\r\rAcc:  %8.5f, %8.5f, %8.5f" %(ax[0], ax[1], ax[2]))
             sleep(0.001)
 
 
