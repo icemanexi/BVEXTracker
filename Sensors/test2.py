@@ -7,9 +7,9 @@ from numpy import save
 import struct
 
 try:
-	import Sensors.adafruit_bno055 as bno055
+    import Sensors.adafruit_bno055 as bno055
 except:
-	import adafruit_bno055 as bno055
+    import adafruit_bno055 as bno055
 
 imu = bno055.BNO055_I2C(I2C(1))
 
@@ -19,19 +19,19 @@ t0 = time()
 filename = str(floor(t0)) + ".bin"
 print(filename)
 with open(filename, "wb") as file:
-	for e in arr:
-		p = struct.pack('f', e)
-		print(e)
-		file.write(p)
+    for e in arr:
+        p = struct.pack('f', e)
+        print(e)
+        file.write(p)
 print("-----------")
 with open(filename, "rb") as file:
-	data = []
-	while True:
-		binary_data = file.read(4)
-		if not binary_data:
-			break
-		val = struct.unpack('f', binary_data)[0]
-		data.append(val)
-		print(val)
+    data = []
+    while True:
+        binary_data = file.read(4)
+        if not binary_data:
+            break
+        val = struct.unpack('f', binary_data)[0]
+        data.append(val)
+        print(val)
 
 

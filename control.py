@@ -1,35 +1,63 @@
 #!/usr/bin/env python3
-from time import sleep
-from Sensors.Gyroscope import Gyro
-from Sensors.GPS import Gps
-from Sensors.IMU import IMU
-from Sensors.Accelerometer import Accelerometer
-from Sensors.Magnetometer import Magnetometer
+from time import sleep, time
 import numpy as np
-
-gyro = Gyro("/home/fissellab/BVEXTracker-main/output/Gyroscope/")
-gps = Gps("/home/fissellab/BVEXTracker-main/output/GPS/")
-imu = IMU("/home/fissellab/BVEXTracker-main/output/IMU/")
-acc = Accelerometer("/home/fissellab/BVEXTracker-main/output/Accelerometer/")
-mag = Magnetometer("/home/fissellab/BVEXTracker-main/output/Magnetometer/")
+from math import floor
 
 sensor_list = []
-#sensor_list.append(gyro)
-#sensor_list.append(gps)
-sensor_list.append(imu)
-#sensor_list.append(acc)
-sensor_list.append(mag)
+
+syslog = open("/home/bvextp1/BVEXTracker/Logs/sysLog", "a")
+syslog.write("\n=======================================\n")
+syslog.write("\nbeginning control script ... ")
+syslog.write("\nTime:" + str(floor(time())))
 
 try:
-    log = open("/home/fissellab/BVEXTracker-main/Logs" + str(floor(time())), "w+")
+    raise
+    from Sensors.Gyroscope import Gyro
+    gyro = Gyro("/home/fissellab/BVEXTracker-main/output/Gyroscope/", syslog)
+    sensor_list.append(gyro)
 except Exception as e:
-    print("Error opening log file: ", e)
-    log = None
+    syslog.write("\nCONTROL: error importing gyro, not added to senesor list")
+    syslog.write("\nERROR: " + str(e))
+
+try:
+    from Sensors.GPS import Gps
+    gps = Gps("/home/fissellab/BVEXTracker-main/output/GPS/", syslog)
+    sensor_list.append(gps)
+except Exception as e:
+    syslog.write("\nCONTROL: error importing gps, not added to senesor list")
+    syslog.write("\nERROR: " + str(e))
+try:
+    from Sensors.Accelerometer import Accelerometer
+    acc = Accelerometer("/home/fissellab/BVEXTracker-main/output/Accelerometer/", syslog)
+    sensor_list.append(acc)
+except Exception as e:
+    syslog.write("\nCONTROL: error importing accelerometer, not added to sensor list")
+    syslog.write("\nERROR: " + str(e))
+    
+try:
+    from Sensors.Magnetometer import Magnetometer
+    mag = Magnetometer("/home/fissellab/BVEXTracker-main/output/Magnetometer/", syslog)
+    sensor_list.append(mag)
+except Exception as e:
+    syslog.write("\nCONTROL: error importing magnetometer, not added to sensor list")
+    syslog.write("\nERROR: " + str(e))
+
+try:
+    from Sensors.IMU import IMU
+    imu = IMU("/home/fissellab/BVEXTracker-main/output/IMU/", syslog)
+    sensor_list.append(imu)
+except Exception as e:
+    syslog.write("\nCONTROL: error importing IMU, not added to sensor list")
+    syslog.write("\nERROR: " + str(e))
+
+
+syslog.write("\nEnabled sensors:" + str([s.name for s in sensor_list]) + "\n")
+
 
 # Calibration
 def calibrate(arr):
     if not arr:
-        print("No sensors in sensor list")
+        syslog.write("CONTROL: No sensors in sensor list")
         return False
 
     fully_calibrated = False
@@ -48,11 +76,21 @@ def calibrate(arr):
         print("")
         sleep(1)
 
-    print([a.name for a in arr], " calibrated")
+    syslog.write("\nCONTROL: " + str([a.name for a in arr]) + " calibrated")
     return True
 
 
 calibrate(sensor_list)
 # can now collect data
 
+
+for sensor in sensor_list:
+    sensor.new_thread()
+
+sleep(60)
+
+for sensor in sensor_list:
+    sensor.kill()
+
 print("\nfinished")
+quit()
