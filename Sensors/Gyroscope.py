@@ -39,6 +39,8 @@ class Gyro:
         self.threads.append({"thread" : thread, "stop flag" : stop_flag, "start time" : time()})
         thread.start()
         sleep(0.003)
+        self.log.write("GYR: started new thread")
+        print("GYRO: started new thread")
         if len(self.threads) == 2:
             prevThreadDict = self.threads.pop(0)
             prevThreadDict["stop flag"].set()
@@ -47,8 +49,8 @@ class Gyro:
 
 
     def kill_all_threads(self):
-        for diction in self.threads:
-            diction["stop flag"].set()
+        for t in self.threads:
+            t["stop flag"].set()
 
     def run(self, flag):
         if not self.ih:

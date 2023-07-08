@@ -42,6 +42,8 @@ class Gps:
         self.is_calibrating = True
         cal_thread = threading.Thread(target=self.run_calibrate, args=())
         cal_thread.start()
+        self.log.write("\nGPS: beginning calibration")
+        print("GPS: beginning calibration")
 
     fix_types = {
         0 : "no fix",

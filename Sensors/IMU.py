@@ -18,6 +18,7 @@ class IMU:
         self.log = log
         self.header = ("time", "accel x", "accel y", "accel z", "mag x", "mag y", "mag z", "gyro x", "gyro y", "gyro z", "euler 1", "euler 2", "euler 3")
         self.is_calibrating = False
+
         
         try:
             # will throw error if not connected
@@ -41,7 +42,7 @@ class IMU:
         gyr_stat = (status_reg & 0b00110000) >> 4
         acc_stat = (status_reg & 0b00001100) >> 2
         mag_stat = (status_reg & 0b00000011)
-        print("\n IMU cali status: sys: ", sys_stat, "gy", gyr_stat, "ac", acc_stat, "ma", mag_stat)
+        #print("\n IMU cali status: sys: ", sys_stat, "gy", gyr_stat, "ac", acc_stat, "ma", mag_stat)
         
 
         if (status_reg & 0b00110011) == 0b00110011:
@@ -56,6 +57,8 @@ class IMU:
         self.threads.append({"thread" : thread, "stop flag" : stop_flag, "start time" : time()})
         thread.start()
         sleep(0.003)
+        self.log.write("\nIMU: thread started")
+        print("IMU: thread started")
         if len(self.threads) == 2:
             prevThreadDict = self.threads.pop(0)
             prevThreadDict["stop flag"].set()
@@ -63,8 +66,8 @@ class IMU:
             self.log.write("\nIMU: too many IMU threads, did not start a new one")
 
     def kill_all_threads(self):
-        for diction in self.threads:
-            diction["stop flag"].set()
+        for t in self.threads:
+            t["stop flag"].set()
 
 
     def run(self, flag):

@@ -48,15 +48,18 @@ class Accelerometer:
         self.threads.append((thread, stop_flag))
         thread.start()
         sleep(0.003)
+        self.log.write("\nACC: thread started")
+        print("ACC: thread started")
+
         if len(self.threads) == 2:
-            prevThread, prevFlag = self.threads.pop(0)
-            prevFlag.set()
+            prevThreadDict = self.threads.pop(0)
+            prevThreadDict['stop flag'].set()
         if len(self.threads) > 2:
             self.log.write("ACC: too many accelerometer threads!")
 
     def kill_all_threads(self):
-        for _, flag in self.threads:
-            flag.set()
+        for t in self.threads:
+            t['stop flag'].set()
 
     def run(self, flag):
         file = open(self.wd + str(floor(time())), "wb+")

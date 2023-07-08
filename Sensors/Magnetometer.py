@@ -24,6 +24,8 @@ class Magnetometer:
 
     def calibrate(self):
         self.is_calibrating = True
+        self.log.write("\nMAG: calibration thread started")
+        print("MAG: calibration thread started")
         cal_thread = threading.Thread(target = self.run_calibrate, args=())
         cal_thread.start()
         
@@ -82,6 +84,8 @@ class Magnetometer:
 
         self.is_calibrated = True
         self.is_calibrating = False
+        self.log.write("\nMAG: finished calibrating")
+        print("MAG: finished calibrating")
         return 0
 
 
@@ -99,8 +103,8 @@ class Magnetometer:
 
 
     def kill_all_threads(self):
-        for diction in self.threads:
-            diction["stop flag"].set()
+        for t in self.threads:
+            t["stop flag"].set()
 
     def run(self, flag):
         file = open(self.wd + str(floor(time())), "wb+")
