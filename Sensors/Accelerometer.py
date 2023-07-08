@@ -45,7 +45,7 @@ class Accelerometer:
     def new_thread(self):
         stop_flag = threading.Event()
         thread = threading.Thread(target=self.run, args=(stop_flag,))
-        self.threads.append((thread, stop_flag))
+        self.threads.append({"thread" : thread, "stop flag" : stop_flag, "start time" : time()})
         thread.start()
         sleep(0.003)
         self.log.write("\nACC: thread started")

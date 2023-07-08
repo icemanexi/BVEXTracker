@@ -133,19 +133,21 @@ class Gps:
             else:
                 #print("GPS has", fix_type)
                 pass
-        self.log.write("\nGPS has" + fix_type)
-        print("GPS has" + fix_type)
+        self.log.write("\nGPS: has " + fix_type)
+        print("GPS: has " + fix_type)
 
         
         # 2. ensure pps signal (OPTIONAL???)
-        self.log.write("\nGPS: Checking pps time signal is being used")
-        print("GPS: Checking pps time signal is being used")
+        self.log.write("\nGPS: waiting for pps signal sync")
+        print("GPS: waiting for pps signal sync")
         pps_status = None
         while str(pps_status) != "b\'#*\'":
-            # dont ask
+            # compares current pps status to "being used" code
+            # exits if pps is being used
+            # below command runs 'chronyc sources' and strips output for code
+            # couldn't find a better way to check if pps is being used
             pps_status = subprocess.check_output(['chronyc', 'sources', '|', 'grep', 'PPS0']).split()[10]
-            self.log.write("\nGPS: invalid pps signal, waiting for validation")
-            print("GPS: invalid pps signal, waiting for validation")
+            sleep(2)
         self.log.write("\nGPS: valid pps signal")
         print("\nGPS: valid pps signal")
 
