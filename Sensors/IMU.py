@@ -6,15 +6,17 @@ import struct
 
 try:
     import Sensors.adafruit_bno055 as bno055
+    from Sensors.Log import Log
 except:
     import adafruit_bno055 as bno055
+    from Log import Log
 
 class IMU:
-    def __init__(self, Write_Directory, log):
+    def __init__(self, Write_Directory, log_file):
         self.wd = Write_Directory # write directory
         self.name = "IMU"
         self.threads = []
-        self.log = log
+        self.log = Log("IMU:", log_file)
         self.header = ("time", "accel x", "accel y", "accel z", "mag x", "mag y", "mag z", "gyro x", "gyro y", "gyro z", "euler 1", "euler 2", "euler 3")
         self.is_calibrating = False
 
@@ -26,14 +28,19 @@ class IMU:
             self.ih = None
             raise e
         else:
-            self.log.write("\nIMU: initialized")
+            self.log("initialized")
 
 
 
     @property
     def is_calibrated(self):
+        # TODO: figure out how to use old calibration offsets, which would 
+        # be preferable
+        return True 
+
+
         if not self.ih:
-            self.log.write("\nIMU: CRITICAL ERROR!! interface handler not defined, cant calibrate")
+            self.log("CRITICAL ERROR!! interface handler not defined, cant calibrate")
             return
         self.is_calibrating = True
         status_reg =  self.ih._read_register(0x35)
@@ -56,13 +63,12 @@ class IMU:
         self.threads.append({"thread" : thread, "stop flag" : stop_flag, "start time" : time()})
         thread.start()
         sleep(0.003)
-        self.log.write("\nIMU: thread started")
-        print("IMU: thread started")
+        self.log("thread started")
         if len(self.threads) == 2:
             prevThreadDict = self.threads.pop(0)
             prevThreadDict["stop flag"].set()
         if len(self.threads) > 2:
-            self.log.write("\nIMU: too many IMU threads, did not start a new one")
+            self.log("too many IMU threads, did not start a new one")
 
     def kill_all_threads(self):
         for t in self.threads:
@@ -71,18 +77,16 @@ class IMU:
 
     def run(self, flag):
         if not self.ih:
-            self.log.write("\nIMU: CRITICAL ERRROR!! intereface handler not defined. ending thread")
+            self.log("CRITICAL ERRROR!! intereface handler not defined. ending thread")
             return
 
-        t0 = time()
-        t= time()
         dat_file = open(self.wd + str(floor(time())), "wb")
         try:
             while not flag.is_set():
-                print(time() - t)
-                t = time()
+                #print(time() - t)
+                #t = time()
                 
-                bin_data = struct.pack("<d", t)
+                bin_data = struct.pack("<d", time())
                 
                 x, y, z = self.ih.acceleration
                 if None in (x ,y, z):
@@ -106,10 +110,10 @@ class IMU:
                 
                 dat_file.write(bin_data)
         except Exception as e:
-            self.log.write("\nIMU:" + str(e))
+            self.log(str(e))
             dat_file.close()
         dat_file.close()
-        self.log.write("\nIMU: finished running thread")
+        self.log("thread finished")
 
 # ------------------------not runtime--------------------------
     # saving raw data from sensor, these convert numbers to default units

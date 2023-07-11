@@ -8,17 +8,18 @@ import subprocess
 
 try:
     from Sensors.gpsModule import ubx, gps_io
+    from Sensors.Log import Log
 except:
     from gpsModule import ubx, gps_io
-
+    from Log import Log
 
 
 class Gps:
 
 
-    def __init__(self, Write_Directory, log): #runs upon initialization
+    def __init__(self, Write_Directory, log_file): #runs upon initialization
         self.wd = Write_Directory
-        self.log = log
+        self.log = Log("GPS:", log_file)
         self.threads = []
         self.gpsio = gps_io(input_speed=38400)
         self.ih = ubx.ubx()
@@ -42,8 +43,7 @@ class Gps:
         self.is_calibrating = True
         cal_thread = threading.Thread(target=self.run_calibrate, args=())
         cal_thread.start()
-        self.log.write("\nGPS: beginning calibration")
-        print("GPS: beginning calibration")
+        self.log("beginning calibration")
 
     fix_types = {
         0 : "no fix",
@@ -59,8 +59,7 @@ class Gps:
         # 3 steps:
         # 0. ensure binary protocol
 
-        self.log.write("\nChecking GPS protocol")
-        print("\nChecking GPS protocol")
+        self.log("Checking protocol")
         while True:
             out = []
 
@@ -83,20 +82,16 @@ class Gps:
 
             # debug..
             if binary_prot:
-                self.log.write("\nGPS:  outputting ubx protocol")
-                print("GPS: outputting ubx protocol")
+                self.log("outputting ubx protocol")
             else: #if not enabled, enable it
-                self.log.write("\nGPS: Enabling binary protocol")
-                print("GPS: Enabling binary protocol")
+                self.log("Enabling binary protocol")
                 subprocess.run(['ubxtool', '-e', 'BINARY', '-w', '0'])
 
             if NMEA_prot:
-                self.log.write("\nGPS: outputting NMEA protocol, disabling")
-                print("GPS: outputting NMEA protocol, disabling")
+                self.log("outputting NMEA protocol, disabling")
                 subprocess.run(['ubxtool', '-d', 'NMEA', '-w', '0'])
             sleep(5)
-        self.log.write("\nGPS: outputting proper protocol")
-        print("GPS: outputting proper protocol")
+        self.log("outputting proper protocol")
 
         # TODO: ensure 20hz sample rate
 
@@ -104,8 +99,7 @@ class Gps:
         # 1. Wait for fix
         no_fix = True
         fix_type = None
-        self.log.write("\nGPS: Checking fix")
-        print("GPS: checking fix")
+        self.log("Checking fix")
         while no_fix:
             out = self.read()
 
@@ -133,8 +127,7 @@ class Gps:
             else:
                 #print("GPS has", fix_type)
                 pass
-        self.log.write("\nGPS: has " + fix_type)
-        print("GPS: has " + fix_type)
+        self.log("has " + fix_type)
 
         
         # 2. ensure pps signal (OPTIONAL???)
@@ -145,15 +138,15 @@ class Gps:
             wifi_en = None
 
         if wifi_en:
-            self.log.write("\nGPS: connected to internet, will not use pps signal unless connection drops")
-            print("GPS: connected to internet, will not use pps signal unless connection drops")
+            self.log("connected to internet, will not use pps signal unless connection drops")
         else:
             t0 = time()
 
-            self.log.write("\nGPS: waiting for pps signal sync")
-            print("GPS: waiting for pps signal sync")
+            wait_time = 60
+            self.log("GPS: waiting for pps signal sync")
+            self.log("will wait only " + str(wait_time) +" seconds") 
             pps_status = None
-            while (str(pps_status) != "b\'#*\'") && time() - t0 > :
+            while (str(pps_status) != "b\'#*\'") and (time() - t0 > wait_time):
                 # compares current pps status to "being used" code
                 # exits if pps is being used
                 # below command runs 'chronyc sources' and strips output for code
@@ -161,14 +154,12 @@ class Gps:
                 try:
                     pps_status = subprocess.check_output(['chronyc', 'sources', '|', 'grep', 'PPS0']).split()[10]
                 except Exception as e:
-                    self.log.write("\nGPS: error checking chrony sources")
-                    print("GPS: error checking chrony sources")
+                    self.log("error checking chrony sources")
 
                 sleep(2)
-                self.log.write("\nGPS: valid pps signal")
-                print("\nGPS: valid pps signal")
+                self.log("valid pps signal")
 
-        self.log.write("\nGPS: has been calibrated")
+        self.log("has been calibrated")
         self.is_calibrated = True
         self.is_calibrating = False
 
@@ -178,11 +169,12 @@ class Gps:
         self.threads.append({"thread" : thread, "stop flag" : stop_flag, "start time" : time()})
         thread.start()
         sleep(0.003)
+        self.log("thread started")
         if len(self.threads) == 2:
             prevThreadDict = self.threads.pop(0)
             prevThreadDict["start time"].set()
         if len(self.threads) > 2:
-            self.log.write("\nGPS: Something went wrong with the threading in gps!")
+            self.log("Something went wrong with the threading in gps!")
 
     def kill_all_threads(self):
         for diction in self.threads:
@@ -191,23 +183,17 @@ class Gps:
         self.log.write("GPS: all threads killed")
 
     def run(self, flag):
-        try:
-            file = open(self.wd + str(floor(time())), "wb+")
-        except Exception as e:
-            self.log.write("\nGPS: error opening GPS binary file: " +  str(e))
-            self.log.write("\nGPS: Exiting GPS thread now")
-            return
         file = open(self.wd + str(floor(time())), "wb+")
 
         try:
             while not flag.is_set():
                 file.write(self.read())
         except Exception as e:
-            self.log.write("error wrile running GPS: ", e)
+            self.log("error wrile running GPS: ", e)
             file.close()
 
         file.close()
-        self.log.write("GPS: finished running thread")
+        self.log("finished running thread")
 
     def read(self):
         out = None

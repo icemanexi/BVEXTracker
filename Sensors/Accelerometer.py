@@ -6,14 +6,15 @@ import struct
 
 try:
     from adxl355 import ADXL355, SET_RANGE_2G, ODR_TO_BIT
+    from Log import Log
 except:
     from Sensors.adxl355 import ADXL355, SET_RANGE_2G, ODR_TO_BIT
-
+    from Sensors.Log import Log
 
 class Accelerometer:
-    def __init__(self, Write_Directory, log, rate=1000):
+    def __init__(self, Write_Directory, log_file, rate=1000):
         self.wd = Write_Directory
-        self.log = log
+        self.log = Log("ACC:", log_file)
         self.threads = []
         self.rate = rate # valid: 4000, 2000, 1000, 500, 250, 125
         self.key = "<dfff"
@@ -40,7 +41,7 @@ class Accelerometer:
         except Exception as e:
             raise e
         else:
-            self.log.write("\nACC: initialized")
+            self.log("initialized")
 
     def new_thread(self):
         stop_flag = threading.Event()
@@ -48,14 +49,13 @@ class Accelerometer:
         self.threads.append({"thread" : thread, "stop flag" : stop_flag, "start time" : time()})
         thread.start()
         sleep(0.003)
-        self.log.write("\nACC: thread started")
-        print("ACC: thread started")
+        self.log("thread started")
 
         if len(self.threads) == 2:
             prevThreadDict = self.threads.pop(0)
             prevThreadDict['stop flag'].set()
         if len(self.threads) > 2:
-            self.log.write("ACC: too many accelerometer threads!")
+            self.log("too many accelerometer threads!")
 
     def kill_all_threads(self):
         for t in self.threads:
@@ -63,7 +63,6 @@ class Accelerometer:
 
     def run(self, flag):
         file = open(self.wd + str(floor(time())), "wb+")
-        #t0 = time()
 
         try:
             while not flag.is_set():
@@ -72,11 +71,11 @@ class Accelerometer:
                     bin_data = struct.pack("<dfff", data[0], data[1], data[2], data[3])
                     file.write(bin_data)
         except Exception as e:
-            self.log.write("\nACC: " + str(e))
+            self.log(str(e))
             file.close()
 
         file.close()
-        self.log.write("\nACC: finished running thread")
+        self.log("thread finished")
 
 
 #-------------------------not runtime-----------------------------
@@ -103,7 +102,7 @@ class Accelerometer:
                 print("\r\r%8.5f, %8.5f, %8.5f" %(ax[1], ax[2], ax[3]))
 
 if __name__ == "__main__":
-    with open("/home/fissellab/BVEXTracker/output/accelLog", "a") as log:
-        test = Accelerometer("/home/fissellab/BVEXTracker-main/output/Accelerometer/", log)
+    with open("/home/fissellab/BVEXTracker/output/accelLog", "a") as l:
+        test = Accelerometer("/home/fissellab/BVEXTracker/output/Accelerometer/", l)
+        test.new_thread()
 
-    test.test()

@@ -6,26 +6,36 @@ import struct
 
 try:
     from adafruit_lis3mdl import LIS3MDL, Rate
+    from Log import Log
 except:
     from Sensors.adafruit_lis3mdl import LIS3MDL, Rate
+    from Sensors.Log import Log
 
 class Magnetometer:
-    def __init__(self, Write_Directory, log):
-        self.wd =Write_Directory
-        self.log = log
+    def __init__(self, Write_Directory, log_file):
+        self.wd = Write_Directory
+        self.log = Log("MAG:", log_file)
         self.threads = []
         self.ih = LIS3MDL(I2C(1))
         self.header = ("time", "mag x", "mag y", "mag z")
         self.name = "Magnetometer"
-        self.is_calibrated = False
+
+        """ 
+        not super sure how the magnetometer calibration works, but I think the
+        way that it's done now can be done in post so for ease of setup, there
+        will not be a calibration script on startup
+
+        """
+        self.is_calibrated = True
         self.is_calibrating = False
 
-        self.log.write("\nMAG: initialized")
+        self.log("initialized")
+
+#------------------------------calibration---------------------------------
 
     def calibrate(self):
         self.is_calibrating = True
-        self.log.write("\nMAG: calibration thread started")
-        print("MAG: calibration thread started")
+        self.log("calibration thread started")
         cal_thread = threading.Thread(target = self.run_calibrate, args=())
         cal_thread.start()
         
@@ -84,22 +94,23 @@ class Magnetometer:
 
         self.is_calibrated = True
         self.is_calibrating = False
-        self.log.write("\nMAG: finished calibrating")
-        print("MAG: finished calibrating")
+        self.log("finished calibrating")
         return 0
 
 
+#----------------------------run time---------------------------------
     def new_thread(self):
         stop_flag = threading.Event()
         thread = threading.Thread(target=self.run, args=(stop_flag,))
         self.threads.append({"thread" : thread, "stop flag" : stop_flag, "start time" : time()})
         thread.start()
+        self.log("thread started")
         sleep(0.003)
         if len(self.threads) == 2:
             prevThreadDict = self.threads.pop(0)
             prevThreadDict["stop flag"].set()
         if len(self.threads) > 2:
-            self.log.write("MAG: too many threads!!")
+            self.log("too many threads!!")
 
 
     def kill_all_threads(self):
@@ -108,11 +119,12 @@ class Magnetometer:
 
     def run(self, flag):
         file = open(self.wd + str(floor(time())), "wb+")
-        while flag.is_set():
+        while not flag.is_set():
             bin_data = struct.pack("<d", time())
             mx, my, mz = self.ih.magnetic
             bin_data += struct.pack("<fff", mx, my, mz)
             file.write(bin_data)
+        self.log("thread finished")
 
     def read_file(self, file):
         data = [self.header]
@@ -124,10 +136,10 @@ class Magnetometer:
                 bin_dat = file.read(12)
                 data += [struct.unpack("<fff", bin_dat)] # magx, magy, magz
             except Exception as e:
-                self.log.write("\nMAG: got error reading data, returned processed data")
-                self.log.write("\nERROR: ", e)
+                self.log("got error reading data, returned processed data")
+                self.log(str(e))
                 return data
-        self.log.write("\nMAG: thread finished running")
+        self.log("thread finished running")
         return data
     
     def test(self):
@@ -137,8 +149,8 @@ class Magnetometer:
 
 if __name__ == '__main__':
     with open("/home/fissellab/BVEXTracker/output/magLog", "a") as log:
-        sens = Magnetometer("~/BVEXTracker/output/Magnetometer", log)
-        sens.test()
+        sens = Magnetometer("/home/fissellab/BVEXTracker/output/Magnetometer", log)
+        sens.new_thread()
 
 
 

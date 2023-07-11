@@ -6,6 +6,6 @@ gitSSH.pub
 output/
 Sensors/__pycache__
 __pycache__/
-*.pyc
+*.py[cod]
 *__pycache__/
 

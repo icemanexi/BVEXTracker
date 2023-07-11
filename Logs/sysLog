@@ -5,3 +5,114 @@ beginning control script ...
 Time:1689097481
 CONTROL: FATAL! error importing gyro, not added to senesor list
 ERROR: No active exception to reraise
+=======================================
+
+beginning control script ... 
+Time:1689102027
+CONTROL: FATAL! error importing gyro, not added to senesor list
+ERROR: No active exception to reraise
+CONTROL: FATAL! error importing gps, not added to senesor list
+ERROR: invalid syntax (GPS.py, line 156)
+1689102027 ACC: initialized
+=======================================
+
+beginning control script ... 
+Time:1689102348
+CONTROL: FATAL! error importing gyro, not added to senesor list
+ERROR: No active exception to reraise
+CONTROL: FATAL! error importing gps, not added to senesor list
+ERROR: invalid syntax (GPS.py, line 156)
+CONTROL: FATAL! error importing accelerometer, not added to sensor list
+ERROR: cannot import name 'round' from 'math' (unknown location)
+CONTROL: FATAL! error importing magnetometer, not added to sensor list
+ERROR: cannot import name 'round' from 'math' (unknown location)
+CONTROL: FATAL!  error importing IMU, not added to sensor list
+ERROR: No module named 'adafruit_bno055'
+Enabled sensors:[]
+
+1689102960.3746 CONTROL: =======================================
+
+1689102960.3746 CONTROL: beginning control script ... 
+1689102960.3747 CONTROL: FATAL! error importing gyro, not added to senesor list
+1689102960.3747 CONTROL: No active exception to reraise
+1689102960.3841 CONTROL: FATAL! error importing gps, not added to senesor list
+1689102960.3842 CONTROL: invalid syntax (GPS.py, line 144)
+1689102960.4053 CONTROL: FATAL! error importing accelerometer, not added to sensor list
+1689102960.4057 CONTROL: name 'syslog' is not defined
+1689102960.6965 CONTROL: FATAL! error importing magnetometer, not added to sensor list
+1689102960.6966 CONTROL: name 'syslog' is not defined
+1689102960.7108 CONTROL: FATAL!  error importing IMU, not added to sensor list
+1689102960.7109 CONTROL: name 'syslog' is not defined
+1689102960.711 CONTROL: Enabled sensors:[]
+
+1689102992.0494 CONTROL: =======================================
+
+1689102992.0495 CONTROL: beginning control script ... 
+1689102992.0495 CONTROL: FATAL! error importing gyro, not added to senesor list
+1689102992.0496 CONTROL: No active exception to reraise
+1689102992.0554 CONTROL: FATAL! error importing gps, not added to senesor list
+1689102992.0556 CONTROL: invalid syntax (GPS.py, line 144)
+1689102992.2183 CONTROL: FATAL! error importing accelerometer, not added to sensor list
+1689102992.2184 CONTROL: 'Log' object has no attribute 'write'
+1689102992.4152 CONTROL: FATAL! error importing magnetometer, not added to sensor list
+1689102992.4153 CONTROL: 'Log' object has no attribute 'write'
+1689102993.196 CONTROL: FATAL!  error importing IMU, not added to sensor list
+1689102993.1961 CONTROL: 'Log' object has no attribute 'write'
+1689102993.1963 CONTROL: Enabled sensors:[]
+
+1689103236.6447 CONTROL: =======================================
+
+1689103236.6452 CONTROL: beginning control script ... 
+1689103236.6454 CONTROL: FATAL! error importing gyro, not added to senesor list
+1689103236.6455 CONTROL: No active exception to reraise
+1689103236.6539 CONTROL: FATAL! error importing gps, not added to senesor list
+1689103236.6542 CONTROL: invalid syntax (GPS.py, line 146)
+1689103236.8394 CONTROL: FATAL! error importing accelerometer, not added to sensor list
+1689103236.8395 CONTROL: 'Log' object has no attribute 'write'
+1689103237.2055 CONTROL: FATAL! error importing magnetometer, not added to sensor list
+1689103237.2057 CONTROL: 'Log' object has no attribute 'write'
+1689103238.0053 CONTROL: FATAL!  error importing IMU, not added to sensor list
+1689103238.0055 CONTROL: 'Log' object has no attribute 'write'
+1689103238.0058 CONTROL: Enabled sensors:[]
+
+1689103367.6419 CONTROL: =======================================
+
+1689103367.6421 CONTROL: beginning control script ... 
+1689103367.6423 CONTROL: FATAL! error importing gyro, not added to senesor list
+1689103367.6425 CONTROL: No active exception to reraise
+1689103367.6715 CONTROL: FATAL! error importing gps, not added to senesor list
+1689103367.6716 CONTROL: invalid syntax (GPS.py, line 148)
+1689103367.8441 CONTROL: FATAL! error importing accelerometer, not added to sensor list
+1689103367.8441 CONTROL: 'Log' object has no attribute 'write'
+1689103368.1944 CONTROL: FATAL! error importing magnetometer, not added to sensor list
+1689103368.1945 CONTROL: 'Log' object has no attribute 'write'
+1689103368.9809 CONTROL: FATAL!  error importing IMU, not added to sensor list
+1689103368.9811 CONTROL: 'Log' object has no attribute 'write'
+1689103368.9813 CONTROL: Enabled sensors:[]
+
+1689103407.7771 CONTROL: =======================================
+
+1689103407.7773 CONTROL: beginning control script ... 
+1689103407.7775 CONTROL: FATAL! error importing gyro, not added to senesor list
+1689103407.7776 CONTROL: No active exception to reraise
+1689103407.7889 CONTROL: FATAL! error importing gps, not added to senesor list
+1689103407.7891 CONTROL: invalid syntax (GPS.py, line 148)
+1689103407.9584 CONTROL: FATAL! error importing accelerometer, not added to sensor list
+1689103407.9585 CONTROL: 'Log' object has no attribute 'write'
+1689103408.2568 CONTROL: FATAL! error importing magnetometer, not added to sensor list
+1689103408.2569 CONTROL: 'Log' object has no attribute 'write'
+1689103476.646 CONTROL: =======================================
+
+1689103476.6468 CONTROL: beginning control script ... 
+1689103476.6469 CONTROL: FATAL! error importing gyro, not added to senesor list
+1689103476.6469 CONTROL: No active exception to reraise
+1689103477.7877 CONTROL: FATAL! error importing accelerometer, not added to sensor list
+1689103477.7878 CONTROL: 'Log' object has no attribute 'write'
+1689103478.1491 CONTROL: FATAL! error importing magnetometer, not added to sensor list
+1689103478.1491 CONTROL: 'Log' object has no attribute 'write'
+1689103478.9507 CONTROL: FATAL!  error importing IMU, not added to sensor list
+1689103478.9509 CONTROL: 'Log' object has no attribute 'write'
+1689103478.9513 CONTROL: Enabled sensors:['GPS']
+
+1689103478.9611 CONTROL: error during calibration of GPS: 'Log' object has no attribute 'write'
+1689103478.9891 CONTROL: error during thread management of GPS: 'Log' object has no attribute 'write'

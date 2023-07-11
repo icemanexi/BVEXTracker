@@ -2,82 +2,59 @@
 from time import sleep, time
 import numpy as np
 from math import floor
+from Sensors.Log import Log
+
+log_filation =  open("/home/fissellab/BVEXTracker/Logs/sysLog", "a")
+log = Log("CONTROL:", log_filation)
 
 sensor_list = []
 calibration_dict = {}
 
-syslog = open("/home/fissellab/BVEXTracker/Logs/sysLog", "a")
-syslog.write("\n=======================================\n")
-syslog.write("\nbeginning control script ... ")
-syslog.write("\nTime:" + str(floor(time())))
+log("=======================================\n")
+log("beginning control script ... ")
 
 try:
     raise
     from Sensors.Gyroscope import Gyro
-    gyro = Gyro("/home/fissellab/BVEXTracker/output/Gyroscope/", syslog)
+    gyro = Gyro("/home/fissellab/BVEXTracker/output/Gyroscope/", log_filation)
     sensor_list.append(gyro)
 except Exception as e:
-    syslog.write("\nCONTROL: FATAL! error importing gyro, not added to senesor list")
-    syslog.write("\nERROR: " + str(e))
+    log("FATAL! error importing gyro, not added to senesor list")
+    log(str(e))
 
 try:
     from Sensors.GPS import Gps
-    gps = Gps("/home/fissellab/BVEXTracker/output/GPS/", syslog)
+    gps = Gps("/home/fissellab/BVEXTracker/output/GPS/", log_filation)
     sensor_list.append(gps)
 except Exception as e:
-    syslog.write("\nCONTROL: FATAL! error importing gps, not added to senesor list")
-    syslog.write("\nERROR: " + str(e))
+    log("FATAL! error importing gps, not added to senesor list")
+    log(str(e))
 try:
     from Sensors.Accelerometer import Accelerometer
-    acc = Accelerometer("/home/fissellab/BVEXTracker/output/Accelerometer/", syslog)
+    acc = Accelerometer("/home/fissellab/BVEXTracker/output/Accelerometer/", log_filation)
     sensor_list.append(acc)
 except Exception as e:
-    syslog.write("\nCONTROL: FATAL! error importing accelerometer, not added to sensor list")
-    syslog.write("\nERROR: " + str(e))
+    log("FATAL! error importing accelerometer, not added to sensor list")
+    log(str(e))
     
 try:
     from Sensors.Magnetometer import Magnetometer
-    mag = Magnetometer("/home/fissellab/BVEXTracker/output/Magnetometer/", syslog)
+    mag = Magnetometer("/home/fissellab/BVEXTracker/output/Magnetometer/", log_filation)
     sensor_list.append(mag)
 except Exception as e:
-    syslog.write("\nCONTROL: FATAL! error importing magnetometer, not added to sensor list")
-    syslog.write("\nERROR: " + str(e))
+    log("FATAL! error importing magnetometer, not added to sensor list")
+    log(str(e))
 
 try:
     from Sensors.IMU import IMU
-    imu = IMU("/home/fissellab/BVEXTracker/output/IMU/", syslog)
+    imu = IMU("/home/fissellab/BVEXTracker/output/IMU/", log_filation)
     sensor_list.append(imu)
 except Exception as e:
-    syslog.write("\nCONTROL: FATAL!  error importing IMU, not added to sensor list")
-    syslog.write("\nERROR: " + str(e))
+    log("FATAL!  error importing IMU, not added to sensor list")
+    log(str(e))
 
 
-syslog.write("\nEnabled sensors:" + str([s.name for s in sensor_list]) + "\n")
-
-
-#if not arr:
-#    syslog.write("CONTROL: No sensors in sensor list")
-#    return False
-#
-#fully_calibrated = False
-#for sens in arr: # run calibrate script if it exists
-#    if hasattr(sens, "calibrate"):
-#        sens.calibrate()
-#
-#while not fully_calibrated: # standby mode until sensors are calibrated
-#    temp = []
-#    print("| ", end="")
-#    for sens in arr:
-#        temp.append(sens.is_calibrated)
-#        print(sens.name, sens.is_calibrated, "| ", end="")
-#        calibration_dict.append({})
-#    if False not in temp:
-#       fully_calibrated = True
-#    print("")
-#    sleep(1)
-#
-#syslog.write("\nCONTROL: " + str([a.name for a in arr]) + " calibrated")
-#return True
+log("Enabled sensors:" + str([s.name for s in sensor_list]) + "\n")
 
 while True:
     # go through each sensor
@@ -89,8 +66,7 @@ while True:
                     sensor.calibrate()
                 continue
         except Exception as e:
-            syslog.write("CONTROL: error during calibration of " + sensor.name + ": " + str(e))
-            print("CONTROL: error during calibration of " + sensor.name + ": " + str(e))
+            log("error during calibration of " + sensor.name + ": " + str(e))
 
         # data collection thread management
         try:
@@ -99,12 +75,11 @@ while True:
             elif time() - sensor.threads[0]["start time"] > 10: # creates new thread every 60s
                 sensor.new_thread()
         except Exception as e:
-            syslog.write("CONTROL: error during thread management of " + sensor.name + ": " + str(e))
-            print("CONTROL: error during thread management of ", sensor.name, ": ",  str(e))
+            log("error during thread management of " + sensor.name + ": " + str(e))
 
     sleep(1)
 
-
+asdasd
 
 print("\nfinished")
 quit()
