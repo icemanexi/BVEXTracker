@@ -93,6 +93,9 @@ class Gps:
             sleep(5)
         self.log("outputting proper protocol")
 
+        # NAV EOE = 0x01 0x61
+        # NAV PVT = 0x01 0x07
+
         # TODO: ensure 20hz sample rate
 
 
@@ -100,14 +103,26 @@ class Gps:
         no_fix = True
         fix_type = None
         self.log("Checking fix")
+        # doesnt hurt to reenable pvt message
+        subprocess.run(['ubxtool', '-p', 'CFG-MSG,1,7,1', '-w', '0'])
         while no_fix:
             out = self.read()
 
             # TODO: add timeout if no pvt message for too long
+            t0 = time()
+            if time() > t0 + 10:
+                if pvt_flag:
+                    self.log("10s with no fix")
+                    pvt_flag=False
+                else:
+                    self.log("no PVT message in 10s")
+                    subprocess.run(['ubxtool', '-p', 'CFG-MSG,1,7,1', '-w', '0'])
 
 
             # check if first 4 bytes in message match header of UBX-NAV-PVT
             if b'\xb5b\x01\x07' in out[0:4]:
+                pvt_flag=True
+
                 nums = unpack_from('<LHBBBBBBLlBBBBllllLLlllllLLHHHH', out[6:], 0)
                 #                                            trim header ^^
 
@@ -172,13 +187,13 @@ class Gps:
         self.log("thread started")
         if len(self.threads) == 2:
             prevThreadDict = self.threads.pop(0)
-            prevThreadDict["start time"].set()
+            prevThreadDict["stop flag"].set()
         if len(self.threads) > 2:
             self.log("Something went wrong with the threading in gps!")
 
     def kill_all_threads(self):
-        for diction in self.threads:
-            diction["stop flag"].set()
+        for t in self.threads:
+            t["stop flag"].set()
 
         self.log.write("GPS: all threads killed")
 

@@ -11,7 +11,7 @@ class Log:
 
         print(time(), self.pf, arg)
         try:
-            self.lf.write("\n" + str(round(time(), 4)) + " " + self.pf + " " + arg)
+            self.lf.write("\n" + str(round(time(), 2)) + " " + self.pf + " " + arg)
         except Exception as e:
             print(e)
 

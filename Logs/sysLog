@@ -116,3 +116,835 @@ Enabled sensors:[]
 
 1689103478.9611 CONTROL: error during calibration of GPS: 'Log' object has no attribute 'write'
 1689103478.9891 CONTROL: error during thread management of GPS: 'Log' object has no attribute 'write'
+1689104566.0963 CONTROL: =======================================
+
+1689104566.0966 CONTROL: beginning control script ... 
+1689104566.0969 CONTROL: FATAL! error importing gyro, not added to senesor list
+1689104566.097 CONTROL: No active exception to reraise
+1689104566.5019 ACC: initialized
+1689104566.7453 MAG: initialized
+1689104402.98 CONTROL: =======================================
+
+1689104402.98 CONTROL: beginning control script ... 
+1689104402.98 CONTROL: FATAL! error importing gyro, not added to senesor list
+1689104402.98 CONTROL: No active exception to reraise
+1689104403.66 ACC: initialized
+1689104404.0 MAG: initialized
+1689104404.79 IMU: initialized
+1689104404.79 CONTROL: Enabled sensors:['GPS', 'Acceleromter', 'Magnetometer', 'IMU']
+
+1689104404.79 GPS: Checking protocol
+1689104404.79 GPS: beginning calibration
+1689104404.79 ACC: thread started
+1689104404.79 MAG: thread started
+1689104404.8 IMU: thread started
+1689104414.82 ACC: thread started
+1689104414.82 ACC: thread finished
+1689104414.82 MAG: thread started
+1689104414.83 MAG: thread finished
+1689104414.84 IMU: thread started
+1689104414.85 IMU: thread finished
+1689105362.68 ACC: thread started
+1689105362.68 MAG: thread started
+1689105362.69 ACC: thread finished
+1689105362.69 MAG: thread finished
+1689105362.7 IMU: thread started
+1689105362.7 IMU: thread finished
+1689105372.71 ACC: thread started
+1689105372.71 MAG: thread started
+1689105372.72 IMU: thread started
+1689105374.85 MAG: thread finished
+1689105374.85 IMU: thread finished
+1689105374.85 ACC: thread finished
+1689105382.74 ACC: thread started
+1689105382.74 MAG: thread started
+1689105382.74 ACC: thread finished
+1689105382.77 IMU: thread started
+1689105382.77 MAG: thread finished
+1689105382.8 IMU: thread finished
+1689105392.79 ACC: thread started
+1689105392.79 ACC: thread finished
+1689105392.79 MAG: thread started
+1689105392.8 IMU: thread started
+1689105392.8 MAG: thread finished
+1689105392.81 IMU: thread finished
+1689105402.82 ACC: thread started
+1689105402.82 MAG: thread started
+1689105402.82 MAG: thread finished
+1689105402.82 IMU: thread started
+1689105402.86 IMU: thread finished
+1689105402.86 ACC: thread finished
+1689105407.4 IMU: [Errno 121] Remote I/O error
+1689105407.41 IMU: thread finished
+1689105412.84 ACC: thread started
+1689105412.84 ACC: thread finished
+1689105412.85 MAG: thread started
+1689105412.85 IMU: thread started
+1689105412.86 MAG: thread finished
+1689105422.87 ACC: thread started
+1689105422.87 MAG: thread started
+1689105422.87 ACC: thread finished
+1689105422.87 MAG: thread finished
+1689105422.88 IMU: thread started
+1689105422.92 IMU: thread finished
+1689105432.9 ACC: thread started
+1689105432.9 MAG: thread started
+1689105432.9 ACC: thread finished
+1689105432.91 MAG: thread finished
+1689105432.92 IMU: thread started
+1689105432.97 IMU: thread finished
+1689105440.76 IMU: [Errno 121] Remote I/O error
+1689105440.76 IMU: thread finished
+1689105442.94 ACC: thread started
+1689105442.94 ACC: thread finished
+1689105442.94 MAG: thread started
+1689105442.95 MAG: thread finished
+1689105442.96 IMU: thread started
+1689105452.97 ACC: thread started
+1689105452.97 ACC: thread finished
+1689105452.97 MAG: thread started
+1689105452.98 MAG: thread finished
+1689105452.99 IMU: thread started
+1689105453.03 IMU: thread finished
+1689105463.04 ACC: thread started
+1689105463.04 ACC: thread finished
+1689105463.04 MAG: thread started
+1689105463.07 IMU: thread started
+1689105463.09 MAG: thread finished
+1689105463.14 IMU: thread finished
+1689105473.08 ACC: thread started
+1689105473.09 ACC: thread finished
+1689105473.09 MAG: thread started
+1689105473.1 IMU: thread started
+1689105473.11 MAG: thread finished
+1689105473.13 IMU: thread finished
+1689105483.12 ACC: thread started
+1689105483.12 MAG: thread started
+1689105483.12 ACC: thread finished
+1689105483.12 MAG: thread finished
+1689105483.13 IMU: thread started
+1689105483.13 IMU: thread finished
+1689105493.14 ACC: thread started
+1689105493.14 MAG: thread started
+1689105493.15 MAG: thread finished
+1689105493.15 IMU: thread started
+1689105493.17 IMU: thread finished
+1689105493.17 ACC: thread finished
+1689105503.16 ACC: thread started
+1689105503.17 MAG: thread started
+1689105503.17 ACC: thread finished
+1689105503.18 MAG: thread finished
+1689105503.18 IMU: thread started
+1689105503.19 IMU: thread finished
+1689105513.2 ACC: thread started
+1689105513.2 MAG: thread started
+1689105513.2 ACC: thread finished
+1689105513.21 MAG: thread finished
+1689105513.21 IMU: thread started
+1689105513.22 IMU: thread finished
+1689105523.23 ACC: thread started
+1689105523.23 MAG: thread started
+1689105523.23 ACC: thread finished
+1689105523.23 MAG: thread finished
+1689105523.24 IMU: thread started
+1689105523.24 IMU: thread finished
+1689105533.25 ACC: thread started
+1689105533.25 MAG: thread started
+1689105533.25 ACC: thread finished
+1689105533.26 MAG: thread finished
+1689105533.26 IMU: thread started
+1689105533.26 IMU: thread finished
+1689105543.28 ACC: thread started
+1689105543.28 MAG: thread started
+1689105543.28 ACC: thread finished
+1689105543.29 IMU: thread started
+1689105543.29 MAG: thread finished
+1689105543.3 IMU: thread finished
+1689105553.3 ACC: thread started
+1689105553.3 MAG: thread started
+1689105553.3 ACC: thread finished
+1689105553.31 MAG: thread finished
+1689105553.31 IMU: thread started
+1689105553.31 IMU: thread finished
+1689105558.91 IMU: [Errno 121] Remote I/O error
+1689105558.91 IMU: thread finished
+1689105563.33 ACC: thread started
+1689105563.33 MAG: thread started
+1689105563.33 ACC: thread finished
+1689105563.34 MAG: thread finished
+1689105563.35 IMU: thread started
+1689105573.36 ACC: thread started
+1689105573.37 MAG: thread started
+1689105573.37 ACC: thread finished
+1689105573.37 IMU: thread started
+1689105573.38 MAG: thread finished
+1689105573.4 IMU: thread finished
+1689105583.39 ACC: thread started
+1689105583.39 ACC: thread finished
+1689105583.39 MAG: thread started
+1689105583.4 MAG: thread finished
+1689105583.4 IMU: thread started
+1689105583.41 IMU: thread finished
+1689105593.42 ACC: thread started
+1689105593.42 ACC: thread finished
+1689105593.42 MAG: thread started
+1689105593.43 IMU: thread started
+1689105593.44 MAG: thread finished
+1689105593.46 IMU: thread finished
+1689105603.45 ACC: thread started
+1689105603.45 MAG: thread started
+1689105603.45 ACC: thread finished
+1689105603.45 MAG: thread finished
+1689105603.46 IMU: thread started
+1689105603.5 IMU: thread finished
+1689105613.48 ACC: thread started
+1689105613.48 ACC: thread finished
+1689105613.48 MAG: thread started
+1689105613.49 MAG: thread finished
+1689105613.49 IMU: thread started
+1689105613.5 IMU: thread finished
+1689105623.51 ACC: thread started
+1689105623.51 ACC: thread finished
+1689105623.51 MAG: thread started
+1689105623.54 MAG: thread finished
+1689105623.54 IMU: thread started
+1689105623.57 IMU: thread finished
+1689105633.56 ACC: thread started
+1689105633.56 MAG: thread started
+1689105633.56 ACC: thread finished
+1689105633.57 IMU: thread started
+1689105633.57 MAG: thread finished
+1689105633.59 IMU: thread finished
+1689105643.59 ACC: thread started
+1689105643.59 ACC: thread finished
+1689105643.59 MAG: thread started
+1689105643.6 MAG: thread finished
+1689105643.6 IMU: thread started
+1689105643.61 IMU: thread finished
+1689105653.62 ACC: thread started
+1689105653.62 ACC: thread finished
+1689105653.62 MAG: thread started
+1689105653.62 MAG: thread finished
+1689105653.63 IMU: thread started
+1689105653.67 IMU: thread finished
+1689105663.65 ACC: thread started
+1689105663.65 ACC: thread finished
+1689105663.65 MAG: thread started
+1689105663.67 MAG: thread finished
+1689105663.67 IMU: thread started
+1689105663.68 IMU: thread finished
+1689105673.69 ACC: thread started
+1689105673.7 MAG: thread started
+1689105673.7 ACC: thread finished
+1689105673.7 IMU: thread started
+1689105673.7 MAG: thread finished
+1689105673.71 IMU: thread finished
+1689105683.72 ACC: thread started
+1689105683.74 MAG: thread started
+1689105683.75 MAG: thread finished
+1689105683.75 IMU: thread started
+1689105683.78 IMU: thread finished
+1689105683.78 ACC: thread finished
+1689105693.78 ACC: thread started
+1689105693.79 MAG: thread started
+1689105693.8 MAG: thread finished
+1689105693.8 IMU: thread started
+1689105693.81 ACC: thread finished
+1689105693.82 IMU: thread finished
+1689105703.82 ACC: thread started
+1689105703.82 MAG: thread started
+1689105703.82 ACC: thread finished
+1689105703.82 MAG: thread finished
+1689105703.83 IMU: thread started
+1689105703.83 IMU: thread finished
+1689105713.85 ACC: thread started
+1689105713.85 MAG: thread started
+1689105713.85 ACC: thread finished
+1689105713.86 MAG: thread finished
+1689105713.86 IMU: thread started
+1689105713.88 IMU: thread finished
+1689105723.88 ACC: thread started
+1689105723.88 MAG: thread started
+1689105723.88 ACC: thread finished
+1689105723.89 IMU: thread started
+1689105723.89 MAG: thread finished
+1689105723.89 IMU: thread finished
+1689105733.9 ACC: thread started
+1689105733.9 ACC: thread finished
+1689105733.91 MAG: thread started
+1689105733.91 IMU: thread started
+1689105733.92 MAG: thread finished
+1689105733.93 IMU: thread finished
+1689105743.93 ACC: thread started
+1689105743.93 MAG: thread started
+1689105743.93 ACC: thread finished
+1689105743.94 MAG: thread finished
+1689105743.94 IMU: thread started
+1689105743.95 IMU: thread finished
+1689105753.95 ACC: thread started
+1689105753.95 MAG: thread started
+1689105753.96 ACC: thread finished
+1689105753.96 MAG: thread finished
+1689105753.97 IMU: thread started
+1689105753.98 IMU: thread finished
+1689105763.99 ACC: thread started
+1689105763.99 MAG: thread started
+1689105763.99 ACC: thread finished
+1689105763.99 MAG: thread finished
+1689105763.99 IMU: thread started
+1689105764.01 IMU: thread finished
+1689105774.02 ACC: thread started
+1689105774.02 MAG: thread started
+1689105774.02 ACC: thread finished
+1689105774.02 MAG: thread finished
+1689105774.03 IMU: thread started
+1689105774.05 IMU: thread finished
+1689105784.05 ACC: thread started
+1689105784.05 MAG: thread started
+1689105784.05 ACC: thread finished
+1689105784.06 IMU: thread started
+1689105784.06 MAG: thread finished
+1689105784.06 IMU: thread finished
+1689105794.07 ACC: thread started
+1689105794.08 MAG: thread started
+1689105794.08 ACC: thread finished
+1689105794.08 IMU: thread started
+1689105794.09 MAG: thread finished
+1689105794.09 IMU: thread finished
+1689105798.47 GPS: outputting ubx protocol
+1689105798.47 GPS: outputting NMEA protocol, disabling
+1689105804.12 ACC: thread started
+1689105804.12 ACC: thread finished
+1689105804.14 MAG: thread started
+1689105804.15 IMU: thread started
+1689105804.16 IMU: thread finished
+1689105804.17 MAG: thread finished
+1689105804.21 GPS: outputting ubx protocol
+1689105804.21 GPS: outputting NMEA protocol, disabling
+1689105810.21 GPS: outputting proper protocol
+1689105810.21 GPS: Checking fix
+1689105810.22 GPS: has 3d fix
+1689105810.25 GPS: connected to internet, will not use pps signal unless connection drops
+1689105810.25 GPS: has been calibrated
+1689105811.17 GPS: thread started
+1689105814.18 ACC: thread started
+1689105814.18 ACC: thread finished
+1689105814.19 MAG: thread started
+1689105814.2 IMU: thread started
+1689105814.21 MAG: thread finished
+1689105814.26 IMU: thread finished
+1689105821.23 GPS: thread started
+1689105821.23 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689105824.25 ACC: thread started
+1689105824.25 MAG: thread started
+1689105824.28 MAG: thread finished
+1689105824.29 IMU: thread started
+1689105824.3 IMU: thread finished
+1689105824.33 ACC: thread finished
+1689105831.31 GPS: thread started
+1689105831.31 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689105834.32 ACC: thread started
+1689105834.32 ACC: thread finished
+1689105834.32 MAG: thread started
+1689105834.33 MAG: thread finished
+1689105834.33 IMU: thread started
+1689105834.37 IMU: thread finished
+1689105841.37 GPS: thread started
+1689105841.37 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689105842.02 IMU: [Errno 121] Remote I/O error
+1689105842.03 IMU: thread finished
+1689105844.38 ACC: thread started
+1689105844.38 ACC: thread finished
+1689105844.38 MAG: thread started
+1689105844.4 IMU: thread started
+1689105844.4 MAG: thread finished
+1689105851.41 GPS: thread started
+1689105851.41 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689105854.42 ACC: thread started
+1689105854.43 ACC: thread finished
+1689105854.43 MAG: thread started
+1689105854.44 IMU: thread started
+1689105854.45 MAG: thread finished
+1689105854.48 IMU: thread finished
+1689105861.46 GPS: thread started
+1689105861.46 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689105864.47 ACC: thread started
+1689105864.48 ACC: thread finished
+1689105864.48 MAG: thread started
+1689105864.49 IMU: thread started
+1689105864.5 MAG: thread finished
+1689105864.52 IMU: thread finished
+1689105871.51 GPS: thread started
+1689105871.51 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689105874.53 ACC: thread started
+1689105874.53 MAG: thread started
+1689105874.53 ACC: thread finished
+1689105874.54 MAG: thread finished
+1689105874.54 IMU: thread started
+1689105874.55 IMU: thread finished
+1689105881.56 GPS: thread started
+1689105881.56 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689105884.58 ACC: thread started
+1689105884.58 ACC: thread finished
+1689105884.59 MAG: thread started
+1689105884.62 IMU: thread started
+1689105884.63 MAG: thread finished
+1689105884.69 IMU: thread finished
+1689105891.64 GPS: thread started
+1689105891.64 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689105894.66 ACC: thread started
+1689105894.67 MAG: thread started
+1689105894.67 ACC: thread finished
+1689105894.68 MAG: thread finished
+1689105894.68 IMU: thread started
+1689105894.68 IMU: thread finished
+1689105901.7 GPS: thread started
+1689105901.7 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689105904.71 ACC: thread started
+1689105904.71 MAG: thread started
+1689105904.72 IMU: thread started
+1689105904.72 MAG: thread finished
+1689105905.18 IMU: thread finished
+1689105905.19 ACC: thread finished
+1689105911.74 GPS: thread started
+1689105911.74 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689105914.75 ACC: thread started
+1689105914.75 ACC: thread finished
+1689105914.76 MAG: thread started
+1689105914.77 IMU: thread started
+1689105914.78 MAG: thread finished
+1689105914.8 IMU: thread finished
+1689105921.78 GPS: thread started
+1689105921.78 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689105924.79 ACC: thread started
+1689105924.79 MAG: thread started
+1689105924.79 ACC: thread finished
+1689105924.79 MAG: thread finished
+1689105924.8 IMU: thread started
+1689105924.81 IMU: thread finished
+1689105931.81 GPS: thread started
+1689105931.81 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689105934.82 ACC: thread started
+1689105934.82 ACC: thread finished
+1689105934.83 MAG: thread started
+1689105934.83 IMU: thread started
+1689105934.84 MAG: thread finished
+1689105934.87 IMU: thread finished
+1689105941.85 GPS: thread started
+1689105941.85 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689105944.86 ACC: thread started
+1689105944.86 ACC: thread finished
+1689105944.86 MAG: thread started
+1689105944.87 MAG: thread finished
+1689105944.88 IMU: thread started
+1689105944.88 IMU: thread finished
+1689105951.89 GPS: thread started
+1689105951.89 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689105954.9 ACC: thread started
+1689105954.9 MAG: thread started
+1689105954.9 ACC: thread finished
+1689105954.91 MAG: thread finished
+1689105954.91 IMU: thread started
+1689105954.93 IMU: thread finished
+1689105961.92 GPS: thread started
+1689105961.92 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689105964.93 ACC: thread started
+1689105964.93 ACC: thread finished
+1689105964.94 MAG: thread started
+1689105964.95 IMU: thread started
+1689105964.95 MAG: thread finished
+1689105965.0 IMU: thread finished
+1689105971.96 GPS: thread started
+1689105971.96 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689105974.97 ACC: thread started
+1689105974.97 ACC: thread finished
+1689105974.98 MAG: thread started
+1689105974.98 MAG: thread finished
+1689105974.98 IMU: thread started
+1689105975.02 IMU: thread finished
+1689105982.0 GPS: thread started
+1689105982.0 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689105985.01 ACC: thread started
+1689105985.01 ACC: thread finished
+1689105985.01 MAG: thread started
+1689105985.02 IMU: thread started
+1689105985.02 IMU: thread finished
+1689105985.03 MAG: thread finished
+1689105992.05 GPS: thread started
+1689105992.05 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689105995.05 ACC: thread started
+1689105995.06 ACC: thread finished
+1689105995.06 MAG: thread started
+1689105995.07 IMU: thread started
+1689105995.07 MAG: thread finished
+1689105995.1 IMU: thread finished
+1689106002.08 GPS: thread started
+1689106002.08 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106005.09 ACC: thread started
+1689106005.1 MAG: thread started
+1689106005.11 ACC: thread finished
+1689106005.11 MAG: thread finished
+1689106005.11 IMU: thread started
+1689106005.14 IMU: thread finished
+1689106012.14 GPS: thread started
+1689106012.14 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106015.16 ACC: thread started
+1689106015.17 MAG: thread started
+1689106015.17 ACC: thread finished
+1689106015.18 IMU: thread started
+1689106015.19 MAG: thread finished
+1689106015.21 IMU: thread finished
+1689106022.2 GPS: thread started
+1689106022.2 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106025.21 ACC: thread started
+1689106025.21 ACC: thread finished
+1689106025.22 MAG: thread started
+1689106025.23 MAG: thread finished
+1689106025.23 IMU: thread started
+1689106025.24 IMU: thread finished
+1689106032.25 GPS: thread started
+1689106032.25 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106035.26 ACC: thread started
+1689106035.26 MAG: thread started
+1689106035.26 ACC: thread finished
+1689106035.27 MAG: thread finished
+1689106035.27 IMU: thread started
+1689106035.29 IMU: thread finished
+1689106042.28 GPS: thread started
+1689106042.28 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106045.29 ACC: thread started
+1689106045.29 MAG: thread started
+1689106045.29 ACC: thread finished
+1689106045.3 MAG: thread finished
+1689106045.3 IMU: thread started
+1689106045.31 IMU: thread finished
+1689106052.33 GPS: thread started
+1689106052.33 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106055.34 ACC: thread started
+1689106055.34 MAG: thread started
+1689106055.34 ACC: thread finished
+1689106055.34 MAG: thread finished
+1689106055.35 IMU: thread started
+1689106055.36 IMU: thread finished
+1689106062.36 GPS: thread started
+1689106062.36 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106065.37 ACC: thread started
+1689106065.38 ACC: thread finished
+1689106065.38 MAG: thread started
+1689106065.39 IMU: thread started
+1689106065.39 MAG: thread finished
+1689106065.4 IMU: thread finished
+1689106072.4 GPS: thread started
+1689106072.4 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106075.41 ACC: thread started
+1689106075.41 MAG: thread started
+1689106075.41 ACC: thread finished
+1689106075.42 MAG: thread finished
+1689106075.42 IMU: thread started
+1689106075.43 IMU: thread finished
+1689106082.44 GPS: thread started
+1689106082.44 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106085.45 ACC: thread started
+1689106085.45 MAG: thread started
+1689106085.48 IMU: thread started
+1689106085.48 ACC: thread finished
+1689106085.49 MAG: thread finished
+1689106085.5 IMU: thread finished
+1689106092.49 GPS: thread started
+1689106092.49 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106095.5 ACC: thread started
+1689106095.51 ACC: thread finished
+1689106095.51 MAG: thread started
+1689106095.52 IMU: thread started
+1689106095.53 MAG: thread finished
+1689106095.53 IMU: thread finished
+1689106102.54 GPS: thread started
+1689106102.54 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106105.56 ACC: thread started
+1689106105.56 MAG: thread started
+1689106105.56 ACC: thread finished
+1689106105.57 MAG: thread finished
+1689106105.57 IMU: thread started
+1689106105.6 IMU: thread finished
+1689106109.55 IMU: [Errno 121] Remote I/O error
+1689106109.55 IMU: thread finished
+1689106112.59 GPS: thread started
+1689106112.59 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106115.6 ACC: thread started
+1689106115.6 MAG: thread started
+1689106115.6 ACC: thread finished
+1689106115.61 MAG: thread finished
+1689106115.61 IMU: thread started
+1689106122.63 GPS: thread started
+1689106122.63 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106125.64 ACC: thread started
+1689106125.65 ACC: thread finished
+1689106125.65 MAG: thread started
+1689106125.66 IMU: thread started
+1689106125.66 MAG: thread finished
+1689106125.7 IMU: thread finished
+1689106132.71 GPS: thread started
+1689106132.71 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106135.72 ACC: thread started
+1689106135.72 MAG: thread started
+1689106135.72 ACC: thread finished
+1689106135.72 MAG: thread finished
+1689106135.73 IMU: thread started
+1689106135.75 IMU: thread finished
+1689106142.74 GPS: thread started
+1689106142.74 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106145.75 ACC: thread started
+1689106145.75 MAG: thread started
+1689106145.76 ACC: thread finished
+1689106145.76 MAG: thread finished
+1689106145.77 IMU: thread started
+1689106145.78 IMU: thread finished
+1689106152.79 GPS: thread started
+1689106152.79 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106154.12 IMU: [Errno 121] Remote I/O error
+1689106154.12 IMU: thread finished
+1689106155.8 ACC: thread started
+1689106155.8 MAG: thread started
+1689106155.8 ACC: thread finished
+1689106155.81 IMU: thread started
+1689106155.81 MAG: thread finished
+1689106162.82 GPS: thread started
+1689106162.82 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106165.83 ACC: thread started
+1689106165.84 MAG: thread started
+1689106165.84 ACC: thread finished
+1689106165.84 MAG: thread finished
+1689106165.85 IMU: thread started
+1689106165.9 IMU: thread finished
+1689106172.87 GPS: thread started
+1689106172.87 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106175.89 ACC: thread started
+1689106175.89 MAG: thread started
+1689106175.89 ACC: thread finished
+1689106175.9 MAG: thread finished
+1689106175.9 IMU: thread started
+1689106175.95 IMU: thread finished
+1689106182.91 GPS: thread started
+1689106182.92 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106185.92 ACC: thread started
+1689106185.93 MAG: thread started
+1689106185.93 ACC: thread finished
+1689106185.93 IMU: thread started
+1689106185.94 IMU: thread finished
+1689106185.94 MAG: thread finished
+1689106192.95 GPS: thread started
+1689106192.95 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106195.96 ACC: thread started
+1689106195.96 ACC: thread finished
+1689106195.96 MAG: thread started
+1689106195.97 IMU: thread started
+1689106195.97 MAG: thread finished
+1689106196.0 IMU: thread finished
+1689106202.99 GPS: thread started
+1689106202.99 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106206.01 ACC: thread started
+1689106206.01 MAG: thread started
+1689106206.02 ACC: thread finished
+1689106206.02 MAG: thread finished
+1689106206.03 IMU: thread started
+1689106206.08 IMU: thread finished
+1689106213.07 GPS: thread started
+1689106213.07 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106216.07 ACC: thread started
+1689106216.08 MAG: thread started
+1689106216.08 ACC: thread finished
+1689106216.08 MAG: thread finished
+1689106216.09 IMU: thread started
+1689106216.1 IMU: thread finished
+1689106223.11 GPS: thread started
+1689106223.11 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106226.12 ACC: thread started
+1689106226.12 ACC: thread finished
+1689106226.12 MAG: thread started
+1689106226.13 IMU: thread started
+1689106226.13 MAG: thread finished
+1689106226.16 IMU: thread finished
+1689106233.14 GPS: thread started
+1689106233.14 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106236.15 ACC: thread started
+1689106236.15 MAG: thread started
+1689106236.16 ACC: thread finished
+1689106236.16 MAG: thread finished
+1689106236.16 IMU: thread started
+1689106236.18 IMU: thread finished
+1689106243.17 GPS: thread started
+1689106243.17 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106246.19 ACC: thread started
+1689106246.2 MAG: thread started
+1689106246.2 ACC: thread finished
+1689106246.25 IMU: thread started
+1689106246.29 MAG: thread finished
+1689106246.33 IMU: thread finished
+1689106253.26 GPS: thread started
+1689106253.26 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106256.28 ACC: thread started
+1689106256.28 MAG: thread started
+1689106256.28 ACC: thread finished
+1689106256.29 IMU: thread started
+1689106256.31 MAG: thread finished
+1689106256.33 IMU: thread finished
+1689106263.3 GPS: thread started
+1689106263.3 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106266.31 ACC: thread started
+1689106266.31 ACC: thread finished
+1689106266.32 MAG: thread started
+1689106266.33 IMU: thread started
+1689106266.33 MAG: thread finished
+1689106266.34 IMU: thread finished
+1689106273.34 GPS: thread started
+1689106273.34 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106276.35 ACC: thread started
+1689106276.35 MAG: thread started
+1689106276.35 ACC: thread finished
+1689106276.36 MAG: thread finished
+1689106276.37 IMU: thread started
+1689106276.39 IMU: thread finished
+1689106283.39 GPS: thread started
+1689106283.39 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106286.41 ACC: thread started
+1689106286.42 ACC: thread finished
+1689106286.42 MAG: thread started
+1689106286.44 MAG: thread finished
+1689106286.45 IMU: thread started
+1689106286.5 IMU: thread finished
+1689106293.47 GPS: thread started
+1689106293.47 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106296.5 ACC: thread started
+1689106296.5 MAG: thread started
+1689106296.51 MAG: thread finished
+1689106296.51 IMU: thread started
+1689106296.53 ACC: thread finished
+1689106296.53 IMU: thread finished
+1689106298.87 IMU: [Errno 121] Remote I/O error
+1689106298.87 IMU: thread finished
+1689106303.53 GPS: thread started
+1689106303.53 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106306.55 ACC: thread started
+1689106306.55 ACC: thread finished
+1689106306.56 MAG: thread started
+1689106306.57 MAG: thread finished
+1689106306.57 IMU: thread started
+1689106313.59 GPS: thread started
+1689106313.59 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106316.6 ACC: thread started
+1689106316.6 MAG: thread started
+1689106316.6 ACC: thread finished
+1689106316.61 IMU: thread started
+1689106316.61 IMU: thread finished
+1689106316.62 MAG: thread finished
+1689106323.63 GPS: thread started
+1689106323.63 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106326.66 ACC: thread started
+1689106326.68 MAG: thread started
+1689106326.7 ACC: thread finished
+1689106326.71 MAG: thread finished
+1689106326.71 IMU: thread started
+1689106326.73 IMU: thread finished
+1689106333.73 GPS: thread started
+1689106333.73 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106336.74 ACC: thread started
+1689106336.74 ACC: thread finished
+1689106336.75 MAG: thread started
+1689106336.75 IMU: thread started
+1689106336.76 MAG: thread finished
+1689106336.8 IMU: thread finished
+1689106343.77 GPS: thread started
+1689106343.77 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106346.78 ACC: thread started
+1689106346.78 ACC: thread finished
+1689106346.78 MAG: thread started
+1689106346.8 MAG: thread finished
+1689106346.8 IMU: thread started
+1689106346.83 IMU: thread finished
+1689106353.81 GPS: thread started
+1689106353.82 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106356.83 ACC: thread started
+1689106356.83 ACC: thread finished
+1689106356.83 MAG: thread started
+1689106356.84 IMU: thread started
+1689106356.87 MAG: thread finished
+1689106356.93 IMU: thread finished
+1689106363.87 GPS: thread started
+1689106363.87 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106366.88 ACC: thread started
+1689106366.88 MAG: thread started
+1689106366.89 MAG: thread finished
+1689106366.89 IMU: thread started
+1689106366.89 ACC: thread finished
+1689106366.91 IMU: thread finished
+1689106373.91 GPS: thread started
+1689106373.91 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106376.92 ACC: thread started
+1689106376.92 MAG: thread started
+1689106376.92 ACC: thread finished
+1689106376.92 MAG: thread finished
+1689106376.92 IMU: thread started
+1689106376.93 IMU: thread finished
+1689106383.95 GPS: thread started
+1689106383.95 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106386.96 ACC: thread started
+1689106386.97 MAG: thread started
+1689106386.99 MAG: thread finished
+1689106386.99 IMU: thread started
+1689106387.01 ACC: thread finished
+1689106387.03 IMU: thread finished
+1689106394.01 GPS: thread started
+1689106394.01 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106397.03 ACC: thread started
+1689106397.03 MAG: thread started
+1689106397.04 ACC: thread finished
+1689106397.04 MAG: thread finished
+1689106397.04 IMU: thread started
+1689106397.05 IMU: thread finished
+1689106404.06 GPS: thread started
+1689106404.06 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106407.07 ACC: thread started
+1689106407.07 MAG: thread started
+1689106407.08 MAG: thread finished
+1689106407.08 ACC: thread finished
+1689106407.08 IMU: thread started
+1689106407.09 IMU: thread finished
+1689106414.1 GPS: thread started
+1689106414.1 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106417.11 ACC: thread started
+1689106417.11 ACC: thread finished
+1689106417.11 MAG: thread started
+1689106417.12 MAG: thread finished
+1689106417.12 IMU: thread started
+1689106417.14 IMU: thread finished
+1689106424.13 GPS: thread started
+1689106424.13 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106427.14 ACC: thread started
+1689106427.15 MAG: thread started
+1689106427.15 MAG: thread finished
+1689106427.16 IMU: thread started
+1689106427.24 ACC: thread finished
+1689106427.27 IMU: thread finished
+1689106434.18 GPS: thread started
+1689106434.18 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106437.19 ACC: thread started
+1689106437.2 ACC: thread finished
+1689106437.2 MAG: thread started
+1689106437.22 IMU: thread started
+1689106437.22 MAG: thread finished
+1689106437.22 IMU: thread finished
+1689106444.25 GPS: thread started
+1689106444.25 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106447.26 ACC: thread started
+1689106447.27 MAG: thread started
+1689106447.27 ACC: thread finished
+1689106447.28 MAG: thread finished
+1689106447.28 IMU: thread started
+1689106447.29 IMU: thread finished
+1689106454.29 GPS: thread started
+1689106454.29 CONTROL: error during thread management of GPS: 'float' object has no attribute 'set'
+1689106457.3 ACC: thread started
+1689106457.31 MAG: thread started
+1689106457.32 ACC: thread finished
+1689106457.32 MAG: thread finished
+1689106457.33 IMU: thread started
