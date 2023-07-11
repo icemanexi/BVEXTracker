@@ -103,7 +103,7 @@ class Accelerometer:
                 print("\r\r%8.5f, %8.5f, %8.5f" %(ax[1], ax[2], ax[3]))
 
 if __name__ == "__main__":
-    with open("/home/bvextp1/BVEXTracker/output/accelLog", "a") as log:
-        test = Accelerometer("/home/bvextp1/BVEXTracker-main/output/Accelerometer/", log)
+    with open("/home/fissellab/BVEXTracker/output/accelLog", "a") as log:
+        test = Accelerometer("/home/fissellab/BVEXTracker-main/output/Accelerometer/", log)
 
     test.test()

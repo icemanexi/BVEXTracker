@@ -133,10 +133,10 @@ class Magnetometer:
     def test(self):
         while True:
             ax = self.ih.magnetic
-            print("%8.5f, %8.5f, %8.5f" %(ax[0], ax[1], ax[2]))
+            print("%12.5f, %12.5f, %12.5f" %(ax[0], ax[1], ax[2]))
 
 if __name__ == '__main__':
-    with open("/home/bvextp1/BVEXTracker/output/magLog", "a") as log:
+    with open("/home/fissellab/BVEXTracker/output/magLog", "a") as log:
         sens = Magnetometer("~/BVEXTracker/output/Magnetometer", log)
         sens.test()
 

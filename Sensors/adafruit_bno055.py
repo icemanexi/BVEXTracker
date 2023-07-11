@@ -163,7 +163,9 @@ class _ScaledReadOnlyStruct(Struct):  # pylint: disable=too-few-public-methods
     def __get__(
         self, obj: Optional["BNO055_I2C"], objtype: Optional[Type["BNO055_I2C"]] = None
     ) -> Tuple[float, float, float]:
+        print(super().__dict__)
         result = super().__get__(obj, objtype)
+        
         return tuple(self.scale * v for v in result)
 
     def __set__(self, obj: Optional["BNO055_I2C"], value: Any) -> None:
@@ -424,7 +426,7 @@ class BNO055:  # pylint: disable=too-many-public-methods
         """
         if self.mode not in [0x00, 0x02, 0x03, 0x06]:
             return self._acceleration
-        return None, None, None
+        return -999, -999, -999
 
     @property
     def _acceleration(self) -> None:
@@ -437,7 +439,7 @@ class BNO055:  # pylint: disable=too-many-public-methods
         """
         if self.mode not in [0x00, 0x01, 0x03, 0x05, 0x08]:
             return self._magnetic
-        return (None, None, None)
+        return (-999, -999, -999)
 
     @property
     def _magnetic(self) -> None:
@@ -450,7 +452,7 @@ class BNO055:  # pylint: disable=too-many-public-methods
         """
         if self.mode not in [0x00, 0x01, 0x02, 0x04, 0x09, 0x0A]:
             return self._gyro
-        return (None, None, None)
+        return (-999, -999, -999)
 
     @property
     def _gyro(self) -> None:
@@ -463,7 +465,7 @@ class BNO055:  # pylint: disable=too-many-public-methods
         """
         if self.mode in [0x08, 0x09, 0x0A, 0x0B, 0x0C]:
             return self._euler
-        return (None, None, None)
+        return (-999, -999, -999)
 
     @property
     def _euler(self) -> None:
@@ -478,7 +480,7 @@ class BNO055:  # pylint: disable=too-many-public-methods
         """
         if self.mode in [0x08, 0x09, 0x0A, 0x0B, 0x0C]:
             return self._quaternion
-        return (None, None, None, None)
+        return (-999, -999, -999, -999)
 
     @property
     def _quaternion(self) -> None:
@@ -776,14 +778,21 @@ class BNO055_I2C(BNO055):
     Driver for the BNO055 9DOF IMU sensor via I2C.
     """
 
-    _temperature = _ReadOnlyUnaryStruct(0x34, "b")
-    _acceleration = _ScaledReadOnlyStruct(0x08, "<hhh", np.float16(0.01)) # 0.01
-    _magnetic = _ScaledReadOnlyStruct(0x0E, "<hhh", np.float16(0.0625))
-    _gyro = _ScaledReadOnlyStruct(0x14, "<hhh", np.float16(0.001090830782496456))
-    _euler = _ScaledReadOnlyStruct(0x1A, "<hhh", np.float16(0.0625))
-    _quaternion = _ScaledReadOnlyStruct(0x20, "<hhhh", 1 / (1 << 14))
-    _linear_acceleration = _ScaledReadOnlyStruct(0x28, "<hhh", np.float16(0.01))
-    _gravity = _ScaledReadOnlyStruct(0x2E, "<hhh", np.float16(0.01))
+    #_temperature = _ReadOnlyUnaryStruct(0x34, "b")
+    #_acceleration = _ScaledReadOnlyStruct(0x08, "<hhh", np.float16(0.01)) # 0.01
+    #_magnetic = _ScaledReadOnlyStruct(0x0E, "<hhh", np.float16(0.0625))
+    #_gyro = _ScaledReadOnlyStruct(0x14, "<hhh", np.float16(0.001090830782496456))
+    #_euler = _ScaledReadOnlyStruct(0x1A, "<hhh", np.float16(0.0625))
+    #_quaternion = _ScaledReadOnlyStruct(0x20, "<hhhh", 1 / (1 << 14))
+    #_linear_acceleration = _ScaledReadOnlyStruct(0x28, "<hhh", np.float16(0.01))
+    #_gravity = _ScaledReadOnlyStruct(0x2E, "<hhh", np.float16(0.01))
+    _acceleration = _ReadOnlyStruct(0x08, "<hhh")
+    _magnetic = _ReadOnlyStruct(0x0E, "<hhh")
+    _gyro = _ReadOnlyStruct(0x14, "<hhh")
+    _euler = _ReadOnlyStruct(0x1A, "<hhh")
+    _quaternion = _ReadOnlyStruct(0x20, "<hhhh")
+    _linear_acceleration = _ReadOnlyStruct(0x28, "<hhh")
+    _gravity = _ReadOnlyStruct(0x2E, "<hhh")
 
     offsets_accelerometer = _ModeStruct(_OFFSET_ACCEL_REGISTER, "<hhh", CONFIG_MODE)
     """Calibration offsets for the accelerometer"""

@@ -138,18 +138,35 @@ class Gps:
 
         
         # 2. ensure pps signal (OPTIONAL???)
-        self.log.write("\nGPS: waiting for pps signal sync")
-        print("GPS: waiting for pps signal sync")
-        pps_status = None
-        while str(pps_status) != "b\'#*\'":
-            # compares current pps status to "being used" code
-            # exits if pps is being used
-            # below command runs 'chronyc sources' and strips output for code
-            # couldn't find a better way to check if pps is being used
-            pps_status = subprocess.check_output(['chronyc', 'sources', '|', 'grep', 'PPS0']).split()[10]
-            sleep(2)
-        self.log.write("\nGPS: valid pps signal")
-        print("\nGPS: valid pps signal")
+        # mangling output of 'ifconfig wlan0' to get the item I want to check. if UP is in flags, wifi is enabledi
+        try:
+            wifi_en = 'UP' in str(subprocess.check_output(['ifconfig', 'wlan0'])).split('\n')[0].split()[1]
+        except:
+            wifi_en = None
+
+        if wifi_en:
+            self.log.write("\nGPS: connected to internet, will not use pps signal unless connection drops")
+            print("GPS: connected to internet, will not use pps signal unless connection drops")
+        else:
+            t0 = time()
+
+            self.log.write("\nGPS: waiting for pps signal sync")
+            print("GPS: waiting for pps signal sync")
+            pps_status = None
+            while (str(pps_status) != "b\'#*\'") && time() - t0 > :
+                # compares current pps status to "being used" code
+                # exits if pps is being used
+                # below command runs 'chronyc sources' and strips output for code
+                # couldn't find a better way to check if pps is being used
+                try:
+                    pps_status = subprocess.check_output(['chronyc', 'sources', '|', 'grep', 'PPS0']).split()[10]
+                except Exception as e:
+                    self.log.write("\nGPS: error checking chrony sources")
+                    print("GPS: error checking chrony sources")
+
+                sleep(2)
+                self.log.write("\nGPS: valid pps signal")
+                print("\nGPS: valid pps signal")
 
         self.log.write("\nGPS: has been calibrated")
         self.is_calibrated = True
@@ -209,13 +226,13 @@ class Gps:
 
     def test(self):
         while True:
-            print(self.read())
-            #self.ih.decode_msg(self.read())
+            #print(self.read())
+            self.ih.decode_msg(self.read())
 
 if __name__ == "__main__":
     
-    with open("/home/bvextp1/BVEXTracker/Logs/GpsLog", "a") as log:
-        test = Gps("/home/bvextp1/BVEXTracker/output/GPS/", log)
+    with open("/home/fissellab/BVEXTracker/Logs/GpsLog", "a") as log:
+        test = Gps("/home/fissellab/BVEXTracker/output/GPS/", log)
 
         #test.calibrate()
         #while not test.is_calibrated:

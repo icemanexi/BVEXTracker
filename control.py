@@ -6,7 +6,7 @@ from math import floor
 sensor_list = []
 calibration_dict = {}
 
-syslog = open("/home/bvextp1/BVEXTracker/Logs/sysLog", "a")
+syslog = open("/home/fissellab/BVEXTracker/Logs/sysLog", "a")
 syslog.write("\n=======================================\n")
 syslog.write("\nbeginning control script ... ")
 syslog.write("\nTime:" + str(floor(time())))
@@ -14,7 +14,7 @@ syslog.write("\nTime:" + str(floor(time())))
 try:
     raise
     from Sensors.Gyroscope import Gyro
-    gyro = Gyro("/home/bvextp1/BVEXTracker/output/Gyroscope/", syslog)
+    gyro = Gyro("/home/fissellab/BVEXTracker/output/Gyroscope/", syslog)
     sensor_list.append(gyro)
 except Exception as e:
     syslog.write("\nCONTROL: FATAL! error importing gyro, not added to senesor list")
@@ -22,14 +22,14 @@ except Exception as e:
 
 try:
     from Sensors.GPS import Gps
-    gps = Gps("/home/bvextp1/BVEXTracker/output/GPS/", syslog)
+    gps = Gps("/home/fissellab/BVEXTracker/output/GPS/", syslog)
     sensor_list.append(gps)
 except Exception as e:
     syslog.write("\nCONTROL: FATAL! error importing gps, not added to senesor list")
     syslog.write("\nERROR: " + str(e))
 try:
     from Sensors.Accelerometer import Accelerometer
-    acc = Accelerometer("/home/bvextp1/BVEXTracker/output/Accelerometer/", syslog)
+    acc = Accelerometer("/home/fissellab/BVEXTracker/output/Accelerometer/", syslog)
     sensor_list.append(acc)
 except Exception as e:
     syslog.write("\nCONTROL: FATAL! error importing accelerometer, not added to sensor list")
@@ -37,7 +37,7 @@ except Exception as e:
     
 try:
     from Sensors.Magnetometer import Magnetometer
-    mag = Magnetometer("/home/bvextp1/BVEXTracker/output/Magnetometer/", syslog)
+    mag = Magnetometer("/home/fissellab/BVEXTracker/output/Magnetometer/", syslog)
     sensor_list.append(mag)
 except Exception as e:
     syslog.write("\nCONTROL: FATAL! error importing magnetometer, not added to sensor list")
@@ -45,7 +45,7 @@ except Exception as e:
 
 try:
     from Sensors.IMU import IMU
-    imu = IMU("/home/bvextp1/BVEXTracker/output/IMU/", syslog)
+    imu = IMU("/home/fissellab/BVEXTracker/output/IMU/", syslog)
     sensor_list.append(imu)
 except Exception as e:
     syslog.write("\nCONTROL: FATAL!  error importing IMU, not added to sensor list")
