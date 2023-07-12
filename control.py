@@ -54,10 +54,15 @@ except Exception as e:
     log(str(e))
 
 
+from Sensors.Led import LED
+led = LED(log_filation)
+
 log("Enabled sensors:" + str([s.name for s in sensor_list]) + "\n")
 
 while True:
     # go through each sensor
+    num_active_threads = 0
+
     for sensor in sensor_list:
         # calibration check
         try:
@@ -74,9 +79,13 @@ while True:
                 sensor.new_thread()
             elif time() - sensor.threads[0]["start time"] > 10: # creates new thread every 60s
                 sensor.new_thread()
+            else:
+                num_active_threads += 1
+
         except Exception as e:
             log("error during thread management of " + sensor.name + ": " + str(e))
 
+    led.mode = num_active_threads
     sleep(1)
 
 asdasd

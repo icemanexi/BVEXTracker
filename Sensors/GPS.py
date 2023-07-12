@@ -25,19 +25,26 @@ class Gps:
         self.ih = ubx.ubx()
         self.ih.io_handle = self.gpsio
         self.name = "GPS"
-        self.is_calibrated = False
+        self._is_calibrated = False
         self.is_calibrating = False
 
-        # ensure connection to gps
-        #t0 = time()
-        #out = []
-        #while time() < t0 + 3:
-        #    out += [self.gpsio.ser.sock.recv(8192)]
+    
+    @property
+    def is_calibrated(self):
+        if not self._is_calibrated:
+            return False
+        # has been calibrated, but might as well check we are recieving data
+        t0 = time()
+        out = []
+        while time() < t0 + 0.1:
+            out += self.gpsio.ser.sock.recv(8192)
 
-        #if not out:
-        #    self.log.write("\nGPS: CRITICAL ERROR!! not able to communicate with gps currently")
-        #else:
-        #    self.log.write("\nGPS: initialized")
+        if not out:
+            self.log("not recieving data!!!")
+            # this will cause control to rerun the calibrate script 
+            return False
+        return True
+
 
     def calibrate(self):
         self.is_calibrating = True
@@ -55,10 +62,7 @@ class Gps:
     }
 
     def run_calibrate(self):
-        
-        # 3 steps:
         # 0. ensure binary protocol
-
         self.log("Checking protocol")
         while True:
             out = []
@@ -66,7 +70,9 @@ class Gps:
             # hopefully 30 messages is enough to capture both NMEA 
             # and ubx messages if they are being outputted
             for i in range(30):
+                
                 out += [self.read()]
+
             
             binary_prot = False
             NMEA_prot = False
@@ -80,7 +86,7 @@ class Gps:
             if binary_prot and not NMEA_prot:
                 break
 
-            # debug..
+            # debug checks
             if binary_prot:
                 self.log("outputting ubx protocol")
             else: #if not enabled, enable it
@@ -93,8 +99,11 @@ class Gps:
             sleep(5)
         self.log("outputting proper protocol")
 
-        # NAV EOE = 0x01 0x61
+        # see ubx interface desciption for more codes
+        #          class ID 
+        # NAV EOE = 0x01 0x61 = 97
         # NAV PVT = 0x01 0x07
+        # NAV SAT = 0x01 0x35 = 53
 
         # TODO: ensure 20hz sample rate
 
@@ -103,8 +112,18 @@ class Gps:
         no_fix = True
         fix_type = None
         self.log("Checking fix")
-        # doesnt hurt to reenable pvt message
+        # doesnt hurt to reenable messages
+        # c = class
+        # i = id
+        # r = rate, ie output message every r epochs
+        # an epoch is roughly the same as a timestep. 
+        # rate of epoch should be 20hz and each epoch 
+        # it should output a pvt and eoe msg, and every 
+        # 5th epoch a sat msg.
+        #                                     --- c i r ---
         subprocess.run(['ubxtool', '-p', 'CFG-MSG,1,7,1', '-w', '0'])
+        subprocess.run(['ubxtool', '-p', 'CFG-MSG,1,97,1', '-w', '0'])
+        subprocess.run(['ubxtool', '-p', 'CFG-MSG,1,53,5', '-w', '0'])
         while no_fix:
             out = self.read()
 
@@ -175,7 +194,7 @@ class Gps:
                 self.log("valid pps signal")
 
         self.log("has been calibrated")
-        self.is_calibrated = True
+        self._is_calibrated = True
         self.is_calibrating = False
 
     def new_thread(self):
@@ -208,7 +227,7 @@ class Gps:
             file.close()
 
         file.close()
-        self.log("finished running thread")
+        self.log("thread finished")
 
     def read(self):
         out = None
@@ -235,9 +254,9 @@ if __name__ == "__main__":
     with open("/home/fissellab/BVEXTracker/Logs/GpsLog", "a") as log:
         test = Gps("/home/fissellab/BVEXTracker/output/GPS/", log)
 
-        #test.calibrate()
-        #while not test.is_calibrated:
-        #    sleep(1)
+        test.calibrate()
+        while not test.is_calibrated:
+            sleep(1)
         test.test()
     
 

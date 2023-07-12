@@ -441,3 +441,19 @@ GPS: invalid pps signal, waiting for validation
 GPS: invalid pps signal, waiting for validation
 GPS: invalid pps signal, waiting for validation
 GPS: invalid pps signal, waiting for validation
+1689187760.23 GPS: Checking protocol
+1689187760.23 GPS: beginning calibration
+1689187760.49 GPS: outputting proper protocol
+1689187760.49 GPS: Checking fix
+1689187761.67 GPS: has 3d fix
+1689187761.69 GPS: connected to internet, will not use pps signal unless connection drops
+1689187761.69 GPS: has been calibrated
+1689187787.29 GPS: Checking protocol
+1689187787.29 GPS: beginning calibration
+1689187787.53 GPS: outputting proper protocol
+1689187787.53 GPS: Checking fix
+1689187788.7 GPS: has 3d fix
+1689187788.71 GPS: connected to internet, will not use pps signal unless connection drops
+1689187788.71 GPS: has been calibrated
+1689188285.32 GPS: Checking protocol
+1689188285.32 GPS: beginning calibration

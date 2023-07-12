@@ -104,5 +104,5 @@ class Accelerometer:
 if __name__ == "__main__":
     with open("/home/fissellab/BVEXTracker/output/accelLog", "a") as l:
         test = Accelerometer("/home/fissellab/BVEXTracker/output/Accelerometer/", l)
-        test.new_thread()
+        test.test()
 
