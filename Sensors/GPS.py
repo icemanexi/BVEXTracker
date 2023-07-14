@@ -246,7 +246,7 @@ class Gps:
 
     def test(self):
         while True:
-            #print(self.read())
+            print(self.read())
             self.ih.decode_msg(self.read())
 
 if __name__ == "__main__":
@@ -254,9 +254,9 @@ if __name__ == "__main__":
     with open("/home/fissellab/BVEXTracker/Logs/GpsLog", "a") as log:
         test = Gps("/home/fissellab/BVEXTracker/output/GPS/", log)
 
-        test.calibrate()
-        while not test.is_calibrated:
-            sleep(1)
+        #test.calibrate()
+        #while not test.is_calibrated:
+        #    sleep(1)
         test.test()
     
 

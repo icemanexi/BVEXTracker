@@ -20,7 +20,6 @@ class IMU:
         self.header = ("time", "accel x", "accel y", "accel z", "mag x", "mag y", "mag z", "gyro x", "gyro y", "gyro z", "euler 1", "euler 2", "euler 3")
         self.is_calibrating = False
 
-        
         try:
             # will throw error if not connected
             self.ih = bno055.BNO055_I2C(I2C(1)) # ih = interface handler
@@ -30,15 +29,34 @@ class IMU:
         else:
             self.log("initialized")
 
+    # reads in calibration offsets from file
+    def calibrate(self):
+        with open("/home/fissellab/BVEXTracker/Sensors/IMU_offsets", "r") as f:
+            self.offset_list = [int(i) for i in f.read().split()]
+        print(self.offset_list)
+
+        self.ih.mode = 0x00 # 'CONFIG' mode 
+        addr = 0x55 # start of offset registers
+        for i in self.offset_list:
+            self.ih._write_register(addr, i) # writes in stored offset
+            addr += 1
+        
+        # sanity check
+        for a in range (3):
+            addr = 0x55
+            for i in self.offset_list:
+                stored = self.ih._read_register(addr)
+                print(stored, end=", ")
+                addr += 1
+            print("")
+        
+
+        self.ih.mode = 0x0C # 'NDOF' or 'normal' mode
+        self.log("successful calibration")
 
 
     @property
     def is_calibrated(self):
-        # TODO: figure out how to use old calibration offsets, which would 
-        # be preferable
-        return True 
-
-
         if not self.ih:
             self.log("CRITICAL ERROR!! interface handler not defined, cant calibrate")
             return
@@ -50,8 +68,7 @@ class IMU:
         mag_stat = (status_reg & 0b00000011)
         #print("\n IMU cali status: sys: ", sys_stat, "gy", gyr_stat, "ac", acc_stat, "ma", mag_stat)
         
-
-        if (status_reg & 0b00110011) == 0b00110011:
+        if (status_reg & 0b00111111) == 0b00111111:
             self.is_calibrating = False
             return True
         return False
@@ -115,6 +132,37 @@ class IMU:
         dat_file.close()
         self.log("thread finished")
 
+    def get_calibration_offsets(self):
+        while True:
+            status_reg =  self.ih._read_register(0x35)
+            sys_stat = (status_reg & 0b11000000) >>6
+            gyr_stat = (status_reg & 0b00110000) >> 4
+            acc_stat = (status_reg & 0b00001100) >> 2
+            mag_stat = (status_reg & 0b00000011)
+            print("\n IMU cali status: sys: ", sys_stat, "gy", gyr_stat, "ac", acc_stat, "ma", mag_stat)
+            sleep(1)
+            if status_reg & 0b00111111 == 0b00111111: # full calibration
+                break
+        
+        self.ih.mode = 0x00 # 'CONFIG' mode
+        start_i = 0x55 # start of calibration registers
+        cali_list = []
+        for i in range(22):
+            cali_list.append(self.ih._read_register(start_i + i))
+
+        print(cali_list)
+        with open("/home/fissellab/BVEXTracker/Sensors/IMU_offsets", "w") as f:
+            for i in range(len(cali_list)): # write calibration offsets to file
+                if i == 21:
+                    f.write(str(cali_list[i]))
+                    continue
+                f.write(str(cali_list[i]) + " ")
+            
+
+        self.ih.mode = 0x0C # NDOF mode / normal mode   
+        
+
+
 # ------------------------not runtime--------------------------
     # saving raw data from sensor, these convert numbers to default units
     # see data sheet
@@ -125,7 +173,8 @@ class IMU:
             "euler" : 0.0625,
             "quaternion" : (1 / (1<<14)),
             "linear accel" : 0.01,
-            "gravity" : 0.01
+            "gravity" : 0.01,
+            "temperature" : 0.5
             }
 
     def read_file(self, file):
@@ -172,8 +221,5 @@ class IMU:
 if __name__ == "__main__":
     with open("/home/fissellab/BVEXTracker/output/IMULog", "a") as log:
         test = IMU("/home/fissellab/BVEXTracker/output/IMU/", log)
-        #test.new_thread()
-    #while not test.is_calibrated:
-    #    sleep(1)
-    test.test()
+        test.new_thread()
 

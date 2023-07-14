@@ -6,19 +6,20 @@ import threading
 
 try:
     from Sensors.L3GD20H import L3GD20H
+    from Sensors.Log import Log
 except:
     from L3GD20H import L3GD20H
+    from Log import Log
 
 
 
 class Gyro:
-    def __init__(self, Write_Directory : str, log): #runs upon initialization
+    def __init__(self, Write_Directory : str, log_file): #runs upon initialization
         self.wd = Write_Directory
-        self.log = log
+        self.log = Log("GYR:", log_file)
         self.header = ("time", "gyro x", "gyro y", "gyro z")
         self.key = "<dfff" # this is used for the struct methods
         self.threads = []
-        self.num_threads = 0
         self.name = "Gyroscope"
         self.is_calibrating = False
         self.is_calibrated = True # gyro does not need to be calibrated
@@ -27,10 +28,11 @@ class Gyro:
             # TODO write script to ensure connection 
             # eg read whoami reg
             self.ih = L3GD20H()
-            self.log.write("\nGYRO: initialized")
+            self.ih.power()
+            self.log("initialized")
         except Exception as e:
             self.ih = None
-            self.log.write("\nGYRO: CRITICAL ERROR!! could not initialize interface handler:" + str(e))
+            self.log("CRITICAL ERROR!! could not initialize interface handler:" + str(e))
             raise e
 
     def new_thread(self):
@@ -39,13 +41,12 @@ class Gyro:
         self.threads.append({"thread" : thread, "stop flag" : stop_flag, "start time" : time()})
         thread.start()
         sleep(0.003)
-        self.log.write("GYR: started new thread")
-        print("GYRO: started new thread")
+        self.log("started new thread")
         if len(self.threads) == 2:
             prevThreadDict = self.threads.pop(0)
             prevThreadDict["stop flag"].set()
         if len(self.threads) > 2:
-            self.log.write("\nGYRO: too many gyro threads, did not start a new one")
+            self.log("too many gyro threads, did not start a new one")
 
 
     def kill_all_threads(self):
@@ -54,27 +55,30 @@ class Gyro:
 
     def run(self, flag):
         if not self.ih:
-            self.log.write("\nGYRO: CRITICAL ERROR!! interface handler not defined. ending thread")
+            self.log("CRITICAL ERROR!! interface handler not defined. ending thread")
             return
 
-        file = open(self.wd + str(floor(time())), "wb+")
-        t0 = time()
+        file = open(self.wd + str(floor(time())), "wb")
         try:
+            prev = time()
             while not flag.is_set():
-                axes = self.ih.read_axes()
-                print(t0, axes)
-                bin_data = struct.pack("<dfff",  axes[0], axes[1], axes[2], axes[3])
-                file.write(bin_data)
-                sleep(0.0005)
+                if self.ih.readRegister(0x27) & 0b00001000 == 0b00001000: # new data check
+                    axes = self.ih.read_axes()
+                    #print(1/(axes[0] - prev))
+                    #prev = axes[0]
+                    #print("%8.2f, %8.2f, %8.2f" %(axes[1],axes[2],axes[3]))
+                    bin_data = struct.pack("<dfff",  axes[0], axes[1], axes[2], axes[3])
+                    file.write(bin_data)
         except Exception as e:
-            self.log.write("\nGYRO: error whle collecting data:", str(e))
+            self.log("error whle collecting data:", str(e))
             file.close()
 
         file.close()
 
-        self.log.write("\nGYRO: finished running thread")
+        self.log("finished running thread")
 
 
+# ------------------------not runtime--------------------------
     def read_file(self, file):
         data = [self.header]
         while True:
@@ -92,14 +96,20 @@ class Gyro:
 
     def test(self):
         while True:
-            t, x, y ,z = self.ih.read_axes() 
-            print("%8.2f, %8.2f, %8.2f" %(x, y, z))
-            print(hex(x), hex(y), hex(z))
-            sleep(0.001)
+            stat = self.ih.readRegister(0x27)
+            #print(stat)
+            prev = time()
+            if stat & 0b00001000 == 0b00001000:
+                t, x, y ,z = self.ih.read_axes() 
+                print(1 /(t-prev))
+                prev=t
+                print("%8.2f, %8.2f, %8.2f" %(x, y, z))
+
 
 
 if __name__ == "__main__":
-    test = Gyro("/home/fissellab/BVEXTracker-main/output/Gyroscope/")
-
-    test.test()
+    with open("/home/fissellab/BVEXTracker/Logs/gyroLog", "a") as f:
+        test = Gyro("/home/fissellab/BVEXTracker/output/Gyroscope/", f)
+        print(test.ih.readRegister(0x0F))
+        test.test()
 

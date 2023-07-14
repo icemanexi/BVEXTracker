@@ -948,3 +948,453 @@ Enabled sensors:[]
 1689106457.32 ACC: thread finished
 1689106457.32 MAG: thread finished
 1689106457.33 IMU: thread started
+1689282119.49 CONTROL: =======================================
+
+1689282119.49 CONTROL: beginning control script ... 
+1689282119.49 GYR: initialized
+1689282119.9 ACC: initialized
+1689282120.18 MAG: initialized
+1689282120.97 IMU: initialized
+1689282120.99 LED: initialized, thread running
+1689282120.99 CONTROL: Enabled sensors:['Gyroscope', 'GPS', 'Acceleromter', 'Magnetometer', 'IMU']
+
+1689282120.99 GYR: started new thread
+1689282121.0 GPS: Checking protocol
+1689282121.0 GPS: beginning calibration
+1689282121.0 ACC: thread started
+1689282121.01 MAG: thread started
+1689282131.07 GYR: started new thread
+1689282131.07 GYR: finished running thread
+1689282131.08 ACC: thread started
+1689282131.09 MAG: thread started
+1689282131.1 MAG: thread finished
+1689282131.15 ACC: thread finished
+1689282141.15 GYR: started new thread
+1689282141.15 GYR: finished running thread
+1689282141.15 ACC: thread started
+1689282141.16 MAG: thread started
+1689282141.16 ACC: thread finished
+1689282141.17 MAG: thread finished
+1689282151.21 GYR: started new thread
+1689282151.21 ACC: thread started
+1689282151.22 GYR: finished running thread
+1689282151.23 MAG: thread started
+1689282151.24 MAG: thread finished
+1689282151.45 ACC: thread finished
+1689282161.28 GYR: started new thread
+1689282161.28 GYR: finished running thread
+1689282161.29 ACC: thread started
+1689282161.3 MAG: thread started
+1689282161.31 MAG: thread finished
+1689282161.41 ACC: thread finished
+1689282161.53 GPS: outputting ubx protocol
+1689282161.53 GPS: outputting NMEA protocol, disabling
+1689282167.63 GPS: outputting proper protocol
+1689282167.63 GPS: Checking fix
+1689282170.46 GPS: has 3d fix
+1689282170.5 GPS: connected to internet, will not use pps signal unless connection drops
+1689282170.5 GPS: has been calibrated
+1689282171.35 GYR: started new thread
+1689282171.37 GYR: finished running thread
+1689282171.47 GPS: thread started
+1689282171.48 ACC: thread started
+1689282171.48 MAG: thread started
+1689282171.51 MAG: thread finished
+1689282172.0 ACC: thread finished
+1689282181.74 GYR: started new thread
+1689282181.75 GYR: finished running thread
+1689282181.88 GPS: thread started
+1689282181.88 ACC: thread started
+1689282181.89 MAG: thread started
+1689282181.9 MAG: thread finished
+1689282181.9 GPS: thread finished
+1689282181.98 ACC: thread finished
+1689282191.97 GYR: started new thread
+1689282191.98 GYR: finished running thread
+1689282192.11 GPS: thread started
+1689282192.12 GPS: thread finished
+1689282192.13 ACC: thread started
+1689282192.13 MAG: thread started
+1689282192.14 MAG: thread finished
+1689282192.22 ACC: thread finished
+1689282202.31 GYR: started new thread
+1689282202.32 GYR: finished running thread
+1689282202.52 GPS: thread started
+1689282202.52 GPS: thread finished
+1689282202.52 ACC: thread started
+1689282202.53 MAG: thread started
+1689282202.54 MAG: thread finished
+1689282202.63 ACC: thread finished
+1689282212.61 GYR: started new thread
+1689282212.62 GYR: finished running thread
+1689282212.75 GPS: thread started
+1689282212.76 ACC: thread started
+1689282212.77 GPS: thread finished
+1689282212.77 MAG: thread started
+1689282212.79 MAG: thread finished
+1689282212.82 ACC: thread finished
+1689282222.82 GYR: started new thread
+1689282222.83 GYR: finished running thread
+1689282222.96 GPS: thread started
+1689282222.97 GPS: thread finished
+1689282222.97 ACC: thread started
+1689282222.98 MAG: thread started
+1689282223.0 MAG: thread finished
+1689282223.08 ACC: thread finished
+1689282233.02 GYR: started new thread
+1689282233.02 GYR: finished running thread
+1689282233.17 GPS: thread started
+1689282233.17 ACC: thread started
+1689282233.18 MAG: thread started
+1689282233.19 MAG: thread finished
+1689282233.2 GPS: thread finished
+1689282233.24 ACC: thread finished
+1689282243.31 GYR: started new thread
+1689282243.32 GYR: finished running thread
+1689282243.45 GPS: thread started
+1689282243.46 GPS: thread finished
+1689282243.47 ACC: thread started
+1689282243.47 MAG: thread started
+1689282243.48 MAG: thread finished
+1689282243.63 ACC: thread finished
+1689282253.49 GYR: started new thread
+1689282253.5 GYR: finished running thread
+1689282253.62 GPS: thread started
+1689282253.65 ACC: thread started
+1689282253.65 MAG: thread started
+1689282253.66 GPS: thread finished
+1689282253.66 MAG: thread finished
+1689282254.0 ACC: thread finished
+1689282263.72 GYR: started new thread
+1689282263.74 GYR: finished running thread
+1689282263.87 GPS: thread started
+1689282263.88 ACC: thread started
+1689282263.9 MAG: thread started
+1689282263.92 MAG: thread finished
+1689282263.92 GPS: thread finished
+1689282264.15 ACC: thread finished
+1689282273.92 GYR: started new thread
+1689282273.93 GYR: finished running thread
+1689282274.06 GPS: thread started
+1689282274.07 GPS: thread finished
+1689282274.09 ACC: thread started
+1689282274.1 MAG: thread started
+1689282274.11 MAG: thread finished
+1689282274.23 ACC: thread finished
+1689282284.17 GYR: started new thread
+1689282284.17 GYR: finished running thread
+1689282284.28 GPS: thread started
+1689282284.28 ACC: thread started
+1689282284.29 MAG: thread started
+1689282284.3 MAG: thread finished
+1689282284.31 GPS: thread finished
+1689282284.31 ACC: thread finished
+1689282294.46 GYR: started new thread
+1689282294.47 GYR: finished running thread
+1689282294.58 GPS: thread started
+1689282294.6 ACC: thread started
+1689282294.61 GPS: thread finished
+1689282294.64 MAG: thread started
+1689282294.67 MAG: thread finished
+1689282294.71 ACC: thread finished
+1689282304.65 GYR: started new thread
+1689282304.66 GYR: finished running thread
+1689282304.76 GPS: thread started
+1689282304.77 ACC: thread started
+1689282304.79 MAG: thread started
+1689282304.81 GPS: thread finished
+1689282304.81 MAG: thread finished
+1689282304.91 ACC: thread finished
+1689282314.86 GYR: started new thread
+1689282314.86 GYR: finished running thread
+1689282314.97 GPS: thread started
+1689282314.98 ACC: thread started
+1689282314.98 MAG: thread started
+1689282314.99 MAG: thread finished
+1689282315.02 GPS: thread finished
+1689282315.15 ACC: thread finished
+1689282325.22 GYR: started new thread
+1689282325.22 GYR: finished running thread
+1689282325.36 GPS: thread started
+1689282325.37 ACC: thread started
+1689282325.38 MAG: thread started
+1689282325.39 MAG: thread finished
+1689282325.4 GPS: thread finished
+1689282325.53 ACC: thread finished
+1689282335.37 GYR: started new thread
+1689282335.37 GYR: finished running thread
+1689282335.51 GPS: thread started
+1689282335.51 GPS: thread finished
+1689282335.51 ACC: thread started
+1689282335.52 MAG: thread started
+1689282335.55 MAG: thread finished
+1689282335.81 ACC: thread finished
+1689282345.56 GYR: started new thread
+1689282345.57 GYR: finished running thread
+1689282345.69 GPS: thread started
+1689282345.7 ACC: thread started
+1689282345.7 MAG: thread started
+1689282345.71 MAG: thread finished
+1689282345.72 GPS: thread finished
+1689282345.81 ACC: thread finished
+1689282355.7 GYR: started new thread
+1689282355.71 GYR: finished running thread
+1689282355.82 GPS: thread started
+1689282355.83 ACC: thread started
+1689282355.84 MAG: thread started
+1689282355.86 MAG: thread finished
+1689282355.87 GPS: thread finished
+1689282356.12 ACC: thread finished
+1689282365.92 GYR: started new thread
+1689282365.92 GYR: finished running thread
+1689282366.04 GPS: thread started
+1689282366.04 ACC: thread started
+1689282366.05 MAG: thread started
+1689282366.06 MAG: thread finished
+1689282366.1 ACC: thread finished
+1689282366.12 GPS: thread finished
+1689282376.27 GYR: started new thread
+1689282376.27 GYR: finished running thread
+1689282376.42 GPS: thread started
+1689282376.42 ACC: thread started
+1689282376.44 MAG: thread started
+1689282376.45 MAG: thread finished
+1689282376.45 GPS: thread finished
+1689282376.58 ACC: thread finished
+1689282386.49 GYR: started new thread
+1689282386.49 GYR: finished running thread
+1689282386.62 GPS: thread started
+1689282386.62 ACC: thread started
+1689282386.64 MAG: thread started
+1689282386.65 ACC: thread finished
+1689282386.65 GPS: thread finished
+1689282386.65 MAG: thread finished
+1689282396.77 GYR: started new thread
+1689282396.77 GYR: finished running thread
+1689282396.92 GPS: thread started
+1689282396.92 GPS: thread finished
+1689282925.72 CONTROL: =======================================
+
+1689282925.72 CONTROL: beginning control script ... 
+1689282925.74 GYR: initialized
+1689282926.25 ACC: initialized
+1689282926.6 MAG: initialized
+1689282927.41 IMU: initialized
+1689282927.46 LED: initialized, thread running
+1689282927.46 CONTROL: Enabled sensors:['Gyroscope', 'GPS', 'Acceleromter', 'Magnetometer', 'IMU']
+
+1689282927.46 GYR: started new thread
+1689282927.46 GPS: Checking protocol
+1689282927.46 GPS: beginning calibration
+1689282927.47 ACC: thread started
+1689282927.49 MAG: thread started
+1689282937.54 GYR: started new thread
+1689282937.54 GYR: finished running thread
+1689282937.55 ACC: thread started
+1689282937.55 MAG: thread started
+1689282937.55 MAG: thread finished
+1689282937.59 ACC: thread finished
+1689282947.59 GYR: started new thread
+1689282947.59 GYR: finished running thread
+1689282947.6 ACC: thread started
+1689282947.6 MAG: thread started
+1689282947.61 MAG: thread finished
+1689282947.63 ACC: thread finished
+1689282957.64 GYR: started new thread
+1689282957.65 ACC: thread started
+1689282957.65 MAG: thread started
+1689282957.66 MAG: thread finished
+1689282957.66 ACC: thread finished
+1689282957.67 GYR: finished running thread
+1689282967.7 GYR: started new thread
+1689282967.7 ACC: thread started
+1689282967.71 MAG: thread started
+1689282967.71 GYR: finished running thread
+1689282967.72 MAG: thread finished
+1689282967.73 ACC: thread finished
+1689282977.75 GYR: started new thread
+1689282977.77 ACC: thread started
+1689282977.77 GYR: finished running thread
+1689282977.77 MAG: thread started
+1689282977.78 MAG: thread finished
+1689282977.82 ACC: thread finished
+1689282987.83 GYR: started new thread
+1689282987.83 GYR: finished running thread
+1689282987.85 ACC: thread started
+1689282987.85 MAG: thread started
+1689282987.86 MAG: thread finished
+1689282987.95 ACC: thread finished
+1689282997.89 GYR: started new thread
+1689282997.9 GYR: finished running thread
+1689282997.9 ACC: thread started
+1689282997.9 MAG: thread started
+1689282997.91 MAG: thread finished
+1689282997.97 ACC: thread finished
+1689283007.95 GYR: started new thread
+1689283007.95 GYR: finished running thread
+1689283007.97 ACC: thread started
+1689283007.97 ACC: thread finished
+1689283007.97 MAG: thread started
+1689283008.0 MAG: thread finished
+1689283018.04 GYR: started new thread
+1689283018.06 ACC: thread started
+1689283018.07 GYR: finished running thread
+1689283018.07 ACC: thread finished
+1689283018.07 MAG: thread started
+1689283018.08 MAG: thread finished
+1689283028.11 GYR: started new thread
+1689283028.12 GYR: finished running thread
+1689283028.12 ACC: thread started
+1689283028.13 MAG: thread started
+1689283028.14 MAG: thread finished
+1689283028.16 ACC: thread finished
+1689283038.17 GYR: started new thread
+1689283038.18 GYR: finished running thread
+1689283038.2 ACC: thread started
+1689283038.2 MAG: thread started
+1689283038.22 MAG: thread finished
+1689283038.31 ACC: thread finished
+1689283048.24 GYR: started new thread
+1689283048.25 GYR: finished running thread
+1689283048.25 ACC: thread started
+1689283048.26 MAG: thread started
+1689283048.27 MAG: thread finished
+1689283048.28 ACC: thread finished
+1689283058.3 GYR: started new thread
+1689283058.31 GYR: finished running thread
+1689283058.31 ACC: thread started
+1689283058.32 MAG: thread started
+1689283058.33 MAG: thread finished
+1689283058.34 ACC: thread finished
+1689283068.37 GYR: started new thread
+1689283068.37 GYR: finished running thread
+1689283068.37 ACC: thread started
+1689283068.38 MAG: thread started
+1689283068.4 MAG: thread finished
+1689283068.4 ACC: thread finished
+1689283078.42 GYR: started new thread
+1689283078.43 ACC: thread started
+1689283078.43 GYR: finished running thread
+1689283078.44 MAG: thread started
+1689283078.44 MAG: thread finished
+1689283078.46 ACC: thread finished
+1689283088.48 GYR: started new thread
+1689283088.48 ACC: thread started
+1689283088.49 MAG: thread started
+1689283088.49 GYR: finished running thread
+1689283088.49 MAG: thread finished
+1689283088.59 ACC: thread finished
+1689283098.53 GYR: started new thread
+1689283098.53 GYR: finished running thread
+1689283098.53 ACC: thread started
+1689283098.55 MAG: thread started
+1689283098.56 MAG: thread finished
+1689283098.57 ACC: thread finished
+1689283108.59 GYR: started new thread
+1689283108.59 GYR: finished running thread
+1689283108.63 ACC: thread started
+1689283108.64 MAG: thread started
+1689283108.65 MAG: thread finished
+1689283108.71 ACC: thread finished
+1689283118.68 GYR: started new thread
+1689283118.69 GYR: finished running thread
+1689283118.69 ACC: thread started
+1689283118.7 MAG: thread started
+1689283118.71 MAG: thread finished
+1689283118.72 ACC: thread finished
+1689283128.74 GYR: started new thread
+1689283128.75 GYR: finished running thread
+1689283128.77 ACC: thread started
+1689283128.77 MAG: thread started
+1689283128.79 MAG: thread finished
+1689283128.79 ACC: thread finished
+1689283138.82 GYR: started new thread
+1689283138.83 GYR: finished running thread
+1689283138.83 ACC: thread started
+1689283138.84 MAG: thread started
+1689283138.84 MAG: thread finished
+1689283138.87 ACC: thread finished
+1689283148.89 GYR: started new thread
+1689283148.9 GYR: finished running thread
+1689283148.9 ACC: thread started
+1689283148.9 MAG: thread started
+1689283148.91 MAG: thread finished
+1689283148.97 ACC: thread finished
+1689283158.94 GYR: started new thread
+1689283158.95 GYR: finished running thread
+1689283158.95 ACC: thread started
+1689283158.96 MAG: thread started
+1689283158.97 MAG: thread finished
+1689283159.01 ACC: thread finished
+1689283169.0 GYR: started new thread
+1689283169.01 GYR: finished running thread
+1689283169.01 ACC: thread started
+1689283169.03 ACC: thread finished
+1689283169.03 MAG: thread started
+1689283169.04 MAG: thread finished
+1689283179.09 GYR: started new thread
+1689283179.09 GYR: finished running thread
+1689283179.09 ACC: thread started
+1689283179.1 MAG: thread started
+1689283179.11 MAG: thread finished
+1689283179.13 ACC: thread finished
+1689283189.14 GYR: started new thread
+1689283189.14 GYR: finished running thread
+1689283189.15 ACC: thread started
+1689283189.16 MAG: thread started
+1689283189.17 MAG: thread finished
+1689283189.17 ACC: thread finished
+1689283199.2 GYR: started new thread
+1689283199.2 GYR: finished running thread
+1689283199.21 ACC: thread started
+1689283199.21 MAG: thread started
+1689283199.23 MAG: thread finished
+1689283199.24 ACC: thread finished
+1689283209.26 GYR: started new thread
+1689283209.27 GYR: finished running thread
+1689283209.27 ACC: thread started
+1689283209.29 MAG: thread started
+1689283209.3 MAG: thread finished
+1689283209.33 ACC: thread finished
+1689283219.34 GYR: started new thread
+1689283219.35 GYR: finished running thread
+1689283219.37 ACC: thread started
+1689283219.41 MAG: thread started
+1689283219.41 ACC: thread finished
+1689283219.44 MAG: thread finished
+1689283229.46 GYR: started new thread
+1689283229.46 GYR: finished running thread
+1689283229.46 ACC: thread started
+1689283229.49 MAG: thread started
+1689283229.5 MAG: thread finished
+1689283229.53 ACC: thread finished
+1689283239.54 GYR: started new thread
+1689283239.55 GYR: finished running thread
+1689283239.58 ACC: thread started
+1689283239.58 MAG: thread started
+1689283239.59 MAG: thread finished
+1689283239.64 ACC: thread finished
+1689283249.63 GYR: started new thread
+1689283249.63 GYR: finished running thread
+1689283249.63 ACC: thread started
+1689283249.67 MAG: thread started
+1689283249.68 MAG: thread finished
+1689283249.76 ACC: thread finished
+1689283259.72 GYR: started new thread
+1689283259.72 GYR: finished running thread
+1689283259.74 ACC: thread started
+1689283259.75 MAG: thread started
+1689283259.76 MAG: thread finished
+1689283259.78 ACC: thread finished
+1689283269.79 GYR: started new thread
+1689283269.8 GYR: finished running thread
+1689283269.82 ACC: thread started
+1689283269.84 MAG: thread started
+1689283269.85 MAG: thread finished
+1689283269.89 ACC: thread finished
+1689283279.89 GYR: started new thread
+1689283279.9 ACC: thread started
+1689283279.9 MAG: thread started
+1689283279.93 MAG: thread finished
+1689283280.89 ACC: thread finished
+1689283280.9 GYR: finished running thread

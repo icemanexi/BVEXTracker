@@ -14,7 +14,6 @@ log("=======================================\n")
 log("beginning control script ... ")
 
 try:
-    raise
     from Sensors.Gyroscope import Gyro
     gyro = Gyro("/home/fissellab/BVEXTracker/output/Gyroscope/", log_filation)
     sensor_list.append(gyro)
@@ -59,6 +58,9 @@ led = LED(log_filation)
 
 log("Enabled sensors:" + str([s.name for s in sensor_list]) + "\n")
 
+# in seconds
+thread_time = 60  * 1
+
 while True:
     # go through each sensor
     num_active_threads = 0
@@ -68,16 +70,18 @@ while True:
         try:
             if not sensor.is_calibrated:
                 if not sensor.is_calibrating:
-                    sensor.calibrate()
+                    if hasattr(sensor, "calibrate"):
+                        sensor.calibrate()
                 continue
         except Exception as e:
             log("error during calibration of " + sensor.name + ": " + str(e))
 
         # data collection thread management
         try:
+            #print(sensor.name, sensor.threads)
             if len(sensor.threads) == 0: # starts first thread
                 sensor.new_thread()
-            elif time() - sensor.threads[0]["start time"] > 10: # creates new thread every 60s
+            elif time() - sensor.threads[0]["start time"] > thread_time: # creates new thread every 60s
                 sensor.new_thread()
             else:
                 num_active_threads += 1
@@ -87,8 +91,6 @@ while True:
 
     led.mode = num_active_threads
     sleep(1)
-
-asdasd
 
 print("\nfinished")
 quit()
