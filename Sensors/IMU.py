@@ -19,6 +19,7 @@ class IMU:
         self.log = Log("IMU:", log_file)
         self.header = ("time", "accel x", "accel y", "accel z", "mag x", "mag y", "mag z", "gyro x", "gyro y", "gyro z", "euler 1", "euler 2", "euler 3")
         self.is_calibrating = False
+        self.is_calibrated = False
 
         try:
             # will throw error if not connected
@@ -35,44 +36,34 @@ class IMU:
             self.offset_list = [int(i) for i in f.read().split()]
         print(self.offset_list)
 
-        self.ih.mode = 0x00 # 'CONFIG' mode 
+        # these 5 lines load in the preset offset values
+        self.ih.mode = 0x00 # 'CONFIG' mode needed to edit offsets
         addr = 0x55 # start of offset registers
-        for i in self.offset_list:
-            self.ih._write_register(addr, i) # writes in stored offset
+        for e in self.offset_list:
+            self.ih._write_register(addr, e) # writes in stored offset
             addr += 1
-        
+       
+        """
+        the IMU gets 128 added to values when reading, 
+        but I don't think there are any issues with sending 
+        values to the IMU. so no need for a sanity check.
+        """
         # sanity check
-        for a in range (3):
-            addr = 0x55
-            for i in self.offset_list:
-                stored = self.ih._read_register(addr)
-                print(stored, end=", ")
-                addr += 1
-            print("")
+        #print("Software offsets:")
+        #print(self.offset_list)
+        #print("Hardware offsets (x3)")
+        #for a in range (3):
+        #    addr = 0x55
+        #    for i in self.offset_list:
+        #        stored = self.ih._read_register(addr)
+        #        print(stored, end=", ")
+        #        addr += 1
+        #    print("")
         
 
         self.ih.mode = 0x0C # 'NDOF' or 'normal' mode
+        self.is_calibrated = True
         self.log("successful calibration")
-
-
-    @property
-    def is_calibrated(self):
-        if not self.ih:
-            self.log("CRITICAL ERROR!! interface handler not defined, cant calibrate")
-            return
-        self.is_calibrating = True
-        status_reg =  self.ih._read_register(0x35)
-        sys_stat = (status_reg & 0b11000000) >>6
-        gyr_stat = (status_reg & 0b00110000) >> 4
-        acc_stat = (status_reg & 0b00001100) >> 2
-        mag_stat = (status_reg & 0b00000011)
-        #print("\n IMU cali status: sys: ", sys_stat, "gy", gyr_stat, "ac", acc_stat, "ma", mag_stat)
-        
-        if (status_reg & 0b00111111) == 0b00111111:
-            self.is_calibrating = False
-            return True
-        return False
-
 
     def new_thread(self):
         stop_flag = threading.Event()
