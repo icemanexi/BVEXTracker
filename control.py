@@ -59,7 +59,7 @@ led = LED(log_filation)
 log("Enabled sensors:" + str([s.name for s in sensor_list]) + "\n")
 
 # in seconds
-thread_time = 60  * 1
+thread_time = 10 
 
 while True:
     # go through each sensor
@@ -83,8 +83,7 @@ while True:
                 sensor.new_thread()
             elif time() - sensor.threads[0]["start time"] > thread_time: # creates new thread every 60s
                 sensor.new_thread()
-            else:
-                num_active_threads += 1
+            num_active_threads += 1
 
         except Exception as e:
             log("error during thread management of " + sensor.name + ": " + str(e))

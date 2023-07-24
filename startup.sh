@@ -10,12 +10,12 @@ check_control_script() {
 
 
 while :; do
-	if check_control_script; then
+	if check_control_script > /dev/null; then
 		echo "control.py is not running, starting the script.."
-		python3 $HOME/BVEXTracker/control.py & # runs in background
+		python3 $HOME/BVEXTracker/control.py > $HOME/BVEXTracker/Logs/sysLog & # runs in background
 
 	else
-		echo "control.py is running"
+		sleep 0
 	fi
 
 	sleep 5 # period of checks

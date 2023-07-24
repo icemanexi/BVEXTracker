@@ -31,20 +31,32 @@ class Gps:
     
     @property
     def is_calibrated(self):
-        if not self._is_calibrated:
+        if self.is_calibrating or self._is_calibrated == False:
             return False
-        # has been calibrated, but might as well check we are recieving data
+
+        # gps was previously calibrated successfully, but will check again anyways
+        is_cal_thread = threading.Thread(target=self.is_calibrated_run , args=())
+        is_cal_thread.start()
+        return self._is_calibrated
+
+    def is_calibrated_run(self):
         t0 = time()
-        out = []
-        while time() < t0 + 0.1:
-            out += self.gpsio.ser.sock.recv(8192)
+        
+        while time() < t0 + 0.15: # should be enough time to recieve 1-2 epochs
+            out = self.gpsio.ser.sock.recv(8192)
 
-        if not out:
-            self.log("not recieving data!!!")
-            # this will cause control to rerun the calibrate script 
-            return False
-        return True
+            # check if first 4 bytes in message match header of UBX-NAV-PVT
+            if b'\xb5b\x01\x07' in out[0:4]:
+                nums = unpack_from('<LHBBBBBBLlBBBBllllLLlllllLLHHHH', out[6:], 0)
+                #                                            trim header ^^
+                fix_type = self.fix_types[nums[10]] # fix type is the 11th number in array
+                if fix_type == 3:
+                    self._is_calibrated = True
+                    return
 
+        self._is_calibrated = False  # if got no pvt message / no fix then gps is no longer calibrated
+        self.kill_all_threads() # stop threads from recieving false data
+       
 
     def calibrate(self):
         self.is_calibrating = True

@@ -34,7 +34,6 @@ class IMU:
     def calibrate(self):
         with open("/home/fissellab/BVEXTracker/Sensors/IMU_offsets", "r") as f:
             self.offset_list = [int(i) for i in f.read().split()]
-        print(self.offset_list)
 
         # these 5 lines load in the preset offset values
         self.ih.mode = 0x00 # 'CONFIG' mode needed to edit offsets
@@ -45,7 +44,7 @@ class IMU:
        
         """
         the IMU gets 128 added to values when reading, 
-        but I don't think there are any issues with sending 
+        but I don't think there are any issues with writing
         values to the IMU. so no need for a sanity check.
         """
         # sanity check
