@@ -1,26 +1,11 @@
-#!/usr/bin/bash
-
-check_control_script() {
-	if ps aux | grep control.py | grep -v grep; then
-		return 1
-	else
-		return 0
-	fi
-}
-
-
-while :; do
-	if check_control_script > /dev/null; then
-		echo "control.py is not running, starting the script.."
-		python3 $HOME/BVEXTracker/control.py > $HOME/BVEXTracker/Logs/sysLog & # runs in background
-
-	else
-		sleep 0
-	fi
-
-	sleep 5 # period of checks
-done
-
-
-
-
+#!/bin/bash
+cd
+git clone https://www.github.com/icemanexi/BVEXTracker
+cd BVEXTracker
+sudo apt install gspd
+sudo pat install chrony
+sudo systemctl disable gett@ttyAMA0
+sudo apt install python3-gps
+sudo apt install pps-tools
+sudo systemctl enable gpsd
+sudo systemctl start gpsd
