@@ -40,12 +40,6 @@ except ImportError:
 
 NaN = float('nan')
 
-VERB_QUIET = 0   # quiet
-VERB_NONE = 1    # just output requested data and some info
-VERB_DECODE = 2  # decode all messages
-VERB_INFO = 3    # more info
-VERB_RAW = 4     # raw info
-VERB_PROG = 5    # program trace
 
 
 def isfinite(f):
@@ -54,9 +48,18 @@ def isfinite(f):
     # Python 2 has no easier way to test for Inf
     return float('-inf') < float(f) < float('inf')
 
+VERB_QUIET = 0   # quiet
+VERB_NONE = 1    # just output requested data and some info
+VERB_DECODE = 2  # decode all messages
+VERB_INFO = 3    # more info
+VERB_RAW = 4     # raw info
+VERB_PROG = 5    # program trace
+test = 1234
 
 # Don't hand-hack this list, it's generated.
 ONLINE_SET = (1 << 1)
+TEST_SET = (1 << 1)
+
 TIME_SET = (1 << 2)
 TIMERR_SET = (1 << 3)
 LATLON_SET = (1 << 4)

@@ -18,6 +18,7 @@ import time
 
 try:
     import gps
+    print(gps.__file__)
 except ImportError:
     # PEP8 says local imports last
     sys.stderr.write("gps/ubx: failed to import gps, check PYTHONPATH\n")
@@ -235,7 +236,7 @@ class ubx(object):
     read_only = False
     protver = 10
     timestamp = None
-    verbosity = gps.VERB_NONE
+    verbosity = 1 #gps.VERB_NONE
 
     def __init__(self):
         pass

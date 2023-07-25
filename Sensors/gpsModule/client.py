@@ -18,6 +18,9 @@ import sys
 import time
 
 import gps          # for VERB_*
+print(gps.__file__)
+print(gps.__dict__)
+
 from .misc import polystr, polybytes
 from .watch_options import *
 

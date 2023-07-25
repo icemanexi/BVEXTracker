@@ -7,11 +7,11 @@ from struct import unpack_from
 import subprocess
 
 try:
-    from Sensors.gpsModule import ubx, gps_io
-    from Sensors.Log import Log
-except:
     from gpsModule import ubx, gps_io
     from Log import Log
+except:
+    from Sensors.gpsModule import ubx, gps_io
+    from Sensors.Log import Log
 
 
 class Gps:
@@ -117,7 +117,15 @@ class Gps:
         # NAV PVT = 0x01 0x07
         # NAV SAT = 0x01 0x35 = 53
 
-        # TODO: ensure 20hz sample rate
+
+        self.log("checking 20hz sample rate")
+        t0 = time()
+        while time() < t0  + 2:
+            out = self.read() 
+            print(out[0:4])
+            if b'\xb5b\x01 \x10' in out[0:4]:
+                print("yes")
+                print(self.ih.decode_msg(out))
 
 
         # 1. Wait for fix
@@ -266,9 +274,9 @@ if __name__ == "__main__":
     with open("/home/fissellab/BVEXTracker/Logs/GpsLog", "a") as log:
         test = Gps("/home/fissellab/BVEXTracker/output/GPS/", log)
 
-        #test.calibrate()
-        #while not test.is_calibrated:
-        #    sleep(1)
+        test.calibrate()
+        while not test.is_calibrated:
+            sleep(1)
         test.test()
     
 
