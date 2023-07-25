@@ -18,7 +18,6 @@ import time
 
 try:
     import gps
-    print(gps.__file__)
 except ImportError:
     # PEP8 says local imports last
     sys.stderr.write("gps/ubx: failed to import gps, check PYTHONPATH\n")

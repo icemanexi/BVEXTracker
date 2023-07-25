@@ -511,3 +511,103 @@ GPS: invalid pps signal, waiting for validation
 1690309108.62 GPS: has 3d fix
 1690309108.65 GPS: connected to internet, will not use pps signal unless connection drops
 1690309108.65 GPS: has been calibrated
+1690314903.64 GPS: Checking protocol
+1690314903.64 GPS: beginning calibration
+1690314906.93 GPS: outputting ubx protocol
+1690314906.93 GPS: outputting NMEA protocol, disabling
+1690315224.47 GPS: Checking protocol
+1690315224.47 GPS: beginning calibration
+1690315255.53 GPS: Checking protocol
+1690315255.53 GPS: beginning calibration
+1690315271.08 GPS: beginning calibration
+1690315271.08 GPS: Checking protocol
+1690315290.74 GPS: outputting ubx protocol
+1690315290.74 GPS: outputting NMEA protocol, disabling
+1690315296.31 GPS: outputting proper protocol
+1690315296.31 GPS: checking 20hz sample rate
+1690315363.52 GPS: beginning calibration
+1690315363.52 GPS: Checking protocol
+1690315363.78 GPS: outputting proper protocol
+1690315363.78 GPS: checking 20hz sample rate
+1690315475.85 GPS: beginning calibration
+1690315475.85 GPS: Checking protocol
+1690315476.1 GPS: outputting proper protocol
+1690315476.1 GPS: checking 20hz sample rate
+1690315983.1 GPS: beginning calibration
+1690315983.1 GPS: Checking protocol
+1690315983.35 GPS: outputting proper protocol
+1690315983.35 GPS: checking 20hz sample rate
+1690315995.38 GPS: beginning calibration
+1690315995.38 GPS: Checking protocol
+1690315995.65 GPS: outputting proper protocol
+1690315995.65 GPS: checking 20hz sample rate
+1690315997.65 GPS: Checking fix
+1690316017.7 GPS: beginning calibration
+1690316017.7 GPS: Checking protocol
+1690316017.95 GPS: outputting proper protocol
+1690316017.95 GPS: checking 20hz sample rate
+1690316039.98 GPS: beginning calibration
+1690316039.98 GPS: Checking protocol
+1690316040.26 GPS: outputting proper protocol
+1690316040.26 GPS: checking 20hz sample rate
+1690316042.3 GPS: Checking fix
+1690316165.71 GPS: beginning calibration
+1690316165.71 GPS: Checking protocol
+1690316165.95 GPS: outputting proper protocol
+1690316166.99 GPS: checking 20hz sample rate
+1690316190.59 GPS: beginning calibration
+1690316190.59 GPS: Checking protocol
+1690316190.89 GPS: outputting proper protocol
+1690316191.94 GPS: checking 20hz sample rate
+1690316193.94 GPS: Checking fix
+1690316193.95 GPS: has 3d fix
+1690316193.97 GPS: connected to internet, will not use pps signal unless connection drops
+1690316193.97 GPS: has been calibrated
+1690316199.79 GPS: beginning calibration
+1690316199.79 GPS: Checking protocol
+1690316200.05 GPS: outputting proper protocol
+1690316201.08 GPS: checking 20hz sample rate
+1690316203.09 GPS: Checking fix
+1690316203.1 GPS: has 3d fix
+1690316203.12 GPS: connected to internet, will not use pps signal unless connection drops
+1690316203.12 GPS: has been calibrated
+1690316398.21 GPS: beginning calibration
+1690316398.21 GPS: Checking protocol
+1690316398.49 GPS: outputting proper protocol
+1690316399.53 GPS: checking 20hz sample rate
+1690316423.38 GPS: beginning calibration
+1690316423.38 GPS: Checking protocol
+1690316423.6 GPS: outputting proper protocol
+1690316424.66 GPS: checking 20hz sample rate
+1690316426.69 GPS: Checking fix
+1690316426.7 GPS: has 3d fix
+1690316426.73 GPS: connected to internet, will not use pps signal unless connection drops
+1690316426.73 GPS: has been calibrated
+1690316776.01 GPS: beginning calibration
+1690316776.01 GPS: Checking protocol
+1690316776.25 GPS: outputting proper protocol
+1690316777.28 GPS: checking 20hz sample rate
+1690316779.29 GPS: Checking fix
+1690316779.3 GPS: has 3d fix
+1690316779.32 GPS: connected to internet, will not use pps signal unless connection drops
+1690316779.32 GPS: has been calibrated
+1690316818.16 GPS: beginning calibration
+1690316818.16 GPS: Checking protocol
+1690316841.64 GPS: beginning calibration
+1690316841.64 GPS: Checking protocol
+1690316891.52 GPS: beginning calibration
+1690316891.52 GPS: Checking protocol
+1690316891.75 GPS: outputting proper protocol
+1690316892.78 GPS: checking 20hz sample rate
+1690316894.79 GPS: Checking fix
+1690316894.8 GPS: has 3d fix
+1690316894.82 GPS: connected to internet, will not use pps signal unless connection drops
+1690316894.82 GPS: has been calibrated
+1690316946.88 GPS: beginning calibration
+1690316946.88 GPS: Checking protocol
+1690316947.11 GPS: outputting proper protocol
+1690316948.14 GPS: checking 20hz sample rate
+1690316948.65 GPS: Checking fix
+1690316948.7 GPS: has 3d fix
+1690316948.72 GPS: connected to internet, will not use pps signal unless connection drops
+1690316948.72 GPS: has been calibrated

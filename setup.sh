@@ -1,7 +1,4 @@
-#!/bin/bash
-cd
-git clone https://www.github.com/icemanexi/BVEXTracker
-cd BVEXTracker
+#!/usr/bin/bash
 sudo apt install gspd
 sudo pat install chrony
 sudo systemctl disable gett@ttyAMA0

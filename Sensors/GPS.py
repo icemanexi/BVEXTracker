@@ -61,8 +61,8 @@ class Gps:
     def calibrate(self):
         self.is_calibrating = True
         cal_thread = threading.Thread(target=self.run_calibrate, args=())
-        cal_thread.start()
         self.log("beginning calibration")
+        cal_thread.start()
 
     fix_types = {
         0 : "no fix",
@@ -118,20 +118,6 @@ class Gps:
         # NAV SAT = 0x01 0x35 = 53
 
 
-        self.log("checking 20hz sample rate")
-        t0 = time()
-        while time() < t0  + 2:
-            out = self.read() 
-            print(out[0:4])
-            if b'\xb5b\x01 \x10' in out[0:4]:
-                print("yes")
-                print(self.ih.decode_msg(out))
-
-
-        # 1. Wait for fix
-        no_fix = True
-        fix_type = None
-        self.log("Checking fix")
         # doesnt hurt to reenable messages
         # c = class
         # i = id
@@ -140,10 +126,38 @@ class Gps:
         # rate of epoch should be 20hz and each epoch 
         # it should output a pvt and eoe msg, and every 
         # 5th epoch a sat msg.
-        #                                     --- c i r ---
         subprocess.run(['ubxtool', '-p', 'CFG-MSG,1,7,1', '-w', '0'])
         subprocess.run(['ubxtool', '-p', 'CFG-MSG,1,97,1', '-w', '0'])
         subprocess.run(['ubxtool', '-p', 'CFG-MSG,1,53,5', '-w', '0'])
+        
+
+        self.log("checking 20hz sample rate")
+        t0 = time()
+        period_in_ms = eoe_time = prev_eoe_time = None
+        while time() < t0  + 0.5: # should be enough time to capture 2 epochs if are being outputted 
+            out = self.read() 
+            if b'\xb5b\x01a\04' in out[0:5]: # nav-eoe message
+                prev_eoe_time = eoe_time
+                eoe_time = unpack_from('<L',out[6:],0)[0]
+                if prev_eoe_time:
+                    period_in_ms = eoe_time - prev_eoe_time
+                    print(period_in_ms)
+
+        if period_in_ms: # we are recieving eoe messages
+            if period_in_ms != 50:
+                self.log("eoe being outputted, but not at 20hz") # (likely same for other messages of eoe is not 20hz)
+                pass # TODO: enable 50 ms period
+        else: # did nto recieve any eoe message
+            # probably want to check if we are recieving messages at all, 
+            # maybe return from function to just restart this whole sequence 
+            # as there is already code for that
+            self.log("no eoe message outputted??")
+            pass
+
+        # 1. Wait for fix
+        no_fix = True
+        fix_type = None
+        self.log("Checking fix")
         while no_fix:
             out = self.read()
 
