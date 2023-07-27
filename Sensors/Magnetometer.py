@@ -149,8 +149,8 @@ class Magnetometer:
 
 if __name__ == '__main__':
     with open("/home/fissellab/BVEXTracker/output/magLog", "a") as log:
-        sens = Magnetometer("/home/fissellab/BVEXTracker/output/Magnetometer", log)
-        sens.new_thread()
+        sens = Magnetometer("/home/fissellab/BVEXTracker/output/Magnetometer/", log)
+        sens.test()
 
 
 

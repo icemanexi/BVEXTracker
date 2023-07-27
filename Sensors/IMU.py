@@ -211,5 +211,5 @@ class IMU:
 if __name__ == "__main__":
     with open("/home/fissellab/BVEXTracker/output/IMULog", "a") as log:
         test = IMU("/home/fissellab/BVEXTracker/output/IMU/", log)
-        test.new_thread()
+        test.test()
 

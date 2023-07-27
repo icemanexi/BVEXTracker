@@ -611,3 +611,23 @@ GPS: invalid pps signal, waiting for validation
 1690316948.7 GPS: has 3d fix
 1690316948.72 GPS: connected to internet, will not use pps signal unless connection drops
 1690316948.72 GPS: has been calibrated
+1690385872.87 GPS: beginning calibration
+1690385875.47 GPS: recieving output from gps
+1690385875.47 GPS: Checking protocol
+1690385877.08 GPS: outputting ubx protocol
+1690385877.08 GPS: outputting NMEA protocol, disabling
+1690385883.02 GPS: outputting ubx protocol
+1690385883.02 GPS: outputting NMEA protocol, disabling
+1690386080.37 GPS: beginning calibration
+1690386108.43 GPS: beginning calibration
+1690386121.55 GPS: not recieving output from gps
+1690386135.75 GPS: not recieving output from gps
+1690386152.34 GPS: not recieving output from gps
+1690386176.39 GPS: not recieving output from gps
+1690395746.86 GPS: beginning calibration
+1690395757.63 GPS: not recieving output from gps
+1690395766.29 GPS: recieving output from gps
+1690395766.29 GPS: Checking protocol
+1690396144.63 GPS: beginning calibration
+1690396145.51 GPS: recieving output from gps
+1690396145.51 GPS: Checking protocol

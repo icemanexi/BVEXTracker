@@ -101,7 +101,7 @@ class Gyro:
             prev = time()
             if stat & 0b00001000 == 0b00001000:
                 t, x, y ,z = self.ih.read_axes() 
-                print(1 /(t-prev))
+                #print(1 /(t-prev))
                 prev=t
                 print("%8.2f, %8.2f, %8.2f" %(x, y, z))
 

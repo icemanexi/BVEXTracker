@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+
 from time import time, sleep
 from numpy import save
 from math import floor
@@ -15,8 +16,6 @@ except:
 
 
 class Gps:
-
-
     def __init__(self, Write_Directory, log_file): #runs upon initialization
         self.wd = Write_Directory
         self.log = Log("GPS:", log_file)
@@ -74,17 +73,30 @@ class Gps:
     }
 
     def run_calibrate(self):
+        #-1. check if gps is outputting
+        t0 = time()
+        while True:
+            strout = str(self.gpsio.ser.sock.recv(8192))
+            if "$" in strout or "\\x" in strout:
+                self.log("recieving output from gps")
+                break
+            elif time() > t0 + 10:
+                # output this message every 10s
+                t0 = time()
+                self.log("not recieving output from gps") 
+
+
         # 0. ensure binary protocol
         self.log("Checking protocol")
         while True:
             out = []
 
-            # hopefully 30 messages is enough to capture both NMEA 
-            # and ubx messages if they are being outputted
-            for i in range(30):
-                
-                out += [self.read()]
-
+            # collect messages for 1s
+            t0 = time()
+            while time() < t0 + 1:
+                out += self.gpsio.ser.sock.recv(8192)
+            if not out:
+                self.log("recieved nothing")
             
             binary_prot = False
             NMEA_prot = False
@@ -279,20 +291,22 @@ class Gps:
 
 
     def test(self):
+        out = None
         while True:
-            print(self.read())
-            self.ih.decode_msg(self.read())
+            out = self.gpsio.ser.sock.recv(8192)
+            print(out)
+            print(subprocess.check_output(['sudo', 'stty', '-F', '/dev/serial0']).split()[1])
+            self.ih.decode_msg(out)
 
 if __name__ == "__main__":
     
     with open("/home/fissellab/BVEXTracker/Logs/GpsLog", "a") as log:
         test = Gps("/home/fissellab/BVEXTracker/output/GPS/", log)
 
-        test.calibrate()
-        while not test.is_calibrated:
-            sleep(1)
+        #test.calibrate()
+        #while not test.is_calibrated:
+        #    sleep(1)
+        
+        #baud = subprocess.check_output(['sudo', 'stty', '-F', '/dev/serial0'])
         test.test()
-    
-
-
 
