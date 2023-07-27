@@ -37,6 +37,7 @@ class Gps:
         # gps was previously calibrated successfully, but will check again anyways
         is_cal_thread = threading.Thread(target=self.is_calibrated_run , args=())
         is_cal_thread.start()
+
         return self._is_calibrated
 
     def is_calibrated_run(self):
@@ -304,9 +305,9 @@ if __name__ == "__main__":
     with open("/home/fissellab/BVEXTracker/Logs/GpsLog", "a") as log:
         test = Gps("/home/fissellab/BVEXTracker/output/GPS/", log)
 
-        test.calibrate()
-        while not test.is_calibrated:
-            sleep(1)
+        #test.calibrate()
+        #while not test.is_calibrated:
+        #    sleep(1)
         
         test.test()
 

@@ -664,3 +664,4 @@ GPS: invalid pps signal, waiting for validation
 1690487377.93 GPS: has 3d fix
 1690487377.94 GPS: connected to internet, will not use pps signal unless connection drops
 1690487377.94 GPS: has been calibrated
+1690487819.5 GPS: beginning calibration
