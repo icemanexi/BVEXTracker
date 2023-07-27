@@ -7,6 +7,7 @@ import threading
 from struct import unpack_from
 import subprocess
 
+
 try:
     from gpsModule import ubx, gps_io
     from Log import Log
@@ -94,7 +95,7 @@ class Gps:
             # collect messages for 1s
             t0 = time()
             while time() < t0 + 1:
-                out += self.gpsio.ser.sock.recv(8192)
+                out += [self.gpsio.ser.sock.recv(8192)]
             if not out:
                 self.log("recieved nothing")
             
@@ -102,9 +103,10 @@ class Gps:
             NMEA_prot = False
             for line in out:
                 strout= str(line[:1])
-                
-                if "$" in strout:
+                    
+                if "$" in strout and len(strout) > 5:
                     NMEA_prot = True
+                    print(strout)
                 if "\\x" in strout:
                     binary_prot = True
             if binary_prot and not NMEA_prot:
@@ -295,7 +297,6 @@ class Gps:
         while True:
             out = self.gpsio.ser.sock.recv(8192)
             print(out)
-            print(subprocess.check_output(['sudo', 'stty', '-F', '/dev/serial0']).split()[1])
             self.ih.decode_msg(out)
 
 if __name__ == "__main__":
@@ -303,10 +304,9 @@ if __name__ == "__main__":
     with open("/home/fissellab/BVEXTracker/Logs/GpsLog", "a") as log:
         test = Gps("/home/fissellab/BVEXTracker/output/GPS/", log)
 
-        #test.calibrate()
-        #while not test.is_calibrated:
-        #    sleep(1)
+        test.calibrate()
+        while not test.is_calibrated:
+            sleep(1)
         
-        #baud = subprocess.check_output(['sudo', 'stty', '-F', '/dev/serial0'])
         test.test()
 
