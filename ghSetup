@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-ssh-keygen -t ed25519 "icemanexi@github.com"
+ssh-keygen -t ed25519 -C "icemanexi@github.com"
 
 eval "$(ssh-agent -s)"
 ssh-add ~/.ssh/id_ed25519
