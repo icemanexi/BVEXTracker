@@ -8,3 +8,7 @@ sudo systemctl enable gpsd
 sudo systemctl start gpsd
 sudo apt install vim
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+git config --global user.name "thomas"
+git config --global user.email "icemanexi@github.com"
+
