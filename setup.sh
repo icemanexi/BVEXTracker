@@ -6,3 +6,4 @@ sudo apt install python3-gps
 sudo apt install pps-tools
 sudo systemctl enable gpsd
 sudo systemctl start gpsd
+curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
