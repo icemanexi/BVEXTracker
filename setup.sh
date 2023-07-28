@@ -8,3 +8,4 @@ sudo systemctl enable gpsd
 sudo systemctl start gpsd
 sudo apt install vim
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+cp ~/BVEXTracker/.vimrc ~/.vimrc
