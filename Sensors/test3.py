@@ -1,28 +1,17 @@
 from time import time, sleep
+from numpy import save
+from math import floor
 import threading
-from GPS import Gps
+from struct import unpack_from
+import subprocess
 
-class test:
-    def __init__(self):
-        print("test init")
+from gpsModule import ubx, gps_io
 
-    def thread_test(self):
-        thread = threading.Thread(target=self.run, args=())
-        thread.start()
+gpsd = gps_io(input_speed=38400)
 
-    def run(self):
-        for i in range(10):
-            print("weewoo")
-            sleep(1)
+ubxt = ubx.ubx()
 
-
-gps = Gps("/home/fissellab/BVEXTracker-main/output/GPS/")
-t = test()
-
-gps.calibrate()
-t.thread_test()
-
-
-
-
+while True:
+    print(gpsd.ser.sock.recv(8192))
+    gpsd.read(ubxt.decode_msg)
 

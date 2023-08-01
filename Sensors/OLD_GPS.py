@@ -41,13 +41,16 @@ class Gps:
         return self._is_calibrated
 
     def is_calibrated_run(self):
+        return True
         t0 = time()
         
-        while time() < t0 + 0.15: # should be enough time to recieve 1-2 epochs
+        while time() < t0 + 1: # should be enough time to recieve 1-2 epochs
             out = self.gpsio.ser.sock.recv(8192)
 
             # check if first 4 bytes in message match header of UBX-NAV-PVT
-            if b'\xb5b\x01\x07' in out[0:4]:
+            self.log(str(out))
+            if b'\xb5b\x01\x07' in out[0:6]:
+                self.log("passed if")
                 nums = unpack_from('<LHBBBBBBLlBBBBllllLLlllllLLHHHH', out[6:], 0)
                 #                                            trim header ^^
                 fix_type = self.fix_types[nums[10]] # fix type is the 11th number in array
@@ -55,6 +58,7 @@ class Gps:
                     self._is_calibrated = True
                     return
 
+        self.log("was calibrated but now isnt...")
         self._is_calibrated = False  # if got no pvt message / no fix then gps is no longer calibrated
         self.kill_all_threads() # stop threads from recieving false data
        
@@ -89,42 +93,42 @@ class Gps:
 
 
         # 0. ensure binary protocol
-        self.log("Checking protocol")
-        while True:
-            out = []
+        #self.log("Checking protocol")
+        #while True:
+        #    out = []
 
-            # collect messages for 1s
-            t0 = time()
-            while time() < t0 + 1:
-                out += [self.gpsio.ser.sock.recv(8192)]
-            if not out:
-                self.log("recieved nothing")
-            
-            binary_prot = False
-            NMEA_prot = False
-            for line in out:
-                strout= str(line[:1])
-                    
-                if "$" in strout and len(strout) > 5:
-                    NMEA_prot = True
-                    print(strout)
-                if "\\x" in strout:
-                    binary_prot = True
-            if binary_prot and not NMEA_prot:
-                break
+        #    # collect messages for 1s
+        #    t0 = time()
+        #    while time() < t0 + 1:
+        #        out += [self.gpsio.ser.sock.recv(8192)]
+        #    if not out:
+        #        self.log("recieved nothing")
+        #    
+        #    binary_prot = False
+        #    NMEA_prot = False
+        #    for line in out:
+        #        strout= str(line[:1])
+        #            
+        #        if "$" in strout and len(strout) > 5:
+        #            NMEA_prot = True
+        #            print(strout)
+        #        if "\\x" in strout:
+        #            binary_prot = True
+        #    if binary_prot and not NMEA_prot:
+        #        break
 
-            # debug checks
-            if binary_prot:
-                self.log("outputting ubx protocol")
-            else: #if not enabled, enable it
-                self.log("Enabling binary protocol")
-                subprocess.run(['ubxtool', '-e', 'BINARY', '-w', '0'])
+        #    # debug checks
+        #    if binary_prot:
+        #        self.log("outputting ubx protocol")
+        #    else: #if not enabled, enable it
+        #        self.log("Enabling binary protocol")
+        #        subprocess.run(['ubxtool', '-e', 'BINARY', '-w', '0'])
 
-            if NMEA_prot:
-                self.log("outputting NMEA protocol, disabling")
-                subprocess.run(['ubxtool', '-d', 'NMEA', '-w', '0'])
-            sleep(5)
-        self.log("outputting proper protocol")
+        #    if NMEA_prot:
+        #        self.log("outputting NMEA protocol, disabling")
+        #        subprocess.run(['ubxtool', '-d', 'NMEA', '-w', '0'])
+        #    sleep(5)
+        #self.log("outputting proper protocol")
 
         # see ubx interface desciption for more codes
         #          class ID 
@@ -156,32 +160,30 @@ class Gps:
                 eoe_time = unpack_from('<L',out[6:],0)[0]
                 if prev_eoe_time:
                     period_in_ms = eoe_time - prev_eoe_time
-                    print(period_in_ms)
+                    #print(period_in_ms)
 
         if period_in_ms: # we are recieving eoe messages
             if period_in_ms != 50:
                 self.log("eoe being outputted, but not at 20hz") # (likely same for other messages of eoe is not 20hz)
-                pass # TODO: enable 50 ms period
         else: # did nto recieve any eoe message
             # probably want to check if we are recieving messages at all, 
             # maybe return from function to just restart this whole sequence 
             # as there is already code for that
             self.log("no eoe message outputted??")
-            pass
 
         # 1. Wait for fix
         no_fix = True
         fix_type = None
         self.log("Checking fix")
+        t0 = time()
         while no_fix:
             out = self.read()
 
-            # TODO: add timeout if no pvt message for too long
-            t0 = time()
             if time() > t0 + 10:
                 if pvt_flag:
                     self.log("10s with no fix")
                     pvt_flag=False
+                    t0 = time()
                 else:
                     self.log("no PVT message in 10s")
                     subprocess.run(['ubxtool', '-p', 'CFG-MSG,1,7,1', '-w', '0'])
@@ -263,7 +265,7 @@ class Gps:
         for t in self.threads:
             t["stop flag"].set()
 
-        self.log.write("GPS: all threads killed")
+        self.log("all threads killed")
 
     def run(self, flag):
         file = open(self.wd + str(floor(time())), "wb+")
@@ -305,9 +307,21 @@ if __name__ == "__main__":
     with open("/home/fissellab/BVEXTracker/Logs/GpsLog", "a") as log:
         test = Gps("/home/fissellab/BVEXTracker/output/GPS/", log)
 
+        test.test()
         #test.calibrate()
         #while not test.is_calibrated:
         #    sleep(1)
-        
-        test.test()
-
+        t0 = time()
+        while time() < t0 + 30:
+            try:
+                if not test.is_calibrated:
+                    if not test.is_calibrating:
+                        test.calibrate()
+                    continue
+                if len(test.threads) == 0:
+                    test.new_thread()
+                elif time() - test.threads[0]["start time"] > 10:
+                    test.new_thread()
+            except Exception as e:
+                print(e)
+            sleep(2)

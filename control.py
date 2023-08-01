@@ -4,12 +4,11 @@ import numpy as np
 from math import floor
 from Sensors.Log import Log
 
-log_filation =  open("/home/fissellab/BVEXTracker/Logs/sysLog", "a")
+log_filation = open("/home/fissellab/BVEXTracker/Logs/sysLog", "w")
 log = Log("CONTROL:", log_filation)
-
 sensor_list = []
 calibration_dict = {}
-
+log("test")
 log("=======================================\n")
 log("beginning control script ... ")
 
@@ -59,7 +58,7 @@ led = LED(log_filation)
 log("Enabled sensors:" + str([s.name for s in sensor_list]) + "\n")
 
 # in seconds
-thread_time = 10 
+thread_time = 60 * 10
 
 while True:
     # go through each sensor

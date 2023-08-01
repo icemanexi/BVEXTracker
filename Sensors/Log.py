@@ -18,7 +18,7 @@ class Log:
 
 if __name__ == "__main__":
 
-    with open("/home/fissellab/BVEXTracker/Sensors/test.log", "a") as fil:
+    with open("/home/fissellab/BVEXTracker/Logs/sysLog", "a") as fil:
         log = Log("ME:", fil)
 
-        log("asd")
+        log("asd\n")

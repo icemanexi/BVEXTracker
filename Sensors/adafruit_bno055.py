@@ -163,7 +163,6 @@ class _ScaledReadOnlyStruct(Struct):  # pylint: disable=too-few-public-methods
     def __get__(
         self, obj: Optional["BNO055_I2C"], objtype: Optional[Type["BNO055_I2C"]] = None
     ) -> Tuple[float, float, float]:
-        print(super().__dict__)
         result = super().__get__(obj, objtype)
         
         return tuple(self.scale * v for v in result)
@@ -778,21 +777,21 @@ class BNO055_I2C(BNO055):
     Driver for the BNO055 9DOF IMU sensor via I2C.
     """
 
-    #_temperature = _ReadOnlyUnaryStruct(0x34, "b")
-    #_acceleration = _ScaledReadOnlyStruct(0x08, "<hhh", np.float16(0.01)) # 0.01
-    #_magnetic = _ScaledReadOnlyStruct(0x0E, "<hhh", np.float16(0.0625))
-    #_gyro = _ScaledReadOnlyStruct(0x14, "<hhh", np.float16(0.001090830782496456))
-    #_euler = _ScaledReadOnlyStruct(0x1A, "<hhh", np.float16(0.0625))
-    #_quaternion = _ScaledReadOnlyStruct(0x20, "<hhhh", 1 / (1 << 14))
-    #_linear_acceleration = _ScaledReadOnlyStruct(0x28, "<hhh", np.float16(0.01))
-    #_gravity = _ScaledReadOnlyStruct(0x2E, "<hhh", np.float16(0.01))
-    _acceleration = _ReadOnlyStruct(0x08, "<hhh")
-    _magnetic = _ReadOnlyStruct(0x0E, "<hhh")
-    _gyro = _ReadOnlyStruct(0x14, "<hhh")
-    _euler = _ReadOnlyStruct(0x1A, "<hhh")
-    _quaternion = _ReadOnlyStruct(0x20, "<hhhh")
-    _linear_acceleration = _ReadOnlyStruct(0x28, "<hhh")
-    _gravity = _ReadOnlyStruct(0x2E, "<hhh")
+    _temperature = _ReadOnlyUnaryStruct(0x34, "b")
+    _acceleration = _ScaledReadOnlyStruct(0x08, "<hhh", np.float16(0.01)) # 0.01
+    _magnetic = _ScaledReadOnlyStruct(0x0E, "<hhh", np.float16(0.0625))
+    _gyro = _ScaledReadOnlyStruct(0x14, "<hhh", np.float16(0.001090830782496456))
+    _euler = _ScaledReadOnlyStruct(0x1A, "<hhh", np.float16(0.0625))
+    _quaternion = _ScaledReadOnlyStruct(0x20, "<hhhh", 1 / (1 << 14))
+    _linear_acceleration = _ScaledReadOnlyStruct(0x28, "<hhh", np.float16(0.01))
+    _gravity = _ScaledReadOnlyStruct(0x2E, "<hhh", np.float16(0.01))
+    #_acceleration = _ReadOnlyStruct(0x08, "<hhh")
+    #_magnetic = _ReadOnlyStruct(0x0E, "<hhh")
+    #_gyro = _ReadOnlyStruct(0x14, "<hhh")
+    #_euler = _ReadOnlyStruct(0x1A, "<hhh")
+    #_quaternion = _ReadOnlyStruct(0x20, "<hhhh")
+    #_linear_acceleration = _ReadOnlyStruct(0x28, "<hhh")
+    #_gravity = _ReadOnlyStruct(0x2E, "<hhh")
 
     offsets_accelerometer = _ModeStruct(_OFFSET_ACCEL_REGISTER, "<hhh", CONFIG_MODE)
     """Calibration offsets for the accelerometer"""

@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 check_control_script() {
 	if ps aux | grep control.py | grep -v grep; then

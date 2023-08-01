@@ -11,5 +11,7 @@ curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.c
 
 git config --global user.name "thomas"
 git config --global user.email "icemanexi@github.com"
+pip install adafruit_extended_bus
+pip install adafruit-circuitpython-register
 
 cp ~/BVEXTracker/.vimrc ~/.vimrc

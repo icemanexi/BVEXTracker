@@ -105,4 +105,14 @@ if __name__ == "__main__":
     with open("/home/fissellab/BVEXTracker/output/accelLog", "a") as l:
         test = Accelerometer("/home/fissellab/BVEXTracker/output/Accelerometer/", l)
         test.test()
+        #test.new_thread()
+        #sleep(60)
+        #test.kill_all_threads()
+        #with open("/home/fissellab/BVEXTracker/output/Accelerometer/1690831806", "rb") as f:
+        #    dat = test.read_file(f)
+        #    for ax in dat:
+        #        print("\r\r%8.5f, %8.5f, %8.5f" %(ax[1], ax[2], ax[3]))
+
+
+
 
