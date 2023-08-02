@@ -58,12 +58,34 @@ class Gps:
 
     def run(self, flag):
         file = open(self.wd + str(floor(time())), "wb+")
+        possible_start = False
+        byte_dat = None
+        buff = b''
+        recv_bytes = 0
 
         try:
             while not flag.is_set():
-                file.write(self.read())
+
+                byte_dat = (bus.read_byte_data(GPS_ADDRESS, READ_STREAM_REG)).to_bytes(1, byteorder='little')
+                if recv_bytes > 0:
+                    recv_bytes -= 1
+                    buff += byte_dat
+                
+                if possible_start:
+                    possible_start = False
+                    if byte_dat == b'b':  # marks start of new message transmission
+                        recv_bytes = 98 # recv another xx bytes of data into buffer
+                        print(buff)
+                        ubxt.decode_msg(buff)
+
+                        buff = b'\xb5b' # add this to buffer as it wasnt added previously
+
+                if byte_dat == b'\xb5' and recv_bytes == 0:
+                    #print("possible start")
+                    possible_start = True
+
         except Exception as e:
-            self.log("error wrile running GPS: ", e)
+            self.log("error wrile running GPS: " + str(e))
             file.close()
 
         file.close()
@@ -79,32 +101,12 @@ class Gps:
             gpsio.read(decode_func=self.ih.decode_msg)
 
     def test(self):
-        out = None
-        while True:
-            out = self.gpsio.ser.sock.recv(8192)
-            print(out)
-            self.ih.decode_msg(out)
+        return 
+
 
 if __name__ == "__main__":
     
     with open("/home/fissellab/BVEXTracker/Logs/GpsLog", "a") as log:
         test = Gps("/home/fissellab/BVEXTracker/output/GPS/", log)
 
-        test.test()
-        #test.calibrate()
-        #while not test.is_calibrated:
-        #    sleep(1)
-        t0 = time()
-        while time() < t0 + 30:
-            try:
-                if not test.is_calibrated:
-                    if not test.is_calibrating:
-                        test.calibrate()
-                    continue
-                if len(test.threads) == 0:
-                    test.new_thread()
-                elif time() - test.threads[0]["start time"] > 10:
-                    test.new_thread()
-            except Exception as e:
-                print(e)
-            sleep(2)
+        test.new_thread()

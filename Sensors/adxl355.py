@@ -241,11 +241,11 @@ class ADXL355():
             
         # convert the data to Gs    
         rawdata = self.convertlisttoRaw(res)
-        gdata = self.convertRawtog(rawdata)
+        #gdata = self.convertRawtog(rawdata)
         
-        gdata = self.flatten_list(gdata)
+        #gdata = self.flatten_list(gdata)
         
-        datalist = times + gdata
+        datalist = rawdata # times + gdata
         
         return datalist
 

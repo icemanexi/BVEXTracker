@@ -218,11 +218,5 @@ class IMU:
 if __name__ == "__main__":
     with open("/home/fissellab/BVEXTracker/output/IMULog", "a") as log:
         test = IMU("/home/fissellab/BVEXTracker/output/IMU/", log)
-        #test.new_thread()
-        #sleep(60)
-        #test.kill_all_threads()
-        with open("/home/fissellab/BVEXTracker/output/IMU/1690833470", "rb") as f:
-            data = test.read_file(f)
-            for e in data:
-                print(e)
+        test.test()
 

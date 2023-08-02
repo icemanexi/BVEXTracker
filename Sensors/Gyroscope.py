@@ -103,7 +103,7 @@ class Gyro:
                 t, x, y ,z = self.ih.read_axes() 
                 #print(1 /(t-prev))
                 prev=t
-                print("%8.2f, %8.2f, %8.2f" %(x, y, z))
+                #print("%8.2f, %8.2f, %8.2f" %(x, y, z))
 
 
 
