@@ -1,6 +1,6 @@
 from time import sleep, time
 from adafruit_extended_bus import ExtendedI2C as I2C
-import threading
+import multiprocessing as mp
 from math import floor
 import struct
 
@@ -15,7 +15,7 @@ class IMU:
     def __init__(self, Write_Directory, log_file):
         self.wd = Write_Directory # write directory
         self.name = "IMU"
-        self.threads = []
+        self.processes = []
         self.log = Log("IMU:", log_file)
         self.header = ("time", "accel x", "accel y", "accel z", "mag x", "mag y", "mag z", "gyro x", "gyro y", "gyro z", "euler 1", "euler 2", "euler 3")
         self.is_calibrating = False
@@ -64,27 +64,27 @@ class IMU:
         self.is_calibrated = True
         self.log("successful calibration")
 
-    def new_thread(self):
-        stop_flag = threading.Event()
-        thread = threading.Thread(target=self.run, args=(stop_flag,))
-        self.threads.append({"thread" : thread, "stop flag" : stop_flag, "start time" : time()})
-        thread.start()
+    def new_process(self):
+        stop_flag = mp.Event()
+        process = mp.Process(target=self.run, args=(stop_flag,))
+        self.processes.append({"process" : process, "stop flag" : stop_flag, "start time" : time()})
+        process.start()
         sleep(0.003)
-        self.log("thread started")
-        if len(self.threads) == 2:
-            prevThreadDict = self.threads.pop(0)
-            prevThreadDict["stop flag"].set()
-        if len(self.threads) > 2:
-            self.log("too many IMU threads, did not start a new one")
+        self.log("process started")
+        if len(self.processes) == 2:
+            prevProcessDict = self.processes.pop(0)
+            prevProcessDict["stop flag"].set()
+        if len(self.processes) > 2:
+            self.log("too many IMU processes, did not start a new one")
 
-    def kill_all_threads(self):
-        for t in self.threads:
+    def kill_all(self):
+        for t in self.processes:
             t["stop flag"].set()
 
 
     def run(self, flag):
         if not self.ih:
-            self.log("CRITICAL ERRROR!! intereface handler not defined. ending thread")
+            self.log("CRITICAL ERRROR!! intereface handler not defined. ending process")
             return
 
         dat_file = open(self.wd + str(floor(time())), "wb")
@@ -120,7 +120,7 @@ class IMU:
             self.log(str(e))
             dat_file.close()
         dat_file.close()
-        self.log("thread finished")
+        self.log("process finished")
 
     def get_calibration_offsets(self):
         while True:

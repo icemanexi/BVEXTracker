@@ -1,6 +1,7 @@
 import spidev
 from time import time, sleep
 import threading
+import multiprocessing as mp
 from math import floor
 import struct
 
@@ -12,15 +13,14 @@ except:
     from Sensors.Log import Log
 
 class Accelerometer:
-    def __init__(self, Write_Directory, log_file, rate=1000):
+    def __init__(self, Write_Directory, log_file, rate=4000):
         self.wd = Write_Directory
         self.log = Log("ACC:", log_file)
-        self.threads = []
+        self.processes = []
         self.rate = rate # valid: 4000, 2000, 1000, 500, 250, 125
         self.key = "<dfff"
         self.header = ["time", "accel x", "accel y", "accel z"]
         self.name = "Acceleromter"
-        self.is_calibrated = True # does not require calibration
         self.is_calibrating = False
 
         # SETUP SPI AND ACCELEROMTER
@@ -43,22 +43,28 @@ class Accelerometer:
         else:
             self.log("initialized")
 
-    def new_thread(self):
-        stop_flag = threading.Event()
-        thread = threading.Thread(target=self.run, args=(stop_flag,))
-        self.threads.append({"thread" : thread, "stop flag" : stop_flag, "start time" : time()})
-        thread.start()
+    @property
+    def is_calibrated(self):
+        if self.ih.whoami() == 237:
+            return True
+        return False
+
+    def new_process(self):
+        stop_flag = mp.Event()
+        process = mp.Process(target=self.run, args=(stop_flag,))
+        self.processes.append({"thread" : process, "stop flag" : stop_flag, "start time" : time()})
+        process.start()
         sleep(0.003)
         self.log("thread started")
 
-        if len(self.threads) == 2:
-            prevThreadDict = self.threads.pop(0)
-            prevThreadDict['stop flag'].set()
-        if len(self.threads) > 2:
+        if len(self.processes) == 2:
+            prevProcessDict = self.processes.pop(0)
+            prevProcessDict['stop flag'].set()
+        if len(self.processes) > 2:
             self.log("too many accelerometer threads!")
 
-    def kill_all_threads(self):
-        for t in self.threads:
+    def kill_all(self):
+        for t in self.processes:
             t['stop flag'].set()
 
     def run(self, flag):
@@ -66,13 +72,12 @@ class Accelerometer:
 
         try:
             while not flag.is_set():
-                data = self.ih.get3Vfifo()
-                if len(data) == 4: #make sure data is not empty
-                    bin_data = struct.pack("<dfff", data[0], data[1], data[2], data[3])
-                    file.write(bin_data)
+                t, x, y, z = time(), self.ih.getXRaw(), self.ih.getYRaw(), self.ih.getZRaw()
+                bin_data = struct.pack("<diii", t, x, y, z)
+                file.write(bin_data)
         except Exception as e:
-            self.log(str(e))
-            file.close()
+                self.log(str(e))
+                file.close()
 
         file.close()
         self.log("thread finished")
@@ -112,15 +117,5 @@ class Accelerometer:
 if __name__ == "__main__":
     with open("/home/fissellab/BVEXTracker/output/accelLog", "a") as l:
         test = Accelerometer("/home/fissellab/BVEXTracker/output/Accelerometer/", l)
-        test.test()
-        #test.new_thread()
-        #sleep(60)
-        #test.kill_all_threads()
-        #with open("/home/fissellab/BVEXTracker/output/Accelerometer/1690831806", "rb") as f:
-        #    dat = test.read_file(f)
-        #    for ax in dat:
-        #        print("\r\r%8.5f, %8.5f, %8.5f" %(ax[1], ax[2], ax[3]))
-
-
-
+        print(test.ih.whoami())
 

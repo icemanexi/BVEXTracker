@@ -2,7 +2,7 @@ from time import sleep, time
 from numpy import save
 from math import floor
 import struct
-import threading
+import multiprocessing as mp
 
 try:
     from Sensors.L3GD20H import L3GD20H
@@ -18,11 +18,10 @@ class Gyro:
         self.wd = Write_Directory
         self.log = Log("GYR:", log_file)
         self.header = ("time", "gyro x", "gyro y", "gyro z")
-        self.key = "<dfff" # this is used for the struct methods
-        self.threads = []
+        self.key = "<dHHH" # this is used for the struct methods
+        self.processes = []
         self.name = "Gyroscope"
         self.is_calibrating = False
-        self.is_calibrated = True # gyro does not need to be calibrated
         
         try:
             # TODO write script to ensure connection 
@@ -35,22 +34,28 @@ class Gyro:
             self.log("CRITICAL ERROR!! could not initialize interface handler:" + str(e))
             raise e
 
-    def new_thread(self):
-        stop_flag = threading.Event()
-        thread = threading.Thread(target=self.run, args=(stop_flag,))
-        self.threads.append({"thread" : thread, "stop flag" : stop_flag, "start time" : time()})
-        thread.start()
-        sleep(0.003)
-        self.log("started new thread")
-        if len(self.threads) == 2:
-            prevThreadDict = self.threads.pop(0)
-            prevThreadDict["stop flag"].set()
-        if len(self.threads) > 2:
-            self.log("too many gyro threads, did not start a new one")
+    @property
+    def is_calibrated(self):
+        if self.ih.check_device() == 215:
+            return True
+        return False
+
+    def new_process(self):
+        stop_flag = mp.Event()
+        process = mp.Process(target=self.run, args=(stop_flag,))
+        self.processes.append({"process" : process, "stop flag" : stop_flag, "start time" : time()})
+        process.start()
+        self.log("started new process")
+        sleep(0.05)
+        if len(self.processes) == 2:
+            prevProcessDict = self.processes.pop(0)
+            prevProcessDict["stop flag"].set()
+        if len(self.processes) > 2:
+            self.log("too many gyro processes, did not start a new one")
 
 
-    def kill_all_threads(self):
-        for t in self.threads:
+    def kill_all(self):
+        for t in self.processes:
             t["stop flag"].set()
 
     def run(self, flag):
@@ -64,10 +69,7 @@ class Gyro:
             while not flag.is_set():
                 if self.ih.readRegister(0x27) & 0b00001000 == 0b00001000: # new data check
                     axes = self.ih.read_axes()
-                    #print(1/(axes[0] - prev))
-                    #prev = axes[0]
-                    #print("%8.2f, %8.2f, %8.2f" %(axes[1],axes[2],axes[3]))
-                    bin_data = struct.pack("<dfff",  axes[0], axes[1], axes[2], axes[3])
+                    bin_data = struct.pack("<dHHH", time(),  axes[0], axes[1], axes[2])
                     file.write(bin_data)
         except Exception as e:
             self.log("error whle collecting data:", str(e))
@@ -75,7 +77,7 @@ class Gyro:
 
         file.close()
 
-        self.log("finished running thread")
+        self.log("finished running process")
 
 
 # ------------------------not runtime--------------------------
@@ -97,19 +99,17 @@ class Gyro:
     def test(self):
         while True:
             stat = self.ih.readRegister(0x27)
-            #print(stat)
-            prev = time()
+            print(stat)
             if stat & 0b00001000 == 0b00001000:
                 t, x, y ,z = self.ih.read_axes() 
                 #print(1 /(t-prev))
                 prev=t
-                #print("%8.2f, %8.2f, %8.2f" %(x, y, z))
+                print("%8.2f, %8.2f, %8.2f" %(x, y, z))
 
 
 
 if __name__ == "__main__":
     with open("/home/fissellab/BVEXTracker/Logs/gyroLog", "a") as f:
         test = Gyro("/home/fissellab/BVEXTracker/output/Gyroscope/", f)
-        print(test.ih.readRegister(0x0F))
-        test.test()
+        print(test.ih.check_device())
 

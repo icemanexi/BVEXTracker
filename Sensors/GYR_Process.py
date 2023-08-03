@@ -33,7 +33,7 @@ acc_ih.setfilter(lpf = ODR_TO_BIT[ACC_RATE]) # set data rate
 gt0 = time()
 while True:
     dat = gyr_ih.read_axes()
-    print("gy", (time()-gt0), dat)
+    print("gy", 1/(time()-gt0), dat)
     gt0 = time()
-    sleep(0.0015)
+    sleep(0.0010)
 

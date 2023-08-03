@@ -1,6 +1,6 @@
 from time import sleep, time
 from adafruit_extended_bus import ExtendedI2C as I2C
-import threading
+import multiprocessing as mp
 from math import floor
 import struct
 
@@ -15,7 +15,7 @@ class Magnetometer:
     def __init__(self, Write_Directory, log_file):
         self.wd = Write_Directory
         self.log = Log("MAG:", log_file)
-        self.threads = []
+        self.processes = []
         self.ih = LIS3MDL(I2C(1))
         self.header = ("time", "mag x", "mag y", "mag z")
         self.name = "Magnetometer"
@@ -35,9 +35,9 @@ class Magnetometer:
 
     def calibrate(self):
         self.is_calibrating = True
-        self.log("calibration thread started")
-        cal_thread = threading.Thread(target = self.run_calibrate, args=())
-        cal_thread.start()
+        self.log("calibration process started")
+        cal_proc = mp.Process(target = self.run_calibrate, args=())
+        cal_proc.start()
         
 
     def run_calibrate(self):
@@ -99,22 +99,22 @@ class Magnetometer:
 
 
 #----------------------------run time---------------------------------
-    def new_thread(self):
-        stop_flag = threading.Event()
-        thread = threading.Thread(target=self.run, args=(stop_flag,))
-        self.threads.append({"thread" : thread, "stop flag" : stop_flag, "start time" : time()})
-        thread.start()
-        self.log("thread started")
+    def new_process(self):
+        stop_flag = mp.Event()
+        process = mp.Process(target=self.run, args=(stop_flag,))
+        self.processes.append({"process" : process, "stop flag" : stop_flag, "start time" : time()})
+        process.start()
+        self.log("process started")
         sleep(0.003)
-        if len(self.threads) == 2:
-            prevThreadDict = self.threads.pop(0)
-            prevThreadDict["stop flag"].set()
-        if len(self.threads) > 2:
-            self.log("too many threads!!")
+        if len(self.processes) == 2:
+            prevProcessDict = self.processes.pop(0)
+            prevProcessDict["stop flag"].set()
+        if len(self.processes) > 2:
+            self.log("too many processes!!")
 
 
-    def kill_all_threads(self):
-        for t in self.threads:
+    def kill_all(self):
+        for t in self.processes:
             t["stop flag"].set()
 
     def run(self, flag):
@@ -124,8 +124,10 @@ class Magnetometer:
             mx, my, mz = self.ih.magnetic
             bin_data += struct.pack("<fff", mx, my, mz)
             file.write(bin_data)
-        self.log("thread finished")
+        self.log("process finished")
 
+
+#----------------- not runtime ---------------------------------------
     def read_file(self, file):
         data = [self.header]
         while True:
@@ -139,7 +141,7 @@ class Magnetometer:
                 self.log("got error reading data, returned processed data")
                 self.log(str(e))
                 return data
-        self.log("thread finished running")
+        self.log("process finished running")
         return data
     
     def test(self):

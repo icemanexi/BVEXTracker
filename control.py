@@ -58,11 +58,11 @@ led = LED(log_filation)
 log("Enabled sensors:" + str([s.name for s in sensor_list]) + "\n")
 
 # in seconds
-thread_time = 60 * 10
+process_time = 10 #60 * 10
 
 while True:
     # go through each sensor
-    num_active_threads = 0
+    num_active_processes = 0
 
     for sensor in sensor_list:
         # calibration check
@@ -77,17 +77,16 @@ while True:
 
         # data collection thread management
         try:
-            #print(sensor.name, sensor.threads)
-            if len(sensor.threads) == 0: # starts first thread
-                sensor.new_thread()
-            elif time() - sensor.threads[0]["start time"] > thread_time: # creates new thread every 60s
-                sensor.new_thread()
-            num_active_threads += 1
+            if len(sensor.processes) == 0: # starts first thread
+                sensor.new_process()
+            elif time() - sensor.processes[0]["start time"] > process_time: # creates new thread every 60s
+                sensor.new_process()
+            num_active_processes += 1
 
         except Exception as e:
-            log("error during thread management of " + sensor.name + ": " + str(e))
+            log("error during process management of " + sensor.name + ": " + str(e))
 
-    led.mode = num_active_threads
+    led.mode = num_active_processes
     sleep(1)
 
 print("\nfinished")
