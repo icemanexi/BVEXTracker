@@ -1,9 +1,8 @@
 #!/usr/bin/python3
-
 from time import time, sleep
 from numpy import save
 from math import floor
-import threading
+import multiprocessing as mp
 from struct import unpack_from
 import subprocess
 
@@ -19,12 +18,12 @@ except:
 class Gps:
     def __init__(self, Write_Directory, log_file): #runs upon initialization
         self.wd = Write_Directory
-        self.log = Log("GPS:", log_file)
-        self.threads = []
+        self.log = Log("ser GPS:", log_file)
+        self.processes = []
         self.gpsio = gps_io(input_speed=38400)
         self.ih = ubx.ubx()
         self.ih.io_handle = self.gpsio
-        self.name = "GPS"
+        self.name = "serial GPS"
         self._is_calibrated = False
         self.is_calibrating = False
 
@@ -35,13 +34,13 @@ class Gps:
             return False
 
         # gps was previously calibrated successfully, but will check again anyways
-        is_cal_thread = threading.Thread(target=self.is_calibrated_run , args=())
-        is_cal_thread.start()
+        is_cal_process = mp.Process(target=self.is_calibrated_run , args=())
+        is_cal_process.start()
 
         return self._is_calibrated
 
     def is_calibrated_run(self):
-        return True
+        return True # FIXME: not currently working ovo
         t0 = time()
         
         while time() < t0 + 1: # should be enough time to recieve 1-2 epochs
@@ -60,14 +59,14 @@ class Gps:
 
         self.log("was calibrated but now isnt...")
         self._is_calibrated = False  # if got no pvt message / no fix then gps is no longer calibrated
-        self.kill_all_threads() # stop threads from recieving false data
+        self.kill_all() # stop processes from recieving false data
        
 
     def calibrate(self):
         self.is_calibrating = True
-        cal_thread = threading.Thread(target=self.run_calibrate, args=())
+        cal_process = mp.Process(target=self.run_calibrate, args=())
         self.log("beginning calibration")
-        cal_thread.start()
+        cal_process.start()
 
     fix_types = {
         0 : "no fix",
@@ -248,24 +247,24 @@ class Gps:
         self._is_calibrated = True
         self.is_calibrating = False
 
-    def new_thread(self):
-        stop_flag = threading.Event()
-        thread = threading.Thread(target=self.run, args=(stop_flag,))
-        self.threads.append({"thread" : thread, "stop flag" : stop_flag, "start time" : time()})
-        thread.start()
+    def new_process(self):
+        stop_flag = mp.Event()
+        process = mp.Process(target=self.run, args=(stop_flag,))
+        self.processes.append({"process" : process, "stop flag" : stop_flag, "start time" : time()})
+        process.start()
         sleep(0.003)
-        self.log("thread started")
-        if len(self.threads) == 2:
-            prevThreadDict = self.threads.pop(0)
-            prevThreadDict["stop flag"].set()
-        if len(self.threads) > 2:
-            self.log("Something went wrong with the threading in gps!")
+        self.log("process started")
+        if len(self.processes) == 2:
+            prevProcessDict = self.processes.pop(0)
+            prevProcessDict["stop flag"].set()
+        if len(self.processes) > 2:
+            self.log("Something went wrong with the processing in gps!")
 
-    def kill_all_threads(self):
-        for t in self.threads:
+    def kill_all(self):
+        for t in self.processes:
             t["stop flag"].set()
 
-        self.log("all threads killed")
+        self.log("all processes killed")
 
     def run(self, flag):
         file = open(self.wd + str(floor(time())), "wb+")
@@ -278,7 +277,7 @@ class Gps:
             file.close()
 
         file.close()
-        self.log("thread finished")
+        self.log("process finished")
 
     def read(self):
         out = None
@@ -305,7 +304,7 @@ class Gps:
 if __name__ == "__main__":
     
     with open("/home/fissellab/BVEXTracker/Logs/GpsLog", "a") as log:
-        test = Gps("/home/fissellab/BVEXTracker/output/GPS/", log)
+        test = Gps("/home/fissellab/BVEXTracker/output/ser_GPS/", log)
 
         test.test()
         #test.calibrate()
@@ -318,10 +317,10 @@ if __name__ == "__main__":
                     if not test.is_calibrating:
                         test.calibrate()
                     continue
-                if len(test.threads) == 0:
-                    test.new_thread()
-                elif time() - test.threads[0]["start time"] > 10:
-                    test.new_thread()
+                if len(test.processes) == 0:
+                    test.new_process()
+                elif time() - test.processes[0]["start time"] > 10:
+                    test.new_process()
             except Exception as e:
                 print(e)
             sleep(2)

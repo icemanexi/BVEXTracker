@@ -21,12 +21,21 @@ except Exception as e:
     log(str(e))
 
 try:
-    from Sensors.GPS import Gps
-    gps = Gps("/home/fissellab/BVEXTracker/output/GPS/", log_filation)
-    sensor_list.append(gps)
+    from Sensors.i2c_GPS import Gps
+    i2c_gps = Gps("/home/fissellab/BVEXTracker/output/i2c_GPS/", log_filation)
+    sensor_list.append(i2c_gps)
 except Exception as e:
     log("FATAL! error importing gps, not added to senesor list")
     log(str(e))
+
+try:
+    from Sensors.serial_GPS import Gps
+    ser_gps = Gps("/home/fissellab/BVEXTracker/output/ser_GPS/", log_filation)
+    sensor_list.append(ser_gps)
+except Exception as e:
+    log("FATAL! error importing gps, not added to senesor list")
+    log(str(e))
+
 try:
     from Sensors.Accelerometer import Accelerometer
     acc = Accelerometer("/home/fissellab/BVEXTracker/output/Accelerometer/", log_filation)
@@ -58,7 +67,7 @@ led = LED(log_filation)
 log("Enabled sensors:" + str([s.name for s in sensor_list]) + "\n")
 
 # in seconds
-process_time = 10 #60 * 10
+process_time = 60 * 5
 
 while True:
     # go through each sensor

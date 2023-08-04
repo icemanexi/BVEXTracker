@@ -3,9 +3,10 @@
 from time import time, sleep
 from numpy import save
 from math import floor
-import threading
+import multiprocessing as mp
 from struct import unpack_from
 import subprocess
+import smbus
 
 
 try:
@@ -19,42 +20,46 @@ except:
 class Gps:
     def __init__(self, Write_Directory, log_file): #runs upon initialization
         self.wd = Write_Directory
-        self.log = Log("GPS:", log_file)
-        self.threads = []
-        self.name = "GPS"
+        self.log = Log("i2c GPS:", log_file)
+        self.processes = []
+        self.name = "i2c GPS"
+        self.error_timer = 0        
+        self.ih = smbus.SMBus(1) # i2c_bus = 1
+        sleep(1)
 
+        self.log("i2c GPS initialized")
     
     @property
     def is_calibrated(self):
-        return 
+        return True
 
     def is_calibrated_run(self):
         return
 
     def calibrate(self):
-        return
+        return True
 
     def run_calibrate(self):
         return
 
-    def new_thread(self):
-        stop_flag = threading.Event()
-        thread = threading.Thread(target=self.run, args=(stop_flag,))
-        self.threads.append({"thread" : thread, "stop flag" : stop_flag, "start time" : time()})
-        thread.start()
+    def new_process(self):
+        stop_flag = mp.Event()
+        process = mp.Process(target=self.run, args=(stop_flag,))
+        self.processes.append({"process" : process, "stop flag" : stop_flag, "start time" : time()})
+        process.start()
         sleep(0.003)
-        self.log("thread started")
-        if len(self.threads) == 2:
-            prevThreadDict = self.threads.pop(0)
-            prevThreadDict["stop flag"].set()
-        if len(self.threads) > 2:
-            self.log("Something went wrong with the threading in gps!")
+        self.log("process started")
+        if len(self.processes) == 2:
+            prevProcessDict = self.processes.pop(0)
+            prevProcessDict["stop flag"].set()
+        if len(self.processes) > 2:
+            self.log("Something went wrong with the processing in gps!")
 
-    def kill_all_threads(self):
-        for t in self.threads:
+    def kill_all(self):
+        for t in self.processes:
             t["stop flag"].set()
 
-        self.log("all threads killed")
+        self.log("all processes killed")
 
     def run(self, flag):
         file = open(self.wd + str(floor(time())), "wb+")
@@ -62,11 +67,13 @@ class Gps:
         byte_dat = None
         buff = b''
         recv_bytes = 0
+        GPS_ADDRESS = 0x42
+        READ_STREAM_REG = 0xFF
 
         try:
             while not flag.is_set():
 
-                byte_dat = (bus.read_byte_data(GPS_ADDRESS, READ_STREAM_REG)).to_bytes(1, byteorder='little')
+                byte_dat = (self.ih.read_byte_data(GPS_ADDRESS, READ_STREAM_REG)).to_bytes(1, byteorder='little')
                 if recv_bytes > 0:
                     recv_bytes -= 1
                     buff += byte_dat
@@ -75,8 +82,9 @@ class Gps:
                     possible_start = False
                     if byte_dat == b'b':  # marks start of new message transmission
                         recv_bytes = 98 # recv another xx bytes of data into buffer
-                        print(buff)
-                        ubxt.decode_msg(buff)
+                        pack = struct.pack("<d", time()) + buff  # store time then the msg buffer
+                        file.write(pack)
+                        ubxt.decode_msg(buff)  # for debugging
 
                         buff = b'\xb5b' # add this to buffer as it wasnt added previously
 
@@ -85,11 +93,14 @@ class Gps:
                     possible_start = True
 
         except Exception as e:
-            self.log("error wrile running GPS: " + str(e))
+            if time() - self.error_timer > 10: # only output erors every 10s             
+                self.log("error wrile running GPS: " + str(e))
+                self.error_timer = time()
+                
             file.close()
 
         file.close()
-        self.log("thread finished")
+        self.log("process finished")
 
 
     def read_file(self, file_name : str):
@@ -109,4 +120,4 @@ if __name__ == "__main__":
     with open("/home/fissellab/BVEXTracker/Logs/GpsLog", "a") as log:
         test = Gps("/home/fissellab/BVEXTracker/output/GPS/", log)
 
-        test.new_thread()
+        test.new_process()

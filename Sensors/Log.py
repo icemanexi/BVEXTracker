@@ -11,14 +11,17 @@ class Log:
 
         print(round(time(), 2), self.pf, arg)
         try:
-            self.lf.write("\n" + str(round(time(), 2)) + " " + self.pf + " " + arg)
+            self.lf.write(str(round(time(), 2)) + " " + self.pf + " " + arg + "\n")
         except Exception as e:
             print(e)
 
 
 if __name__ == "__main__":
 
-    with open("/home/fissellab/BVEXTracker/Logs/sysLog", "a") as fil:
-        log = Log("ME:", fil)
-
-        log("asd\n")
+    fil = open("/home/fissellab/BVEXTracker/Logs/sysLog", "a")
+    log = Log("ME:", fil)
+    log2 = Log("test:", fil)
+    
+    log("asd\n")
+    log2("dsa\n")
+        

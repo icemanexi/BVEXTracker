@@ -72,9 +72,12 @@ class Accelerometer:
 
         try:
             while not flag.is_set():
-                t, x, y, z = time(), self.ih.getXRaw(), self.ih.getYRaw(), self.ih.getZRaw()
-                bin_data = struct.pack("<diii", t, x, y, z)
-                file.write(bin_data)
+                if time() - t > 0.00125:
+                    t = time()
+                    x, y, z = self.ih.getXRaw(), self.ih.getYRaw(), self.ih.getZRaw()
+                    bin_data = struct.pack("<diii", t, x, y, z)
+                    file.write(bin_data)
+
         except Exception as e:
                 self.log(str(e))
                 file.close()
@@ -91,7 +94,7 @@ class Accelerometer:
                 bin_dat = file.read(20)
                 if not bin_dat:
                     break
-                data += [struct.unpack("<dfff", bin_dat)]
+                data += [struct.unpack("<diii", bin_dat)]
             except Exception as e:
                 print(e)
                 print("got error reading data, returned processed data")
@@ -103,10 +106,8 @@ class Accelerometer:
         num = 0
         while True:
             t0 = time()
-            num +=1
             ax = self.ih.get3Vfifo()
             if time() - t0 > 0.001:
-                print(num)
                 print("yes")
                 print(time() - t0)
 
@@ -115,7 +116,8 @@ class Accelerometer:
                 #print("\r\r%8.5f, %8.5f, %8.5f" %(ax[1], ax[2], ax[3]))
 
 if __name__ == "__main__":
-    with open("/home/fissellab/BVEXTracker/output/accelLog", "a") as l:
+    with open("/home/fissellab/BVEXTracker/Logs/accelLog", "a") as l:
         test = Accelerometer("/home/fissellab/BVEXTracker/output/Accelerometer/", l)
-        print(test.ih.whoami())
+        with open("/home/fissellab/BVEXTracker/output/Accelerometer/1691160582", "rb") as f:
+            print(test.read_file(f))
 
