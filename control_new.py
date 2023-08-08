@@ -23,7 +23,7 @@ spi.open(0, 0) #
 spi.max_speed_hz = 10000000
 spi.mode = 0b00
 
-rate = 2000
+rate = 1000
 acc_ih = ADXL355(spi.xfer2)
 acc_ih.start()
 acc_ih.setrange(SET_RANGE_2G) # set range to 2g
@@ -58,7 +58,14 @@ ubxt.io_handle = gpsio
 
 
 def acc_read():
-    return time(), acc_ih.getXRaw(), acc_ih.getYRaw(), acc_ih.getZRaw()
+    t = time()
+    fifo = acc_ih.get3Vfifo()
+    l = len(fifo)
+    for i in range(l//3):
+        print(fifo[i-l])
+    return
+
+    #return time(), acc_ih.getXRaw(), acc_ih.getYRaw(), acc_ih.getZRaw()
 
 def gyr_read():
     return time(), gyr_ih.read_axes()
@@ -89,35 +96,46 @@ def main_process(flag):
     imu_count = 8
     gps_count = 39
     t0 = time()
+    gt0 = time()
+    mt0 = time()
+    it0 = time()
+
 
     while not flag.is_set():
-        if time() - t0 > 0.0125: # decrement every 1/800th of a second
+        if time() - t0 > 0.00125: # decrement every 1/800th of a second
             t0 = time()
-            acc_count -= 1
             gyr_count -= 1      
             mag_count -= 1
             imu_count -= 1
             gps_count -= 1
 
-        if not acc_count:
-            t, x, y, z = acc_read()
-            bin_dat = struct.pack("<diii", t,x,y,z)
-            acc_file.write(bin_dat)
-            acc_count = 1
+            t = time()
+            fifo = acc_ih.get3Vfifo()
+            l = len(fifo)
+            for i in range(l):
+                bin_dat = struct.pack("<diii", t-0.001*i, fifo[i-l][0], fifo[i-l][1], fifo[i-l][2])
+                acc_file.write(bin_dat)
+            
 
         if not gyr_count:
+            print("gyr: ", 1/(time() - gt0))
+            gt0 = time()
             t, l = gyr_read()
             bin_dat = struct.pack("<dHHH", t, l[0], l[1], l[2])
             gyr_file.write(bin_dat)
             gyr_count = 4
 
         if not mag_count:
+            print("mag: ", 1/(time() - mt0))
+            mt0 = time()
             t, l = mag_read()
             bin_dat = struct.pack("<dfff", t, l[0], l[1], l[2])
             mag_file.write(bin_dat)
             mag_count = 4
 
         if not imu_count:
+            print("imu: ", 1/(time() - it0))
+            it0 = time()
             t, a,g,m,e = imu_read()
             bin_dat = struct.pack("<dffffffffffff", t,a[0],a[1],a[2],g[0],g[1],g[2],m[0],m[1],m[2],e[0],e[1],e[2])
             imu_file.write(bin_dat)

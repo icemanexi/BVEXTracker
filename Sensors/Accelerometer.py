@@ -12,8 +12,10 @@ except:
     from Sensors.adxl355 import ADXL355, SET_RANGE_2G, ODR_TO_BIT
     from Sensors.Log import Log
 
+REG_FIFO_DATA = 0x11
+
 class Accelerometer:
-    def __init__(self, Write_Directory, log_file, rate=4000):
+    def __init__(self, Write_Directory, log_file, rate=2000):
         self.wd = Write_Directory
         self.log = Log("ACC:", log_file)
         self.processes = []
@@ -71,12 +73,32 @@ class Accelerometer:
         file = open(self.wd + str(floor(time())), "wb+")
 
         try:
+            t0 = time()
+            t = time()
+            
             while not flag.is_set():
-                if time() - t > 0.00125:
-                    t = time()
-                    x, y, z = self.ih.getXRaw(), self.ih.getYRaw(), self.ih.getZRaw()
-                    bin_data = struct.pack("<diii", t, x, y, z)
-                    file.write(bin_data)
+                t = time()
+                x = self.ih.read(REG_FIFO_DATA, 3)
+                length = 0
+                res = []
+                while(x[2] & 0b10 == 0):
+                    x = self.ih.twocomp((x[2] << 12) | (x[1] << 4) | ((x[0] & 0xF0) >> 4))
+                    y = self.ih.read(REG_FIFO_DATA, 3)
+                    y = self.ih.twocomp((y[2] << 12) | (y[1] << 4) | ((y[0] & 0xF0) >> 4))
+                    z = self.ih.read(REG_FIFO_DATA, 3)
+                    z = self.ih.twocomp((z[2] << 12) | (z[1] << 4) | ((z[0] & 0xF0) >> 4))
+                    res = [[x, y, z]] + res
+                    length += 1
+                    x = self.ih.read(REG_FIFO_DATA, 3)
+                for i in range(length): # the final element is the correctly timestamped read 
+                    if i == length - 1:
+                        bin_data = struct.pack("<diii", t, res[i][0], res[i][1], res[i][2])
+                        file.write(bin_data)
+                    else:
+                        bin_data = struct.pack("<diii", 0,  res[i][0], res[i][1], res[i][2])
+                        file.write(bin_data)
+                
+                sleep(0.0005)
 
         except Exception as e:
                 self.log(str(e))
@@ -85,6 +107,26 @@ class Accelerometer:
         file.close()
         self.log("thread finished")
 
+    def get3Vfifo(self):
+        res = []
+        times = []
+        x = self.read(REG_FIFO_DATA, 3)
+        while(x[2] & 0b10 == 0):
+            y = self.read(REG_FIFO_DATA, 3)
+            z = self.read(REG_FIFO_DATA, 3)
+            res.append([x, y, z])
+            x = self.read(REG_FIFO_DATA, 3)
+            #times.append(time.time())
+            
+        # convert the data to Gs    
+        rawdata = self.convertlisttoRaw(res)
+        #gdata = self.convertRawtog(rawdata)
+        
+        #gdata = self.flatten_list(gdata)
+        
+        datalist = gdata #times + gdata
+        
+        return datalist
 
 #-------------------------not runtime-----------------------------
     def read_file(self, file):
@@ -110,7 +152,7 @@ class Accelerometer:
             if time() - t0 > 0.001:
                 print("yes")
                 print(time() - t0)
-
+                print(ax)
 
             #if len(ax) == 4:
                 #print("\r\r%8.5f, %8.5f, %8.5f" %(ax[1], ax[2], ax[3]))
@@ -118,6 +160,13 @@ class Accelerometer:
 if __name__ == "__main__":
     with open("/home/fissellab/BVEXTracker/Logs/accelLog", "a") as l:
         test = Accelerometer("/home/fissellab/BVEXTracker/output/Accelerometer/", l)
-        with open("/home/fissellab/BVEXTracker/output/Accelerometer/1691160582", "rb") as f:
-            print(test.read_file(f))
 
+        #f = mp.Event()
+        #test.run(f)
+        #sleep(10)
+        #f.set()
+
+        with open("/home/fissellab/BVEXTracker/output/Accelerometer/1691516687", "rb") as f:
+            dat = test.read_file(f)
+            for l in dat:
+                print(l)

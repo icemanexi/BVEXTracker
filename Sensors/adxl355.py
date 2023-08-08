@@ -237,7 +237,7 @@ class ADXL355():
             z = self.read(REG_FIFO_DATA, 3)
             res.append([x, y, z])
             x = self.read(REG_FIFO_DATA, 3)
-            times.append(time.time())
+            #times.append(time.time())
             
         # convert the data to Gs    
         rawdata = self.convertlisttoRaw(res)
@@ -245,7 +245,7 @@ class ADXL355():
         
         #gdata = self.flatten_list(gdata)
         
-        datalist = rawdata # times + gdata
+        datalist = gdata #times + gdata
         
         return datalist
 

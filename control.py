@@ -70,7 +70,6 @@ log("Enabled sensors:" + str([s.name for s in sensor_list]) + "\n")
 process_time = 60 * 5
 
 while True:
-    # go through each sensor
     num_active_processes = 0
 
     for sensor in sensor_list:

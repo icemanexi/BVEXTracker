@@ -22,6 +22,7 @@ class Gyro:
         self.processes = []
         self.name = "Gyroscope"
         self.is_calibrating = False
+        self.is_calibrated = True # gyro does not need to be calibrated
         
         try:
             # TODO write script to ensure connection 
@@ -34,24 +35,18 @@ class Gyro:
             self.log("CRITICAL ERROR!! could not initialize interface handler:" + str(e))
             raise e
 
-    @property
-    def is_calibrated(self):
-        if self.ih.check_device() == 215:
-            return True
-        return False
-
     def new_process(self):
         stop_flag = mp.Event()
         process = mp.Process(target=self.run, args=(stop_flag,))
-        self.processes.append({"process" : process, "stop flag" : stop_flag, "start time" : time()})
+        self.processes.append({"thread" : process, "stop flag" : stop_flag, "start time" : time()})
         process.start()
-        self.log("started new process")
-        sleep(0.05)
+        sleep(0.003)
+        self.log("started new thread")
         if len(self.processes) == 2:
             prevProcessDict = self.processes.pop(0)
             prevProcessDict["stop flag"].set()
         if len(self.processes) > 2:
-            self.log("too many gyro processes, did not start a new one")
+            self.log("too many gyro threads, did not start a new one")
 
 
     def kill_all(self):
@@ -77,7 +72,7 @@ class Gyro:
 
         file.close()
 
-        self.log("finished running process")
+        self.log("finished running thread")
 
 
 # ------------------------not runtime--------------------------
@@ -99,17 +94,18 @@ class Gyro:
     def test(self):
         while True:
             stat = self.ih.readRegister(0x27)
-            print(stat)
+            #print(stat)
+            prev = time()
             if stat & 0b00001000 == 0b00001000:
                 t, x, y ,z = self.ih.read_axes() 
                 #print(1 /(t-prev))
                 prev=t
-                print("%8.2f, %8.2f, %8.2f" %(x, y, z))
+                #print("%8.2f, %8.2f, %8.2f" %(x, y, z))
 
 
 
 if __name__ == "__main__":
     with open("/home/fissellab/BVEXTracker/Logs/gyroLog", "a") as f:
         test = Gyro("/home/fissellab/BVEXTracker/output/Gyroscope/", f)
-        print(test.ih.check_device())
+        test.new_process()
 
