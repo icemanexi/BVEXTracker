@@ -1,17 +1,6 @@
-from time import time, sleep
-from numpy import save
-from math import floor
-import threading
-from struct import unpack_from
-import subprocess
-
-from gpsModule import ubx, gps_io
-
-gpsd = gps_io(input_speed=38400)
-
-ubxt = ubx.ubx()
-
-while True:
-    print(gpsd.ser.sock.recv(8192))
-    gpsd.read(ubxt.decode_msg)
-
+try:
+    print([1,2]**2)
+except ZeroDivisionError:
+    print("divided by 0")
+except Exception as e:
+    print("except", str(e))

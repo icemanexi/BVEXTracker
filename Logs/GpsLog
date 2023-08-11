@@ -1,0 +1,28 @@
+1691519438.12 ser GPS: error wrile running GPS: 'NoneType' object has no attribute 'write'
+1691519438.12 ser GPS: process finished
+1691523476.8 ser GPS: error wrile running GPS: Needs at least 2D fix
+1691523476.8 ser GPS: process finished
+1691523487.11 ser GPS: error wrile running GPS: Needs at least 2D fix
+1691523487.11 ser GPS: process finished
+1691534135.06 GPS: error wrile running GPS: name 'bus' is not defined
+1691534135.06 GPS: process finished
+1691703527.22 GPS: thread started
+1691703550.74 GPS: error wrile running GPS: name 'bus' is not defined
+1691703550.74 GPS: thread finished
+1691703550.74 GPS: thread started
+1691703686.48 GPS: error wrile running GPS: name 'bus' is not defined
+1691703686.48 GPS: thread finished
+1691703686.48 GPS: thread started
+1691703706.24 GPS: thread started
+1691703727.31 GPS: thread started
+1691703745.15 GPS: thread started
+1691703895.3 ser GPS: error wrile running GPS: name 'struct' is not defined
+1691703895.3 ser GPS: process finished
+1691703937.87 ser GPS: error wrile running GPS: 'Gps' object has no attribute 'bin_dat'
+1691703937.87 ser GPS: process finished
+1691705169.84 i2c GPS: initialized
+1691705185.39 i2c GPS: initialized
+1691705186.43 i2c GPS: process started
+1691705244.39 i2c GPS: initialized
+1691705275.98 i2c GPS: initialized
+1691705277.01 i2c GPS: process started

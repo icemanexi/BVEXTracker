@@ -60,9 +60,10 @@ class Gyro:
 
         file = open(self.wd + str(floor(time())), "wb")
         try:
-            prev = time()
+            t0 = time()
             while not flag.is_set():
-                if self.ih.readRegister(0x27) & 0b00001000 == 0b00001000: # new data check
+                if self.ih.readRegister(0x27) & 0b00001000 == 0b00001000 and time() - t0 > 1/200: # new data check
+                    t0 = time()
                     axes = self.ih.read_axes()
                     bin_data = struct.pack("<dHHH", time(),  axes[0], axes[1], axes[2])
                     file.write(bin_data)

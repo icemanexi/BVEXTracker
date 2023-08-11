@@ -16,7 +16,11 @@ class Magnetometer:
         self.wd = Write_Directory
         self.log = Log("MAG:", log_file)
         self.processes = []
-        self.ih = LIS3MDL(I2C(1))
+        try:
+            self.ih = LIS3MDL(I2C(1))
+        except ValueError as e:
+            self.log("IO error: " + str(e))
+
         self.header = ("time", "mag x", "mag y", "mag z")
         self.name = "Magnetometer"
 
@@ -119,11 +123,14 @@ class Magnetometer:
 
     def run(self, flag):
         file = open(self.wd + str(floor(time())), "wb+")
+        t0 = time()
         while not flag.is_set():
-            bin_data = struct.pack("<d", time())
-            mx, my, mz = self.ih.magnetic
-            bin_data += struct.pack("<fff", mx, my, mz)
-            file.write(bin_data)
+            if time() - t0 > 1/100:
+                t = time()
+                mx, my, mz = self.ih.magnetic
+                bin_data = struct.pack("<dfff", t, mx, my, mz)
+                file.write(bin_data)
+                t0 = t
         self.log("process finished")
 
 
@@ -132,11 +139,8 @@ class Magnetometer:
         data = [self.header]
         while True:
             try:
-                bin_dat = file.read(8)
-                data += [struct.unpack("<d", bin_dat)[0]] # time
-
-                bin_dat = file.read(12)
-                data += [struct.unpack("<fff", bin_dat)] # magx, magy, magz
+                bin_dat = file.read(20)
+                data += [struct.unpack("<dfff", bin_dat)] # magx, magy, magz
             except Exception as e:
                 self.log("got error reading data, returned processed data")
                 self.log(str(e))
@@ -153,6 +157,8 @@ if __name__ == '__main__':
     with open("/home/fissellab/BVEXTracker/output/magLog", "a") as log:
         sens = Magnetometer("/home/fissellab/BVEXTracker/output/Magnetometer/", log)
         sens.test()
+
+        quit()
 
 
 

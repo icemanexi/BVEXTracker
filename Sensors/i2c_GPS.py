@@ -1,13 +1,18 @@
 #!/usr/bin/python3
-
 from time import time, sleep
 from numpy import save
 from math import floor
-import multiprocessing as mp
+import threading
 from struct import unpack_from
 import subprocess
+import multiprocessing as mp
 import smbus
 
+i2c_bus = 1
+GPS_ADDRESS = 0x42
+BYTES_AVAIL_HIGH_REG = 0xFD
+BYTES_AVAIL_LOW_REG = 0xFE
+READ_STREAM_REG = 0xFF
 
 try:
     from gpsModule import ubx, gps_io
@@ -23,25 +28,12 @@ class Gps:
         self.log = Log("i2c GPS:", log_file)
         self.processes = []
         self.name = "i2c GPS"
-        self.error_timer = 0        
-        self.ih = smbus.SMBus(1) # i2c_bus = 1
+        self.ih = smbus.SMBus(1)
+        self.is_calibrated = True
+        self.is_calibrating = False
+        self.log("initialized")
         sleep(1)
-
-        self.log("i2c GPS initialized")
-    
-    @property
-    def is_calibrated(self):
-        return True
-
-    def is_calibrated_run(self):
-        return
-
-    def calibrate(self):
-        return True
-
-    def run_calibrate(self):
-        return
-
+        
     def new_process(self):
         stop_flag = mp.Event()
         process = mp.Process(target=self.run, args=(stop_flag,))
@@ -67,12 +59,9 @@ class Gps:
         byte_dat = None
         buff = b''
         recv_bytes = 0
-        GPS_ADDRESS = 0x42
-        READ_STREAM_REG = 0xFF
 
-        try:
-            while not flag.is_set():
-
+        while not flag.is_set():
+            try: 
                 byte_dat = (self.ih.read_byte_data(GPS_ADDRESS, READ_STREAM_REG)).to_bytes(1, byteorder='little')
                 if recv_bytes > 0:
                     recv_bytes -= 1
@@ -82,22 +71,19 @@ class Gps:
                     possible_start = False
                     if byte_dat == b'b':  # marks start of new message transmission
                         recv_bytes = 98 # recv another xx bytes of data into buffer
-                        pack = struct.pack("<d", time()) + buff  # store time then the msg buffer
-                        file.write(pack)
-                        ubxt.decode_msg(buff)  # for debugging
+                        file.write(buff)
 
                         buff = b'\xb5b' # add this to buffer as it wasnt added previously
 
                 if byte_dat == b'\xb5' and recv_bytes == 0:
                     #print("possible start")
                     possible_start = True
-
-        except Exception as e:
-            if time() - self.error_timer > 10: # only output erors every 10s             
-                self.log("error wrile running GPS: " + str(e))
-                self.error_timer = time()
-                
-            file.close()
+            except IOError:
+                self.log("error reading i2c gps address, trying again in 10s")
+                sleep(10)        
+            except Exception as e:
+                self.log("error: " + str(e))
+                break
 
         file.close()
         self.log("process finished")
@@ -118,6 +104,34 @@ class Gps:
 if __name__ == "__main__":
     
     with open("/home/fissellab/BVEXTracker/Logs/GpsLog", "a") as log:
-        test = Gps("/home/fissellab/BVEXTracker/output/GPS/", log)
+        test = Gps("/home/fissellab/BVEXTracker/output/i2c_GPS/", log)
+        sensor_list = [test]
+        while True:
+            num_active_processes = 0
 
-        test.new_process()
+            for sensor in sensor_list:
+                # calibration check
+                try:
+                    if not sensor.is_calibrated:
+                        if not sensor.is_calibrating:
+                            if hasattr(sensor, "calibrate"):
+                                sensor.calibrate()
+                        continue
+                except Exception as e:
+                    log("error during calibration of " + sensor.name + ": " + str(e))
+
+                # data collection thread management
+                try:
+                    if len(sensor.processes) == 0: # starts first thread
+                        print("len processes == 0", sensor.name)
+                        sensor.new_process()
+                    elif time() - sensor.processes[0]["start time"] > process_time: # creates new thread every 60s
+                        print("else", sensor.name)
+                        sensor.new_process()
+                    num_active_processes += 1
+
+                except Exception as e:
+                    log("error during process management of " + sensor.name + ": " + str(e))
+
+            led.mode = num_active_processes
+            sleep(1)

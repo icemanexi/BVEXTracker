@@ -24,7 +24,6 @@ class LED:
         try:
             while True:
                 temp_mode = self.mode
-                assert temp_mode <= 5 #only 5 sensors, should not get number bigger than this
                 for i in range(temp_mode):
                     GPIO.output(18, GPIO.HIGH)
                     sleep(0.2)

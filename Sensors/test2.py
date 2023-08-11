@@ -23,6 +23,7 @@ while True:
     try:
 
         byte_dat = (bus.read_byte_data(GPS_ADDRESS, READ_STREAM_REG)).to_bytes(1, byteorder='little')
+        print(byte_dat, end="")
         if recv_bytes > 0:
             recv_bytes -= 1
             buff += byte_dat

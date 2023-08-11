@@ -89,33 +89,33 @@ class IMU:
 
         dat_file = open(self.wd + str(floor(time())), "wb")
         try:
+            t0 = time()
             while not flag.is_set():
-                #print(time() - t)
-                #t = time()
-                
-                bin_data = struct.pack("<d", time())
-                
-                x, y, z = self.ih.acceleration
-                if None in (x ,y, z):
-                    x = y = z = -999
-                bin_data += struct.pack("<fff", x,y,z)
-                
-                x, y, z = self.ih.magnetic
-                if None in (x ,y, z):
-                    x = y = z = -999
-                bin_data += struct.pack("<fff", x, y, z)
-                
-                x, y, z = self.ih.gyro
-                if None in (x ,y, z):
-                    x = y = z = -999
-                bin_data += struct.pack("<fff", x, y, z)
-                
-                x, y, z = self.ih.euler
-                if None in (x ,y, z):
-                    x = y = z = -999
-                bin_data += struct.pack("<fff", x, y, z)
-                
-                dat_file.write(bin_data)
+                if time() - t0 > 1/200: 
+                    t0 = time()
+                    bin_data = struct.pack("<d", time())
+                    
+                    x, y, z = self.ih.acceleration
+                    if None in (x ,y, z):
+                        x = y = z = -999
+                    bin_data += struct.pack("<fff", x,y,z)
+                    
+                    x, y, z = self.ih.magnetic
+                    if None in (x ,y, z):
+                        x = y = z = -999
+                    bin_data += struct.pack("<fff", x, y, z)
+                    
+                    x, y, z = self.ih.gyro
+                    if None in (x ,y, z):
+                        x = y = z = -999
+                    bin_data += struct.pack("<fff", x, y, z)
+                    
+                    x, y, z = self.ih.euler
+                    if None in (x ,y, z):
+                        x = y = z = -999
+                    bin_data += struct.pack("<fff", x, y, z)
+                    
+                    dat_file.write(bin_data)
         except Exception as e:
             self.log(str(e))
             dat_file.close()

@@ -15,7 +15,7 @@ except:
 REG_FIFO_DATA = 0x11
 
 class Accelerometer:
-    def __init__(self, Write_Directory, log_file, rate=2000):
+    def __init__(self, Write_Directory, log_file, rate=1000):
         self.wd = Write_Directory
         self.log = Log("ACC:", log_file)
         self.processes = []
@@ -71,7 +71,7 @@ class Accelerometer:
 
     def run(self, flag):
         file = open(self.wd + str(floor(time())), "wb+")
-
+        factor = 2.048 * 2 / 2**20
         try:
             t0 = time()
             t = time()
@@ -82,11 +82,11 @@ class Accelerometer:
                 length = 0
                 res = []
                 while(x[2] & 0b10 == 0):
-                    x = self.ih.twocomp((x[2] << 12) | (x[1] << 4) | ((x[0] & 0xF0) >> 4))
+                    x = self.ih.twocomp((x[0] << 12) | (x[1] << 4) | ((x[2] & 0xF0) >> 4))
                     y = self.ih.read(REG_FIFO_DATA, 3)
-                    y = self.ih.twocomp((y[2] << 12) | (y[1] << 4) | ((y[0] & 0xF0) >> 4))
+                    y = self.ih.twocomp((y[0] << 12) | (y[1] << 4) | ((y[2] & 0xF0) >> 4))
                     z = self.ih.read(REG_FIFO_DATA, 3)
-                    z = self.ih.twocomp((z[2] << 12) | (z[1] << 4) | ((z[0] & 0xF0) >> 4))
+                    z = self.ih.twocomp((z[0] << 12) | (z[1] << 4) | ((z[2] & 0xF0) >> 4))
                     res = [[x, y, z]] + res
                     length += 1
                     x = self.ih.read(REG_FIFO_DATA, 3)
@@ -161,12 +161,12 @@ if __name__ == "__main__":
     with open("/home/fissellab/BVEXTracker/Logs/accelLog", "a") as l:
         test = Accelerometer("/home/fissellab/BVEXTracker/output/Accelerometer/", l)
 
-        #f = mp.Event()
-        #test.run(f)
-        #sleep(10)
-        #f.set()
+        f = mp.Event()
+        test.run(f)
+        sleep(10)
+        f.set()
 
-        with open("/home/fissellab/BVEXTracker/output/Accelerometer/1691516687", "rb") as f:
-            dat = test.read_file(f)
-            for l in dat:
-                print(l)
+        #with open("/home/fissellab/BVEXTracker/output/Accelerometer/1691519550", "rb") as f:
+        #    dat = test.read_file(f)
+        #    for l in dat:
+        #        print(l)
