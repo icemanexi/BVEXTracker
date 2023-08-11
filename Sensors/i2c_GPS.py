@@ -3,7 +3,7 @@ from time import time, sleep
 from numpy import save
 from math import floor
 import threading
-from struct import unpack_from
+import struct
 import subprocess
 import multiprocessing as mp
 import smbus
@@ -71,6 +71,7 @@ class Gps:
                     possible_start = False
                     if byte_dat == b'b':  # marks start of new message transmission
                         recv_bytes = 98 # recv another xx bytes of data into buffer
+                        buff = struct.pack("<d", time()) + buff
                         file.write(buff)
 
                         buff = b'\xb5b' # add this to buffer as it wasnt added previously
@@ -89,49 +90,50 @@ class Gps:
         self.log("process finished")
 
 
-    def read_file(self, file_name : str):
-        assert file_name is str # File name needs to be string
-        data = []
-        gpsio = gps_io(input_file_name=file_name, read_only=True, write_requested=False, gpsd_host=None)
+    def read_file(self, f):
+
+        #gpsio = gps_io(input_file_name=file_name, read_only=True, write_requested=False, gpsd_host=None)
+        f.read(8)
         while True:
-            # this function will print the data to screen, but will not return it
-            gpsio.read(decode_func=self.ih.decode_msg)
+            try:
+                bin_dat = f.read(108)
+                #print(bin_dat, "\n\n")
+                time_bin_dat = bin_dat[0:8]
+                nav_pvt_bin = bin_dat[8:108]
+                #print(nav_pvt_bin)
+                print(self.checksum(nav_pvt_bin, 100), int(nav_pvt_bin[-2]), int(nav_pvt_bin[-1]))
+                u = struct.unpack_from('<LHBBBBBBLlBBBBllllLLlllllLLHHHH', nav_pvt_bin[6:90], 0)
+                print("\n\n")
+                s = ('  iTOW %u time %u/%u/%u %02u:%02u:%02u valid x%x\n'
+                     '  tAcc %u nano %d fixType %u flags x%x flags2 x%x\n'
+                     '  numSV %u lon %d lat %d height %d\n'
+                     '  hMSL %d hAcc %u vAcc %u\n'
+                     '  velN %d velE %d velD %d gSpeed %d headMot %d\n'
+                     '  sAcc %u headAcc %u pDOP %u reserved1 %u %u %u' % u)
+                print(s)
+            except Exception as e:
+                print(e)
+                break
 
-    def test(self):
-        return 
+    def checksum(self, msg, m_len):
+        """Calculate u-blox message checksum"""
+        # the checksum is calculated over the Message, starting and including
+        # the CLASS field, up until, but excluding, the Checksum Field:
 
+        ck_a = 0
+        ck_b = 0
+        for c in msg[0:m_len]:
+            ck_a += c
+            ck_b += ck_a
+
+        return [ck_a & 0xff, ck_b & 0xff]
 
 if __name__ == "__main__":
     
     with open("/home/fissellab/BVEXTracker/Logs/GpsLog", "a") as log:
         test = Gps("/home/fissellab/BVEXTracker/output/i2c_GPS/", log)
-        sensor_list = [test]
-        while True:
-            num_active_processes = 0
+        with open("/home/fissellab/BVEXTracker/output/i2c_GPS/1691767125", "rb") as f:
+            test.read_file(f)
 
-            for sensor in sensor_list:
-                # calibration check
-                try:
-                    if not sensor.is_calibrated:
-                        if not sensor.is_calibrating:
-                            if hasattr(sensor, "calibrate"):
-                                sensor.calibrate()
-                        continue
-                except Exception as e:
-                    log("error during calibration of " + sensor.name + ": " + str(e))
 
-                # data collection thread management
-                try:
-                    if len(sensor.processes) == 0: # starts first thread
-                        print("len processes == 0", sensor.name)
-                        sensor.new_process()
-                    elif time() - sensor.processes[0]["start time"] > process_time: # creates new thread every 60s
-                        print("else", sensor.name)
-                        sensor.new_process()
-                    num_active_processes += 1
 
-                except Exception as e:
-                    log("error during process management of " + sensor.name + ": " + str(e))
-
-            led.mode = num_active_processes
-            sleep(1)

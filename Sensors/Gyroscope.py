@@ -12,7 +12,6 @@ except:
     from Log import Log
 
 
-
 class Gyro:
     def __init__(self, Write_Directory : str, log_file): #runs upon initialization
         self.wd = Write_Directory
@@ -85,7 +84,7 @@ class Gyro:
                 print(bin_dat)
                 if not bin_dat:
                     break
-                data += [struct.unpack("<dfff", bin_dat)]
+                data += [struct.unpack("<dHHH", bin_dat)]
             except Exception as e:
                 print(e)
                 print("GYRO: got error reading data, returned processed data")
